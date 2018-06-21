@@ -1,6 +1,10 @@
 # VPC
 Creates a VPC over two AZ w/ NAT.
 
+![Module Diagram](terraform-modules/vpc/diagram.png)
+<div align="center">
+  <a href="http://gordonfoundation.ca"><img src="https://raw.githubusercontent.com/tesera/terraform-modules/master/vpc/diagram.png?token=&sanitize=true" alt="Module Diagram" width="200"></a>
+</div>
 ## Setup
 
 ### Module
@@ -14,7 +18,7 @@ module "vpc" {
 }
 ```
 
-### S3 endpoints
+### Add S3 Endpoints
 ```hcl-terraform
 resource "aws_vpc_endpoint" "s3" {
   vpc_id            = "${module.vpc.id}"
