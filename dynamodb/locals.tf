@@ -1,4 +1,3 @@
 locals {
-  registration_digests_table_name = "emis-registration-${var.env}-digests"
-  registration_exports_table_name = "emis-registration-${var.env}-exports"
+  table_name = "${var.tenant}-${var.env}-${var.name}"
 }
