@@ -27,7 +27,7 @@ resource "aws_vpc_endpoint" "s3" {
 ```hcl-terraform
 # Postgres
 resource "aws_network_acl_rule" "ingress_postgres" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${module.vpc.network_acl_id}"
   rule_number    = 5432
   egress         = false
   protocol       = "tcp"
@@ -38,7 +38,7 @@ resource "aws_network_acl_rule" "ingress_postgres" {
 }
 
 resource "aws_network_acl_rule" "egress_postgres" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${module.vpc.network_acl_id}"
   rule_number    = 5432
   egress         = true
   protocol       = "tcp"
