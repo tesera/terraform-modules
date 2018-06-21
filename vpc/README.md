@@ -1,10 +1,10 @@
 # VPC
 Creates a VPC over two AZ w/ NAT.
 
-![Module Diagram](terraform-modules/vpc/diagram.png)
 <div align="center">
   <a href="http://gordonfoundation.ca"><img src="https://raw.githubusercontent.com/tesera/terraform-modules/master/vpc/diagram.png?token=&sanitize=true" alt="Module Diagram" width="200"></a>
 </div>
+
 ## Setup
 
 ### Module
@@ -53,7 +53,6 @@ resource "aws_network_acl_rule" "egress_postgres" {
 
 ## Input
 - **name:** application name
-- **aws_region:** AWS region
 
 ## Output
 

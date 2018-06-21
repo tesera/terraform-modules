@@ -111,7 +111,7 @@ resource "aws_network_acl_rule" "ingress_dns" {
 resource "aws_network_acl_rule" "egress_dns" {
   network_acl_id = "${aws_network_acl.main.id}"
   rule_number    = 153
-  egress         = tre
+  egress         = true
   protocol       = "udp"
   rule_action    = "allow"
   cidr_block     = "0.0.0.0/0"
