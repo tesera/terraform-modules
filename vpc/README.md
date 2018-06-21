@@ -23,6 +23,32 @@ resource "aws_vpc_endpoint" "s3" {
 }
 ```
 
+### Extra ACL Rules
+```hcl-terraform
+# Postgres
+resource "aws_network_acl_rule" "ingress_postgres" {
+  network_acl_id = "${aws_network_acl.main.id}"
+  rule_number    = 5432
+  egress         = false
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 5432
+  to_port        = 5432
+}
+
+resource "aws_network_acl_rule" "egress_postgres" {
+  network_acl_id = "${aws_network_acl.main.id}"
+  rule_number    = 5432
+  egress         = true
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 5432
+  to_port        = 5432
+}
+```
+
 ## Input
 - **name:** application name
 - **aws_region:** AWS region
