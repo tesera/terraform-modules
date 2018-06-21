@@ -14,6 +14,10 @@ output "private_subnet_ids" {
   value = ["${module.private_a.id}","${module.private_b.id}"]
 }
 
+output "private_route_table_ids" {
+  value = ["${module.private_a.route_table_id}","${module.private_b.route_table_id}"]
+}
+
 # Used to add additional rules
 output "network_acl_id" {
   value = "${aws_network_acl.main.id}"

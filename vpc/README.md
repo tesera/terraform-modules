@@ -21,7 +21,7 @@ module "vpc" {
 resource "aws_vpc_endpoint" "s3" {
   vpc_id            = "${module.vpc.id}"
   service_name      = "com.amazonaws.${var.aws_region}.s3"
-  route_table_ids   = ${module.vpc.private_subnet_ids}
+  route_table_ids   = ["${module.vpc.private_route_table_ids}"]
 }
 ```
 
@@ -60,8 +60,10 @@ resource "aws_network_acl_rule" "egress_postgres" {
 - **public_nat_ips:** array of ips attached to NATs
 - **public_subnet_ids:** array of public subnet ids
 - **private_subnet_ids:** array of private subnet ids
+- **private_route_table_ids:** array of private
 - **network_acl_id:** ACL id so additional rules can be added
 
 
 ## TODO
 - [ ] Add IPv6 - https://www.terraform.io/docs/providers/aws/r/vpc.html#assign_generated_ipv6_cidr_block
+- [ ] Option to modify CIDR if VPC peering ever happen
