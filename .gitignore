@@ -1,4 +1,5 @@
 # Terraform
+*.tfstate
 *.zip
 
 
