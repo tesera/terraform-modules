@@ -20,13 +20,16 @@ TODO - script to find all package.json and install deps
 ```bash
 ${project}-infrastructure
 |-- package.json	# script shortcuts (lint, install, deploy, test) & versioning?
-|-- root			# Setup for root level account
-|   |-- users
+|-- master			# Setup for root level account
+|   |-- users		# IAM roles
+|   |-- state		# Sets up state management for terraform
 |-- operations		# Setup for operation pieces
-|   |-- cicd	
-|   |-- logging	
-|   |-- monitoring
-|   |-- secrets
+|   |-- cicd		# Jenkins
+|   |-- dns			# Route53
+|   |-- logging		# ELK & CloudWatch
+|   |-- monitoring	# CloudTrail
+|   |-- secrets		# HashiCorp Vault
+|   |-- state		# Sets up state management for terraform
 |-- environments
 |   |-- app			# Public static assets
 |   |-- api			# Public/Private API endpoints and support infrastructure
@@ -53,10 +56,10 @@ Each environment module will follow the following format.
 ${module}
 |-- main.tf						# Includes state management & module inclusion
 |-- terraform.tfvars			# Includes ENV that apply to all env
-|-- var.development.env.tfvars	# Includes `development` ENV
-|-- var.testing.env.tfvars		# Includes `testing` ENV
-|-- var.staging.env.tfvars		# Includes `staging` ENV
-|-- var.production.env.tfvars	# Includes `production` ENV
+|-- env.development.tfvars.enc	# Includes `development` ENV
+|-- env.testing.tfvars.enc		# Includes `testing` ENV
+|-- env.staging.tfvars.enc		# Includes `staging` ENV
+|-- env.production.tfvars.enc	# Includes `production` ENV
 ```
 
 All `env.*.tfvars` will be encrypted. (TODO add in script to do that with CI/CD)
@@ -66,6 +69,7 @@ Project specific modules should follow the following structure:
 modules
 |-- waf
 |   |-- variables.tf	# inputs
+|   |-- locals.tf		# internal variables
 |   |-- main.tf			# setup
 |   |-- ...				# tf file for each logical part of the module
 |   |-- output			# outputs
@@ -74,7 +78,7 @@ modules
 
 ## Deployment
 ```bash
-$ terraform apply -var-file=env.${environment}.tfvars
+$ terraform apply -var-file=env.${environment}.${region}.tfvars
 # review changes
 $ yes
 ```
