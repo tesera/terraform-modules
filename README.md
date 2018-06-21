@@ -1,5 +1,5 @@
 # Terraform
-Collection of frequently used modules
+Collection of frequently used modules and how to start a new project.
 
 
 ## Getting Started
@@ -20,22 +20,33 @@ TODO - script to find all package.json and install deps
 ```bash
 ${project}-infrastructure
 |-- package.json	# script shortcuts (lint, install, deploy, test) & versioning?
-|-- root
-|-- operations
+|-- root			# Setup for root level account
+|   |-- users
+|-- operations		# Setup for operation pieces
+|   |-- cicd	
+|   |-- logging	
+|   |-- monitoring
+|   |-- secrets
 |-- environments
 |   |-- app			# Public static assets
 |   |-- api			# Public/Private API endpoints and support infrastructure
+|   |-- dashboard	# Ops dashboards
 |   |-- db			# Databases
+|   |-- state		# Sets up state management for terraform
+|   |-- users		# Sets up IAM roles for users
 |   |-- vpc			# VPC & Networking
 |-- modules			# collection of project specific modules
 ```
 
 Most application will have similar modules, most included in this project. Execution order is important.
 
+1. state
+1. users
 1. vpc
 1. db
 1. api
 1. app
+1. dashboard
 
 Each environment module will follow the following format.
 ```
