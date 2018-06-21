@@ -27,7 +27,7 @@ resource "aws_route_table" "public" {
   }
 
   tags {
-    Name = "public-${var.name}-${var.aws_region}"
+    Name = "public-${var.name}-${local.aws_region}"
   }
 }
 
@@ -36,7 +36,7 @@ module "public_a" {
   name              = "${var.name}"
   vpc_id            = "${aws_vpc.main.id}"
   cidr_block        = "10.0.10.0/24"
-  availability_zone = "${var.aws_region}a"
+  availability_zone = "${local.aws_region}a"
   route_table_id    = "${aws_route_table.public.id}"
 }
 
@@ -45,7 +45,7 @@ module "public_b" {
   name              = "${var.name}"
   vpc_id            = "${aws_vpc.main.id}"
   cidr_block        = "10.0.20.0/24"
-  availability_zone = "${var.aws_region}b"
+  availability_zone = "${local.aws_region}b"
   route_table_id    = "${aws_route_table.public.id}"
 }
 
@@ -56,7 +56,7 @@ module "private_a" {
   name              = "${var.name}"
   vpc_id            = "${aws_vpc.main.id}"
   cidr_block        = "10.0.11.0/24"
-  availability_zone = "${var.aws_region}a"
+  availability_zone = "${local.aws_region}a"
   gateway_id        = "${module.public_a.gateway_id}"
 }
 
@@ -65,6 +65,6 @@ module "private_b" {
   name              = "${var.name}"
   vpc_id            = "${aws_vpc.main.id}"
   cidr_block        = "10.0.21.0/24"
-  availability_zone = "${var.aws_region}b"
+  availability_zone = "${local.aws_region}b"
   gateway_id        = "${module.public_b.gateway_id}"
 }

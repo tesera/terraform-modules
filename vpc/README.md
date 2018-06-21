@@ -12,9 +12,7 @@ Creates a VPC over two AZ w/ NAT.
 ```hcl-terraform
 module "vpc" {
   source = "github.com/tesera/terraform-modules/vpc"
-  
   name = "${env}-myapp"
-  aws_region = "${aws_region}"
 }
 ```
 
