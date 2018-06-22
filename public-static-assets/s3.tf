@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "main" {
   bucket              = "${var.name}-static-assets"
-  region              = "${var.aws_region}"
+  region              = "${local.aws_region}"
   acl                 = "private"
   acceleration_status = "Enabled"
 }

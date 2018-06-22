@@ -1,12 +1,7 @@
-variable "aws_account_id" {
-  type        = "string"
-  description = "AWS Account ID"
-}
-
-variable "aws_region" {
-  type        = "string"
-  description = "AWS Region to deploy in"
-}
+//variable "aws_account_id" {
+//  type        = "string"
+//  description = "AWS Account ID"
+//}
 
 // Suggested:
 // ${env}-${subdomain}-${domain}-${tld}
