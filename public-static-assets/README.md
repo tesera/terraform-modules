@@ -29,7 +29,7 @@ data "aws_acm_certificate" "main" {
 
 ```hcl-terraform
 module "waf" {
-  source = "github.com/willfarrell/terraform-owasp-waf-module"
+  source = "github.com/tesera/terraform-modules/waf-owasp"
   name   = "${var.env}ApplicationName"
   defaultAction = "${var.defaultAction}"
 
@@ -42,7 +42,7 @@ module "waf" {
 ### Module
 ```hcl-terraform
 module "app" {
-  source              = "github.com/willfarrell/terraform-s3-endpoint-module"
+  source              = "github.com/tesera/terraform-modules/public-static-assets"
 
   name                = "${var.env}-myapp"
   aliases             = ["${var.env != "prod" ? "${var.env}-": ""}appname.example.com"]
