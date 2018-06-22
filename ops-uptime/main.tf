@@ -9,7 +9,7 @@ resource "aws_sns_topic" "main" {
 }
 
 resource "aws_route53_health_check" "main" {
-  fqdn              = "${var.domain}"
+  fqdn              = "${var.fqdn}"
   port              = 443
   type              = "HTTPS"
   resource_path     = "${var.resource_path}"
@@ -29,7 +29,7 @@ resource "aws_route53_health_check" "main" {
 
 resource "aws_cloudwatch_metric_alarm" "main" {
   provider            = "aws.edge"
-  alarm_name          = "${var.env}-uptime-failed"
+  alarm_name          = "${var.name}-uptime-failed"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
   comparison_operator = "LessThanThreshold"
