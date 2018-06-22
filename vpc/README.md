@@ -5,6 +5,13 @@ Creates a VPC over two AZ w/ NAT.
   <a href="http://gordonfoundation.ca"><img src="https://raw.githubusercontent.com/tesera/terraform-modules/master/vpc/diagram.png?token=&sanitize=true" alt="Module Diagram" width="200"></a>
 </div>
 
+## Features
+- 1 region
+- 2 availability zones (AZ)
+- 1 public, 1 private subnet per AZ
+- 1 NAT per public subnet
+- ACL - Allow http, https, dns, icmp, ssh, ephemeral ports
+
 ## Setup
 
 ### Module
