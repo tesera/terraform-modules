@@ -1,8 +1,4 @@
-variable "env" {}
-
-variable "name" {}
-variable "tenant" {}
-
+variable "table_name" {}
 variable "hash_key" {}
 
 variable "range_key" {}

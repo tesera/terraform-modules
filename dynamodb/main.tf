@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "main" {
-  name           = "${local.table_name}"
+  name           = "${var.table_name}"
   read_capacity  = "${var.min_read_capacity}"
   write_capacity = "${var.min_write_capacity}"
   hash_key       = "${var.hash_key}"
@@ -16,8 +16,7 @@ resource "aws_dynamodb_table" "main" {
   }
 
   tags {
-    Name        = "Stage"
-    Environment = "${var.env}"
+    Name = "Stage"
   }
 }
 
