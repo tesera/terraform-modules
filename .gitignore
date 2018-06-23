@@ -1,7 +1,9 @@
 # Terraform
+.terraform
 *.tfstate
+*.tfstate.lock.info
+*.tfstate.backup
 *.zip
-
 
 # Logs
 logs
