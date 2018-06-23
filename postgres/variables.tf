@@ -1,10 +1,4 @@
-variable "env" {
-  type = "string"
-}
-
-variable "tenant" {
-  type = "string"
-}
+variable "name" {}
 
 variable "db_name" {
   type = "string"
@@ -18,11 +12,7 @@ variable "password" {
   type = "string"
 }
 
-variable "vpc_security_group_ids" {
-  type = "list"
-}
-
-variable "subnet_ids" {
+variable "private_subnet_ids" {
   type = "list"
 }
 
@@ -51,7 +41,7 @@ variable "parameter_group_name" {
 }
 
 variable "allocated_storage" {
-  default = "200"
+  default = "20"
 }
 
 variable "backup_retention_period" {

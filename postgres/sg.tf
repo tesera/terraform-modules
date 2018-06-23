@@ -1,5 +1,5 @@
 resource "aws_security_group" "db" {
-  name = "${local.db_id}"
+  name = "${var.name}"
 
   description = "SecurityGroup for RDS"
 

@@ -2,7 +2,7 @@ resource "aws_db_instance" "master" {
   allocated_storage         = "${var.allocated_storage}"
   backup_retention_period   = "${var.backup_retention_period}"
   backup_window             = "${var.backup_window}"
-  identifier                = "${local.db_id}"
+  identifier                = "${var.name}"
   storage_type              = "${var.storage_type}"
   engine                    = "${var.engine}"
   engine_version            = "${var.engine_version}"
@@ -14,7 +14,7 @@ resource "aws_db_instance" "master" {
   publicly_accessible       = true
   db_subnet_group_name      = "${aws_db_subnet_group.db_subnet.name}"
   vpc_security_group_ids    = ["${aws_security_group.db.id}"]
-  final_snapshot_identifier = "${local.db_id}"
+  final_snapshot_identifier = "${var.name}"
   apply_immediately         = true
   multi_az                  = "${var.multi_az}"
 }

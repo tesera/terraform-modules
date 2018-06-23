@@ -11,5 +11,5 @@ output "username" {
 }
 
 output "security_group_id" {
-  value = "${var.vpc_security_group_ids}"
+  value = "${aws_security_group.db.id}"
 }
