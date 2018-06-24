@@ -119,6 +119,28 @@ resource "aws_network_acl_rule" "egress_dns" {
   to_port        = 53
 }
 
+resource "aws_network_acl_rule" "ingress_dns_tls" {
+  network_acl_id = "${aws_network_acl.main.id}"
+  rule_number    = 853
+  egress         = false
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 853
+  to_port        = 853
+}
+
+resource "aws_network_acl_rule" "egress_dns_tls" {
+  network_acl_id = "${aws_network_acl.main.id}"
+  rule_number    = 853
+  egress         = true
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = 853
+  to_port        = 853
+}
+
 # Ephemeral Ports
 resource "aws_network_acl_rule" "ingress_ephemeral" {
   network_acl_id = "${aws_network_acl.main.id}"
