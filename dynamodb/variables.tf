@@ -1,7 +1,17 @@
-variable "table_name" {}
+variable "name" {}
 variable "hash_key" {}
 
-variable "range_key" {}
+# variable "range_key" {
+#   default = ""
+# }
+
+variable "ttl_enabled" {
+  default = false
+}
+
+variable "encryption_enabled" {
+  default = true
+}
 
 variable "min_read_capacity" {
   default = "100"

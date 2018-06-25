@@ -8,14 +8,14 @@ Creates a DynamoDB table.
 ```hcl-terraform
 module "dynamodb" {
   source = "github.com/tesera/terraform-modules/dynamodb"
-  table_name = "${var.tenant}-${var.env}-${var.name}"
+  table_name = "${var.env}-${var.name}"
   hash_key = "table-name-hash-key"
   range_key = "table-name-range-key"
 }
 ```
 
 ## Input
-- **table_name:** table name
+- **name:** table name
 - **hash_key:** attribute to use as the hash (partition) key
 - **range_key:** attribute to use as the range (sort) key
 - **min_read_capacity:** min number of read units for this table, also used as initial value for number of read units

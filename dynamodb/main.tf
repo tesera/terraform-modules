@@ -1,22 +1,30 @@
 resource "aws_dynamodb_table" "main" {
-  name           = "${var.table_name}"
+  name           = "${var.name}"
   read_capacity  = "${var.min_read_capacity}"
   write_capacity = "${var.min_write_capacity}"
   hash_key       = "${var.hash_key}"
-  range_key      = "${var.range_key}"
+
+  #range_key      = "${var.range_key}"
 
   attribute {
     name = "${var.hash_key}"
     type = "S"
   }
 
-  attribute {
-    name = "${var.range_key}"
-    type = "S"
-  }
+  #attribute {
+  #  name = "${var.range_key}"
+  #  type = "S"
+  #}
 
+  ttl {
+    enabled        = "${var.ttl_enabled}"
+    attribute_name = "timeToLive"
+  }
+  server_side_encryption {
+    enabled = "${var.encryption_enabled}"
+  }
   tags {
-    Name = "Stage"
+    Name = "${var.name}"
   }
 }
 
