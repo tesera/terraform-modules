@@ -31,7 +31,22 @@ resource "aws_security_group_rule" "db_access" {
   protocol                 = "tcp"
   security_group_id        = "${module.db.security_group_id}"
 }
+```
 
+### IAM policy granting access to the new db resource
+```json
+{
+   "Version":"2012-10-17",
+   "Statement":[
+      {
+         "Effect":"Allow",
+         "Action":[],
+         "Resource":[
+            "${module.db.arn}"
+         ]
+      }
+   ]
+}
 ```
 
 ## Input
