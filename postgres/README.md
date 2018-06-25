@@ -3,7 +3,7 @@ Creates a postgres RDS instance.
 
 ## Features
 - RDS postgres instance
-- db security group that 
+- db security group 
 - db subnet group
 
 ## Setup
@@ -17,14 +17,14 @@ module "db" {
   db_name                = "db-name"
   username               = "db-user"
   password               = "SomePassword123"
-  private_subnet_ids     = ["subnet-1321286b", "subnet-31651858"]
+  private_subnet_ids     = ["${module.vpc.private_subnet_ids}"]
 }
 ```
 
-### Add a security group rule that grants permission to security group sg-6fe11c06 to access the db instance
+### Add a security group rule that grants permission to security group sg-00000000 to access the db instance
 ```hcl-terraform
 resource "aws_security_group_rule" "db_access" {
-  source_security_group_id = "sg-6fe11c06"
+  source_security_group_id = "sg-00000000"
   type                     = "ingress"
   from_port                = 5432
   to_port                  = 5432
@@ -40,7 +40,7 @@ resource "aws_security_group_rule" "db_access" {
 - **db_name:** name of the database to create when the DB instance is created
 - **username:** username for the master DB user
 - **password:** password for the master DB user
-- **subnet_ids:** list of VPC subnet IDs
+- **private_subnet_ids:** list of VPC subnet IDs
 - **storage_type:** "gp2" (general purpose SSD) is the best default choise - https://www.terraform.io/docs/providers/aws/r/db_instance.html#storage_type
 - **engine:** database engine
 - **engine_version:** database engine version. The currently supported version can be checked here - https://aws.amazon.com/rds/postgresql/faqs/
