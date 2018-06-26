@@ -96,7 +96,7 @@ resource "aws_network_acl_rule" "egress_ssh" {
 }
 
 # DNS via UDP
-# TODO remove when DNS via DoH is support accross internal application
+# TODO remove when DNS via DoH or DNS over TLS is support accross internal application
 resource "aws_network_acl_rule" "ingress_dns" {
   network_acl_id = "${aws_network_acl.main.id}"
   rule_number    = 153
