@@ -32,6 +32,15 @@ resource "aws_vpc_endpoint" "s3" {
 }
 ```
 
+## Add DynamoDB Endpoints
+```hcl-terraform
+resource "aws_vpc_endpoint" "dynamodb" {
+  vpc_id          = "${module.vpc.id}"
+  service_name    = "com.amazonaws.${var.region}.dynamodb"
+  route_table_ids = ["${module.vpc.private_route_table_ids}"]
+}
+```
+
 ### Extra ACL Rules
 ```hcl-terraform
 # Postgres
