@@ -5,6 +5,11 @@ Ported from [AWS WAF to Mitigate OWASP's Top 10 Web Application Vulnerabilities]
 
 
 ```hcl-terraform
+# place holder for admin, white, black ip lists
+resorce "aws_waf_ipset" "empty" {
+  name = "${var.name}-empty-ipset"
+}
+
 module "waf" {
   source        = "github.com/tesera/terraform-modules/waf-owasp"
   name          = "${var.env}ApplicationName"
