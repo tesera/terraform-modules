@@ -51,3 +51,7 @@ variable "backup_retention_period" {
 variable "multi_az" {
   default = true
 }
+
+variable "extensions_sql_path" {
+  default = ""
+}
