@@ -1,72 +1,37 @@
-variable "aws_account_id" {
-  type = "string"
+resource "aws_db_instance" "master" {
+  allocated_storage               = "${var.allocated_storage}"
+  identifier                      = "${var.name}"
+  storage_type                    = "${var.storage_type}"
+  engine                          = "${var.engine}"
+  engine_version                  = "${var.engine_version}"
+  instance_class                  = "${var.instance_class}"
+  name                            = "${var.db_name}"
+  parameter_group_name            = "${var.parameter_group_name}"
+  apply_immediately               = true
+  # Scalibility
+  multi_az                        = "${var.multi_az}"
+  # Integrity
+  final_snapshot_identifier       = "${var.name}"
+  backup_retention_period         = "${var.backup_retention_period}"
+  backup_window                   = "${var.backup_window}"
+  # Auditiability
+  enabled_cloudwatch_logs_exports = "audit"
+  # TODO add in `monitoring_interval` & `monitoring_role_arn`
+  # Security
+  username                        = "${var.username}"
+  password                        = "${var.password}"
+  auto_minor_version_upgrade      = true
+  allow_major_version_upgrade     = false
+  publicly_accessible             = false
+  db_subnet_group_name            = "${aws_db_subnet_group.db_subnet.name}"
+  vpc_security_group_ids          = [
+    "${aws_security_group.db.id}"]
+  # TODO test out `iam_database_authentication_enabled` for db user access
+  # TODO research and apply `kms_key_id`
+
+  # TODO add in `storage_encrypted`
 }
 
-variable "aws_region" {
-  type = "string"
-}
 
-variable "env" {
-  type = "string"
-}
 
-variable "tenant" {
-  type = "string"
-}
-
-variable "db_name" {
-  type = "string"
-}
-
-variable "username" {
-  type = "string"
-}
-
-variable "password" {
-  type = "string"
-}
-
-variable "vpc_security_group_ids" {
-  type = "list"
-}
-
-variable "subnet_ids" {
-  type = "list"
-}
-
-resource "aws_db_subnet_group" "main" {
-  name       = "${var.tenant}-${var.env}"
-  subnet_ids = ["${var.subnet_ids}"]
-}
-
-resource "aws_db_instance" "main" {
-  allocated_storage         = 200
-  backup_retention_period   = 7
-  backup_window             = "06:00-07:00"
-  identifier                = "${var.tenant}-${var.env}"
-  storage_type              = "gp2"
-  engine                    = "postgres"
-  engine_version            = "9.5.10"
-  instance_class            = "db.t2.micro"
-  name                      = "${var.db_name}"
-  username                  = "${var.username}"
-  password                  = "${var.password}"
-  parameter_group_name      = "default.postgres9.5"
-  publicly_accessible       = true
-  db_subnet_group_name      = "${aws_db_subnet_group.main.name}"
-  vpc_security_group_ids    = ["${var.vpc_security_group_ids}"]
-  final_snapshot_identifier = "${var.tenant}-${var.env}"
-  apply_immediately         = true
-}
-
-output "postgres_endpoint" {
-  value = "${aws_db_instance.main.endpoint}"
-}
-
-output "password" {
-  value = "${aws_db_instance.main.password}"
-}
-
-output "username" {
-  value = "${aws_db_instance.main.username}"
-}
+# TODO add in replicate db with `replicate_source_db`
