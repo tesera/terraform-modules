@@ -41,7 +41,7 @@ resource "aws_iam_group" "developers" {
 - **public_subnet_ids:** array of public subnet ids
 - **key_name:** name of root ssh key
 - **iam_ssh_group:** name of iam group that should have ssh access
-- **image_id:** override the base image [Default: AWS Linux]
+- **image_id:** override the base image, must be CentOS based (ie has yum and rpm) [Default: AWS Linux]
 - **instance_type:** override the instance type [Default: t2.micro]
 
 ## Output
