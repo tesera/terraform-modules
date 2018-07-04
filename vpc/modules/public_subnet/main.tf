@@ -10,6 +10,16 @@ resource "aws_subnet" "main" {
 
 resource "aws_eip" "nat" {
   vpc = true
+
+  tag {
+    key                 = "Name"
+    value               = "${var.name}-${var.availability_zone}"
+  }
+
+  tags {
+    key                 = "Terraform"
+    value               = "true"
+  }
 }
 
 resource "aws_nat_gateway" "main" {
