@@ -51,9 +51,6 @@ output "bastion_billing_suggestion" {
   value = "${module.bastion.billing_suggestion}"
 }
 
-output "bastion_" {
-  value = "${module.bastion.template}"
-}
 /*
 output "private_subnet_ids" {
   value = ["${module.private_a.id}","${module.private_b.id}"]
