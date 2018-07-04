@@ -5,6 +5,7 @@ resource "aws_vpc" "main" {
 
   tags {
     Name = "${var.name}"
+    Terraform = "true"
   }
 }
 
@@ -13,6 +14,7 @@ resource "aws_internet_gateway" "main" {
 
   tags {
     Name = "${var.name}"
+    Terraform = "true"
   }
 }
 
@@ -28,6 +30,7 @@ resource "aws_route_table" "public" {
 
   tags {
     Name = "public-${var.name}-${local.aws_region}"
+    Terraform = "true"
   }
 }
 
