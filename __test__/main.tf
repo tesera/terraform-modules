@@ -41,6 +41,7 @@ module "bastion" {
   vpc_id            = "${module.vpc.id}"
   public_subnet_ids = "${module.vpc.public_subnet_ids}"
   key_name          = "${local.key_name}"
+  iam_ssh_group     = "Admin"
 }
 
 output "bastion_ip" {

@@ -1,4 +1,7 @@
 variable "name" {}
+variable "account_id" {
+  default = ""
+}
 variable "vpc_id" {}
 variable "public_subnet_ids" {
   type = "list"
@@ -17,5 +20,7 @@ variable "volume_type" {
 variable "volume_size" {
   default = "8"
 }
+
+variable "iam_ssh_group" {}
 
 
