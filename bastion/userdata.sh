@@ -36,6 +36,11 @@ echo "***** Setup fail2ban [Public Subnet Only] *****"
 yum install fail2ban -y
 service fail2ban start
 
+echo "***** Setup OTP [Public Subnet Only] *****"
+# TODO google authenticator - https://github.com/google/google-authenticator-libpam
+#rpm -i https://download.fedoraproject.org/pub/fedora/linux/development/rawhide/Everything/source/tree/Packages/g/google-authenticator-1.04-2.fc28.src.rpm
+#sed -i 's/auth[\s]+required	pam_sepermit.so/auth	   required pam_google_authenticator.so [authtok_prompt=Your secret token: ]/' /etc/pam.d/sshd
+
 echo "***** Setup SSH via IAM *****"
 rpm -i https://s3-eu-west-1.amazonaws.com/widdix-aws-ec2-ssh-releases-eu-west-1/aws-ec2-ssh-1.9.0-1.el7.centos.noarch.rpm
 sed -i 's/IAM_AUTHORIZED_GROUPS=""/IAM_AUTHORIZED_GROUPS="${IAM_AUTHORIZED_GROUPS}"/' /etc/aws-ec2-ssh.conf
