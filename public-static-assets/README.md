@@ -29,7 +29,7 @@ data "aws_acm_certificate" "main" {
 
 ```hcl-terraform
 module "waf" {
-  source = "github.com/willfarrell/terraform-owasp-waf-module"
+  source = "github.com/tesera/terraform-modules/waf-owasp"
   name   = "${var.env}ApplicationName"
   defaultAction = "${var.defaultAction}"
 
@@ -42,10 +42,7 @@ module "waf" {
 ### Module
 ```hcl-terraform
 module "app" {
-  source              = "github.com/willfarrell/terraform-s3-endpoint-module"
-
-  aws_account_id      = "${var.aws_account_id}"
-  aws_region          = "${var.aws_region}"
+  source              = "github.com/tesera/terraform-modules/public-static-assets"
 
   name                = "${var.env}-myapp"
   aliases             = ["${var.env != "prod" ? "${var.env}-": ""}appname.example.com"]
@@ -56,8 +53,6 @@ module "app" {
 ```
 
 ## Input
-- **aws_account_id:** AWS Account ID
-- **aws_region:** AWS Region to deploy in
 - **name:** AWS S3 Bucket name. `${var.env}-${var.name}`.
 - **aliases:** CloudFront Aliases.
 - **acm_certificate_arn:** Domain Certificate ARN
@@ -68,3 +63,6 @@ module "app" {
 - **bucket_name:** `${aws_s3_bucket.main.id}` Full name of the S3 bucket.
 - **cloudfront_distribution_id:** `${aws_cloudfront_distribution.main.id}` CloudFront Distribution Id for CI/CD to trigger cache clearing (`aws cloudfront create-invalidation --distribution-id ${AWS_CLOUDFRONT_DISTRIBUTION_ID} --paths /index.html`)
 - **cloudfront_distribution_domain_name:** `${aws_cloudfront_distribution.main.domain_name}` CloudFront Domain Name for DNS updating.
+
+## TODO
+- [ ] IPv6 support
