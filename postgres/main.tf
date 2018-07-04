@@ -22,7 +22,6 @@ resource "aws_db_instance" "master" {
 
   # TODO add in `storage_encrypted`
   # Integrity
-  enabled_cloudwatch_logs_exports = [ "audit" ]
   # TODO add in `monitoring_interval` & `monitoring_role_arn`
   final_snapshot_identifier       = "${var.name}"
   backup_retention_period         = "${var.backup_retention_period}"
