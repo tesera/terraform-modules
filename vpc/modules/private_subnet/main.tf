@@ -14,7 +14,8 @@ resource "aws_route_table" "main" {
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = "${var.gateway_id}"
+    #gateway_id = "${var.gateway_id}"
+    nat_gateway_id = "${var.gateway_id}"
   }
 
   tags {
