@@ -1,10 +1,11 @@
 resource "aws_subnet" "main" {
-  vpc_id     = "${var.vpc_id}"
-  cidr_block = "${var.cidr_block}"
+  vpc_id            = "${var.vpc_id}"
+  cidr_block        = "${var.cidr_block}"
   availability_zone = "${var.availability_zone}"
 
   tags {
-    Name = "public-${var.name}-${var.availability_zone}"
+    Name      = "public-${var.name}-${var.availability_zone}"
+    Terraform = "true"
   }
 }
 
@@ -12,19 +13,19 @@ resource "aws_eip" "nat" {
   vpc = true
 
   tags {
-    key                 = "Name"
-    value               = "${var.name}-${var.availability_zone}"
-  }
-
-  tags {
-    key                 = "Terraform"
-    value               = "true"
+    Name      = "${var.name}-${var.availability_zone}"
+    Terraform = "true"
   }
 }
 
 resource "aws_nat_gateway" "main" {
   allocation_id = "${aws_eip.nat.id}"
   subnet_id     = "${aws_subnet.main.id}"
+
+  tags {
+    Name      = "${var.name}-${var.availability_zone}"
+    Terraform = "true"
+  }
 }
 
 

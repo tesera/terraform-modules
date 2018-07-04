@@ -5,6 +5,7 @@ resource "aws_subnet" "main" {
 
   tags {
     Name = "private-${var.name}-${var.availability_zone}"
+    Terraform = "true"
   }
 }
 
@@ -18,6 +19,7 @@ resource "aws_route_table" "main" {
 
   tags {
     Name = "private-${var.name}-${var.availability_zone}"
+    Terraform = "true"
   }
 }
 resource "aws_route_table_association" "main" {
