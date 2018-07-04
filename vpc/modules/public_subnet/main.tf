@@ -11,7 +11,7 @@ resource "aws_subnet" "main" {
 resource "aws_eip" "nat" {
   vpc = true
 
-  tag {
+  tags {
     key                 = "Name"
     value               = "${var.name}-${var.availability_zone}"
   }
