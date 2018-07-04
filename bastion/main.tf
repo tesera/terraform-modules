@@ -1,7 +1,7 @@
 resource "aws_eip" "main" {
   vpc = "true"
 
-  tag {
+  tags {
     key                 = "Name"
     value               = "${var.name}-bastion"
   }
@@ -28,15 +28,6 @@ resource "aws_security_group" "main" {
     from_port   = 0
     to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
-data "template_file" "main-userdata" {
-  template = "${file("${path.module}/userdata.sh")}"
-
-  vars {
-    REGION = "${local.aws_region}"
-    EIP_ID = "${aws_eip.main.id}"
   }
 }
 
@@ -115,6 +106,7 @@ resource "aws_launch_configuration" "main" {
   iam_instance_profile = "${aws_iam_instance_profile.main.name}"
   security_groups      = ["${aws_security_group.main.id}"]
   user_data            = "${data.template_file.main-userdata.rendered}"
+  #user_data_base64 = "${data.template_file.main-userdata.}"
   ebs_optimized        = "false"
   enable_monitoring    = "true"
 
@@ -129,6 +121,19 @@ resource "aws_launch_configuration" "main" {
   lifecycle {
     create_before_destroy = "true"
   }
+}
+
+data "template_file" "main-userdata" {
+  template = "${file("${path.module}/userdata.sh")}"
+
+  vars {
+    REGION = "${local.aws_region}"
+    EIP_ID = "${aws_eip.main.id}"
+  }
+}
+
+output "template" {
+  value = "${data.template_file.main-userdata.rendered}"
 }
 
 resource "aws_autoscaling_group" "main" {
