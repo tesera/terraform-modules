@@ -32,7 +32,7 @@ resource "aws_vpc_endpoint" "s3" {
 }
 ```
 
-## Add DynamoDB Endpoints
+### Add DynamoDB Endpoints
 ```hcl-terraform
 resource "aws_vpc_endpoint" "dynamodb" {
   vpc_id          = "${module.vpc.id}"

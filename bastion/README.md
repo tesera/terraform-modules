@@ -1,0 +1,58 @@
+# bastion
+Allow ssh to private subnet services.
+
+## Features
+- static ip address
+- Auto-scaling across all public subnets
+- `authorized_keys` generated from users in an IAM group
+- `fail2ban` enabled
+- CloudWatch logging enabled
+
+## Setup
+### Module
+```hcl-terraform
+module "bastion" {
+  source            = "github.com/tesera/terraform-modules/bastion"
+  name              = "${local.name}"
+  vpc_id            = "${module.vpc.id}"
+  public_subnet_ids = "${module.vpc.public_subnet_ids}"
+  key_name          = "${local.key_name}"
+  iam_ssh_group     = "Admin"
+}
+```
+
+### Create global SSH key
+```hcl-terraform
+resource "aws_key_pair" "root_public_key" {
+  key_name   = "root_public_key"
+  public_key = "ssh-rsa ...== COMMENT"
+}
+```
+
+### Create user group
+```hcl-terraform
+resource "aws_iam_group" "developers" {
+  name = "developers"
+}
+```
+
+## Input
+- **vpc_id:** vpc id
+- **public_subnet_ids:** array of public subnet ids
+- **key_name:** name of root ssh key
+- **iam_ssh_group:** name of iam group that should have ssh access
+- **image_id:** override the base image [Default: AWS Linux]
+- **instance_type:** override the instance type [Default: t2.micro]
+
+## Output
+- **public_ip:** public ip
+- **billing_suggestion:** comments to improve billing cost
+
+
+## TODO
+- [ ] test CloudWatch Logging
+- [ ] fail2ban alerts
+- [ ] MFA - google authenticator
+- [ ] OS hardening
+  - CIS
+  - ClamAV
