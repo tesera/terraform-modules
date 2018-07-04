@@ -10,17 +10,27 @@ pip install --upgrade awscli
 #yum install epel-release -y
 
 echo "***** Setup Banner *****"
-#yum install figlet -y
-#figlet "Bastion" > /etc/motd
-#cat /etc/motd
-#yum remove figlet -y
+yum install figlet -y
+BANNER=$(figlet "Bastion" | sed 's/`/\\`/')
+cat << EOF > /etc/update-motd.d/30-banner
+cat << MOTD
+$BANNER
+MOTD
+EOF
+/usr/sbin/update-motd
+cat /etc/motd
+yum remove figlet -y
 
 # TODO apply other CIS changes
 # or swap out base image for https://aws.amazon.com/marketplace/pp/B078TPXMH2?qid=1530714745994&sr=0-1&ref_=srh_res_product_title
 
-echo "***** Setup Logging *****"
-# TODO add awslogs
-# https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html
+# TODO setup av
+# https://www.centosblog.com/how-to-install-clamav-and-configure-daily-scanning-on-centos/
+
+echo "***** Setup CloudWatch Logging *****"
+yum install -y awslogs
+sed -i 's/{instance_id}/$INSTANCE_ID/' /etc/awslogs/awslogs.conf
+service awslogs start
 
 echo "***** Setup fail2ban [Public Subnet Only] *****"
 yum install fail2ban -y
@@ -29,7 +39,7 @@ service fail2ban start
 echo "***** Setup SSH via IAM *****"
 rpm -i https://s3-eu-west-1.amazonaws.com/widdix-aws-ec2-ssh-releases-eu-west-1/aws-ec2-ssh-1.9.0-1.el7.centos.noarch.rpm
 sed -i 's/IAM_AUTHORIZED_GROUPS=""/IAM_AUTHORIZED_GROUPS="${IAM_AUTHORIZED_GROUPS}"/' /etc/aws-ec2-ssh.conf
-sed -i 's/DONOTSYNC=1//' /etc/aws-ec2-ssh.conf
+sed -i 's/^DONOTSYNC=1/d' /etc/aws-ec2-ssh.conf
 /usr/bin/import_users.sh
 
 echo "***** Clean Up *****"
