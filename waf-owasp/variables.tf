@@ -5,7 +5,7 @@ variable "name" {
 
 # IPs
 variable "defaultAction" {
-  default = "ALLOW"
+  default = "DENY"
 }
 
 variable "ipWhiteListId" {}
