@@ -13,24 +13,23 @@ module "waf" {
   name          = "${var.env}ApplicationName"
   defaultAction = "${var.defaultAction}"
 
-  ipAdminListId = "${var.ipAdminListId}"
-  ipBlackListId = "${var.ipBlackListId}"
-  ipWhiteListId = "${var.ipWhiteListId}"
+  ipAdminListId = "${aws_waf_ipset.admin.id}"
+  ipBlackListId = "${aws_waf_ipset.black.id"
+  ipWhiteListId = "${aws_waf_ipset.white.id}"
 }
 ```
 
 ### IP Lists
 ```hcl-terraform
-# place holder for admin, white, black ip lists
-resorce "aws_waf_ipset" "empty" {
-  name = "${var.name}-empty-ipset"
+resource "aws_waf_ipset" "white" {
+  name = "${var.name}-white-ipset"
 }
 ```
 
 ## Input
 - **name:** application name
 - **defaultAction:** Firewall permission. Set to `ALLOW` for the public to gain access [Default: DENY]
-- **ip{Admin,White,Black}ListId:** ip lists on who can and cannot access the endpoint
+- **ip{Admin,White,Black}ListId:** ip lists on who can and cannot access the endpoint [Default: empty ipset]
 
 See `variables.tf` for extended list of OWASP inputs that can be configured.
 

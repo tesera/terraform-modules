@@ -16,7 +16,17 @@ provider "aws" {
   alias   = "edge"
 }
 
+# WAF
+resource "aws_waf_ipset" "empty" {
+  name = "${local.name}-empty-ipset"
+}
+
 module "waf" {
   source = "../../waf"
   name   = "${local.name}"
+  defaultAction = "ALLOW"
+
+  ipAdminListId = "${aws_waf_ipset.empty.}"
+  ipBlackListId = "${var.ipBlackListId}"
+  ipWhiteListId = "${var.ipWhiteListId}"
 }

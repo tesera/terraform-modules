@@ -16,7 +16,7 @@ resource "aws_waf_rule" "wafgAdminAccessRule" {
   }
 
   predicates {
-    data_id = "${var.ipAdminListId}"
+    data_id = "${local.ipset_admin_id}"
     negated = false
     type    = "IPMatch"
   }
