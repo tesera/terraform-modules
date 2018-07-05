@@ -1,8 +1,6 @@
 variable "name" {}
 
-variable "vpc_id" {
-  default = ""
-}
+variable "vpc_id" {}
 
 variable "db_name" {
   type = "string"

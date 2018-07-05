@@ -13,6 +13,7 @@ Creates a postgres RDS instance.
 ```hcl-terraform
 module "db" {
   source                 = "github.com/tesera/terraform-modules/postgres"
+  vpc_id                 = "vpc-00000000"
   name                   = "rds-instance-name"
   db_name                = "db-name"
   username               = "db-user"
@@ -52,6 +53,7 @@ resource "aws_security_group_rule" "db_access" {
 ## Input
 
 - **name:** name of the RDS instance
+- **vpc_id:** VPC id 
 - **db_name:** name of the database to create when the DB instance is created
 - **username:** username for the master DB user
 - **password:** password for the master DB user
