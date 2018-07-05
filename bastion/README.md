@@ -12,7 +12,7 @@ Allow ssh to private subnet services.
 ### Module
 ```hcl-terraform
 module "bastion" {
-  source            = "github.com/tesera/terraform-modules/bastion"
+  source            = "git@github.com:tesera/terraform-modules//bastion"
   name              = "${local.name}"
   vpc_id            = "${module.vpc.id}"
   public_subnet_ids = "${module.vpc.public_subnet_ids}"

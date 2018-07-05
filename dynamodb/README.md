@@ -7,7 +7,7 @@ Creates a DynamoDB table.
 
 ```hcl-terraform
 module "dynamodb" {
-  source = "github.com/tesera/terraform-modules/dynamodb"
+  source = "git@github.com:tesera/terraform-modules//dynamodb"
   table_name = "${var.env}-${var.name}"
   hash_key = "table-name-hash-key"
   range_key = "table-name-range-key"

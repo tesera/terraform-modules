@@ -12,7 +12,7 @@ Creates a postgres RDS instance.
 
 ```hcl-terraform
 module "db" {
-  source                 = "github.com/tesera/terraform-modules/postgres"
+  source                 = "git@github.com:tesera/terraform-modules//postgres"
   vpc_id                 = "vpc-00000000"
   name                   = "rds-instance-name"
   db_name                = "db-name"

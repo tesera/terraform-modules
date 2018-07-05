@@ -9,7 +9,7 @@ Ported from [AWS WAF to Mitigate OWASP's Top 10 Web Application Vulnerabilities]
 ### Module
 ```hcl-terraform
 module "waf" {
-  source        = "github.com/tesera/terraform-modules/waf-owasp"
+  source        = "git@github.com:tesera/terraform-modules//waf-owasp"
   name          = "${var.env}ApplicationName"
   defaultAction = "${var.defaultAction}"
 

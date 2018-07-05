@@ -29,7 +29,7 @@ data "aws_acm_certificate" "main" {
 
 ```hcl-terraform
 module "waf" {
-  source = "github.com/tesera/terraform-modules/waf-owasp"
+  source = "git@github.com:tesera/terraform-modules//waf-owasp"
   name   = "${var.env}ApplicationName"
   defaultAction = "ALLOW"
 }
