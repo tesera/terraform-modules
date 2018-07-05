@@ -23,25 +23,24 @@ provider "aws" {
 }
 
 module "vpc" {
-  source = "../vpc"
+  source = "../../vpc"
   name   = "${local.name}"
 }
 
-/*
 resource "aws_vpc_endpoint" "s3" {
-  vpc_id            = "${module.vpc.id}"
-  service_name      = "com.amazonaws.${local.aws_region}.s3"
-  route_table_ids   = ["${module.vpc.private_route_table_ids}"]
+  vpc_id          = "${module.vpc.id}"
+  service_name    = "com.amazonaws.${local.aws_region}.s3"
+  route_table_ids = [
+    "${module.vpc.private_route_table_ids}"]
 }
-*/
 
 module "bastion" {
-  source            = "../bastion"
+  source            = "../../bastion"
   name              = "${local.name}"
   vpc_id            = "${module.vpc.id}"
   public_subnet_ids = "${module.vpc.public_subnet_ids}"
   key_name          = "${local.key_name}"
-  iam_ssh_group     = "Admin"
+  iam_user_groups   = "Admin"
 }
 
 output "bastion_ip" {
