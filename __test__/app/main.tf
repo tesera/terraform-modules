@@ -2,6 +2,7 @@ locals {
   aws_region = "ca-central-1"
   profile    = "tesera"
   name       = "tesera-modules-test"
+  domain = "test.tesera.com"
 }
 
 
@@ -25,8 +26,18 @@ module "waf" {
 
 # APP
 
+data "aws_acm_certificate" "main" {
+  provider = "aws.edge"
+  domain   = "${local.domain}"
+  statuses = ["ISSUED"]
+}
+
 module "app" {
   source = "../../public-statis-assets"
   name = "${local.name}"
-  
+
+  aliases             = ["${local.domain}"]
+  acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
+  web_acl_id          = "${module.waf.id}"
+  #lambda_edge_content = "${replace(file("${path.module}/edge.js"), "{pkphash}", "${var.pkphash}")}"
 }
