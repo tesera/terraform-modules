@@ -31,11 +31,7 @@ data "aws_acm_certificate" "main" {
 module "waf" {
   source = "github.com/tesera/terraform-modules/waf-owasp"
   name   = "${var.env}ApplicationName"
-  defaultAction = "${var.defaultAction}"
-
-  ipAdminListId = "${var.ipAdminListId}"
-  ipBlackListId = "${var.ipBlackListId}"
-  ipWhiteListId = "${var.ipWhiteListId}"
+  defaultAction = "ALLOW"
 }
 ```
 

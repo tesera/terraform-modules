@@ -48,6 +48,7 @@ resource "aws_iam_group" "developers" {
 
 ## Output
 - **public_ip:** public ip
+- **security_group_id:** security group applied, add to ingress on private instance security group
 - **billing_suggestion:** comments to improve billing cost
 
 ## SSH
