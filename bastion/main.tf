@@ -185,7 +185,8 @@ data "template_file" "main-userdata" {
   vars {
     REGION = "${local.aws_region}"
     EIP_ID = "${aws_eip.main.id}"
-    IAM_AUTHORIZED_GROUPS = "${var.iam_ssh_group}"
+    IAM_USER_GROUPS = "${var.iam_user_groups}"
+    IAM_SUDO_GROUPS = "${var.iam_sudo_groups}"
   }
 }
 

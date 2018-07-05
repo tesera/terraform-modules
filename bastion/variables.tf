@@ -21,6 +21,12 @@ variable "volume_size" {
   default = "8"
 }
 
-variable "iam_ssh_group" {}
+variable "iam_user_groups" {
+  default = ""
+}
+
+variable "iam_sudo_groups" {
+  default = ""
+}
 
 

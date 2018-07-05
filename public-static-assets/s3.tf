@@ -1,8 +1,19 @@
+# TODO add in logging bucket??
+
 resource "aws_s3_bucket" "main" {
   bucket              = "${var.name}-static-assets"
   region              = "${local.aws_region}"
   acl                 = "private"
   acceleration_status = "Enabled"
+
+  versioning {
+    enabled = false
+  }
+
+  tags {
+    Name        = "${var.name} Static Assets"
+    Terraform = "true"
+  }
 }
 
 resource "aws_cloudfront_origin_access_identity" "main" {
