@@ -1,7 +1,7 @@
 resource "aws_security_group" "db" {
-  name = "${var.name}"
-
+  name        = "${var.name}"
   description = "SecurityGroup for RDS"
+  vpc_id      = "${var.vpc_id}"
 
   # Allow all outbound traffic.
   egress {
