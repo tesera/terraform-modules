@@ -10,8 +10,16 @@ resource "aws_s3_bucket" "main" {
     enabled = false
   }
 
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "aws:kms"
+      }
+    }
+  }
+
   tags {
-    Name        = "${var.name} Static Assets"
+    Name      = "${var.name} Static Assets"
     Terraform = "true"
   }
 }
@@ -22,19 +30,20 @@ resource "aws_cloudfront_origin_access_identity" "main" {
 
 data "aws_iam_policy_document" "s3" {
   statement {
-    actions = [
+    actions    = [
       "s3:ListBucket",
       "s3:GetObject",
     ]
 
-    resources = [
+    resources  = [
       "${aws_s3_bucket.main.arn}",
       "${aws_s3_bucket.main.arn}/*",
     ]
 
     principals = {
       type        = "AWS"
-      identifiers = ["${aws_cloudfront_origin_access_identity.main.iam_arn}"]
+      identifiers = [
+        "${aws_cloudfront_origin_access_identity.main.iam_arn}"]
     }
   }
 }
