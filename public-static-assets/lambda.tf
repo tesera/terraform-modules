@@ -1,25 +1,22 @@
 data "archive_file" "response_headers" {
   type        = "zip"
-  output_path = "${path.module}/function.zip"
+  output_path = "${path.module}/lambda.zip"
 
   source {
     filename = "index.js"
-    content  = "${var.lambda_edge_content != "null" ? "${var.lambda_edge_content}" : file("${path.module}/index.js") }"
+    content  = "${var.lambda_edge_content != "" ? var.lambda_edge_content : file("${path.module}/lambda/index.js") }"
   }
 }
 
 resource "aws_lambda_function" "response_headers" {
-  provider      = "aws.edge"
-  function_name = "${var.name}-edge-response"
-
-  # ${var.env}-${var.name}-edge-response-2017-12-01 # HACK for dev
-  # function_name = "qa-emis-registration-website-edge-response-headers-2017-11-28"   # HACK for fixing AWS - QA Only
-  filename = "${data.archive_file.response_headers.output_path}"
+  provider         = "aws.edge"
+  function_name    = "${local.name}-edge-response"
+  filename         = "${data.archive_file.response_headers.output_path}"
 
   source_code_hash = "${data.archive_file.response_headers.output_base64sha256}"
   role             = "${aws_iam_role.lambda.arn}"
   handler          = "index.handler"
-  runtime          = "nodejs6.10"
+  runtime          = "nodejs8.10"
   memory_size      = 128
   timeout          = 1
   publish          = true
@@ -32,7 +29,7 @@ data "aws_iam_policy_document" "lambda" {
     ]
 
     principals {
-      type = "Service"
+      type        = "Service"
 
       identifiers = [
         "lambda.amazonaws.com",
@@ -43,7 +40,7 @@ data "aws_iam_policy_document" "lambda" {
 }
 
 resource "aws_iam_role" "lambda" {
-  name               = "${var.name}-edge-response"
+  name               = "${local.name}-edge-response"
   assume_role_policy = "${data.aws_iam_policy_document.lambda.json}"
 }
 

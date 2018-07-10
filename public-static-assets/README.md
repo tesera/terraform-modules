@@ -56,9 +56,10 @@ module "app" {
 - **lambda_edge_content:** By default this module includes a lambda function to add security headers to all responses. This can be overwritten using the above example.
 
 ## Output
-- **bucket_name:** `${aws_s3_bucket.main.id}` Full name of the S3 bucket.
-- **cloudfront_distribution_id:** `${aws_cloudfront_distribution.main.id}` CloudFront Distribution Id for CI/CD to trigger cache clearing (`aws cloudfront create-invalidation --distribution-id ${AWS_CLOUDFRONT_DISTRIBUTION_ID} --paths /index.html`)
-- **cloudfront_distribution_domain_name:** `${aws_cloudfront_distribution.main.domain_name}` CloudFront Domain Name for DNS updating.
+- **bucket:** `${aws_s3_bucket.main.id}` Full name of the S3 bucket.
+- **id:** `${aws_cloudfront_distribution.main.id}` CloudFront Distribution Id for CI/CD to trigger cache clearing (`aws cloudfront create-invalidation --distribution-id ${AWS_CLOUDFRONT_DISTRIBUTION_ID} --paths /index.html`)
+- **domain_name:** `${aws_cloudfront_distribution.main.domain_name}` CloudFront Domain Name for DNS updating.
+- **hosted_zone_id:** `${aws_cloudfront_distribution.main.hosted_zone_id}` CloudFront Hosted Zone ID.
 
 ## TODO
 - [ ] IPv6 support

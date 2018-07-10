@@ -9,10 +9,11 @@
 //}
 
 locals {
-  aws_region = "ca-central-1"
-  profile    = "tesera"
-  name       = "tesera-modules-test"
-  domain     = "test.tesera.com"
+  aws_region  = "ca-central-1"
+  profile     = "tesera"
+  name        = "tesera-modules_test"
+  domain_root = "tesera.com"
+  domain      = "test.tesera.com"
 }
 
 provider "aws" {
@@ -28,13 +29,29 @@ provider "aws" {
 
 # WAF
 module "waf" {
-  source        = "../../waf"
+  source        = "../../waf-owasp"
   name          = "${local.name}"
   defaultAction = "ALLOW"
 }
 
 # APP
+## DNS
+data "aws_route53_zone" "main" {
+  name = "${local.domain_root}."
+}
 
+resource "aws_route53_record" "main" {
+  zone_id = "${data.aws_route53_zone.main.zone_id}"
+  name    = "${local.domain}"
+  type    = "A"
+  alias   = {
+    name                   = "${module.app.domain_name}"
+    zone_id                = "${module.app.hosted_zone_id}"
+    evaluate_target_health = true
+  }
+}
+
+## TLS
 data "aws_acm_certificate" "main" {
   provider = "aws.edge"
   domain   = "${local.domain}"
@@ -42,8 +59,9 @@ data "aws_acm_certificate" "main" {
     "ISSUED"]
 }
 
+## CDN
 module "app" {
-  source              = "../../public-statis-assets"
+  source              = "../../public-static-assets"
   name                = "${local.name}"
 
   aliases             = [
@@ -56,6 +74,8 @@ module "app" {
 resource "aws_s3_bucket_object" "index" {
   bucket                 = "${module.app.bucket}"
   key                    = "index.html"
-  source                 = "index.html"
+  source                 = "${path.module}/index.html"
+  content_type           = "text/html"
   server_side_encryption = "${module.app.server_side_encryption}"
 }
+
