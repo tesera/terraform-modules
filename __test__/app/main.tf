@@ -18,7 +18,7 @@ provider "aws" {
 
 # WAF
 module "waf" {
-  source = "../../waf"
+  source = "../../waf-owasp"
   name   = "${local.name}"
   defaultAction = "ALLOW"
 }
@@ -26,7 +26,7 @@ module "waf" {
 # APP
 
 module "app" {
-  source = "../../public-statis-assets"
+  source = "../../public-static-assets"
   name = "${local.name}"
   
 }
