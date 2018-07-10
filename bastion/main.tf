@@ -167,7 +167,7 @@ resource "aws_launch_configuration" "main" {
   enable_monitoring           = "true"
 
   # Assign EIP in user_data instead
-  associate_public_ip_address = "true"
+  associate_public_ip_address = "false"
 
   root_block_device {
     volume_type = "${var.volume_type}"

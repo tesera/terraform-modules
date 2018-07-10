@@ -22,18 +22,15 @@ provider "aws" {
   alias   = "edge"
 }
 
+# VPC
 module "vpc" {
   source = "../../vpc"
   name   = "${local.name}"
+  az_count = "1"
+  cidr_block = "20.5.0.0/16"
 }
 
-resource "aws_vpc_endpoint" "s3" {
-  vpc_id          = "${module.vpc.id}"
-  service_name    = "com.amazonaws.${local.aws_region}.s3"
-  route_table_ids = [
-    "${module.vpc.private_route_table_ids}"]
-}
-
+## Public Subnet
 module "bastion" {
   source            = "../../bastion"
   name              = "${local.name}"
@@ -43,12 +40,21 @@ module "bastion" {
   iam_user_groups   = "Admin"
 }
 
+
 output "bastion_ip" {
   value = "${module.bastion.public_ip}"
 }
 
 output "bastion_billing_suggestion" {
   value = "${module.bastion.billing_suggestion}"
+}
+
+## Private Subnet
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id          = "${module.vpc.id}"
+  service_name    = "com.amazonaws.${local.aws_region}.s3"
+  route_table_ids = [
+    "${module.vpc.private_route_table_ids}"]
 }
 
 module "ecs" {
