@@ -1,7 +1,9 @@
 locals {
   aws_region = "ca-central-1"
   profile    = "tesera"
-  name       = "tesera-modules-test"
+  name       = "tesera-modules_test"
+  domain_root = "tesera.com"
+  domain     = "test.tesera.com"
 }
 
 
@@ -18,15 +20,52 @@ provider "aws" {
 
 # WAF
 module "waf" {
-  source = "../../waf-owasp"
-  name   = "${local.name}"
+  source        = "../../waf-owasp"
+  name          = "${local.name}"
   defaultAction = "ALLOW"
 }
 
 # APP
-
-module "app" {
-  source = "../../public-static-assets"
-  name = "${local.name}"
-  
+## DNS
+data "aws_route53_zone" "main" {
+  name         = "${local.domain_root}."
 }
+
+resource "aws_route53_record" "main" {
+  zone_id = "${data.aws_route53_zone.main.zone_id}"
+  name    = "${local.domain}"
+  type    = "A"
+  alias = {
+    name = "${module.app.domain_name}"
+    zone_id = "${module.app.hosted_zone_id}"
+    evaluate_target_health = true
+  }
+}
+
+## TLS
+data "aws_acm_certificate" "main" {
+  provider = "aws.edge"
+  domain   = "${local.domain}"
+  statuses = [
+    "ISSUED"]
+}
+
+## CDN
+module "app" {
+  source              = "../../public-static-assets"
+  name                = "${local.name}"
+
+  aliases             = [
+    "${local.domain}"]
+  acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
+  web_acl_id          = "${module.waf.id}"
+  #lambda_edge_content = "${replace(file("${path.module}/edge.js"), "{pkphash}", "${var.pkphash}")}"
+}
+
+resource "aws_s3_bucket_object" "index" {
+  bucket                 = "${module.app.bucket}"
+  key                    = "index.html"
+  source                 = "${path.module}/index.html"
+  server_side_encryption = "${module.app.server_side_encryption}"
+}
+

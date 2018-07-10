@@ -8,7 +8,7 @@ resource "aws_cloudfront_distribution" "main" {
 
   aliases = "${var.aliases}"
   origin {
-    origin_id   = "${var.name}"
+    origin_id   = "${local.name}"
     domain_name = "${aws_s3_bucket.main.bucket_domain_name}"
 
     s3_origin_config {
@@ -16,7 +16,7 @@ resource "aws_cloudfront_distribution" "main" {
     }
   }
   default_cache_behavior {
-    target_origin_id = "${var.name}"
+    target_origin_id = "${local.name}"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
 
@@ -64,7 +64,7 @@ resource "aws_cloudfront_distribution" "main" {
 }
 
 resource "aws_s3_bucket" "s3_static_website_logs" {
-  bucket = "${var.name}-access-logs"
+  bucket = "${local.name}-access-logs"
 
   lifecycle_rule {
     enabled = true

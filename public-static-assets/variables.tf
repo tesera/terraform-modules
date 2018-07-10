@@ -1,7 +1,3 @@
-//variable "aws_account_id" {
-//  type        = "string"
-//  description = "AWS Account ID"
-//}
 
 // Suggested:
 // ${env}-${subdomain}-${domain}-${tld}
@@ -27,6 +23,6 @@ variable "web_acl_id" {
 
 variable "lambda_edge_content" {
   type        = "string"
-  default     = "null"
+  default     = ""
   description = "function content to be used for edge lambda"
 }

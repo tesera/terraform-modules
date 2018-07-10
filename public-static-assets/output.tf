@@ -6,10 +6,14 @@ output "server_side_encryption" {
   value = "aws:kms"
 }
 
-output "cloudfront_distribution_id" {
+output "id" {
   value = "${aws_cloudfront_distribution.main.id}"
 }
 
-output "cloudfront_distribution_domain_name" {
+output "domain_name" {
   value = "${aws_cloudfront_distribution.main.domain_name}"
+}
+
+output "hosted_zone_id" {
+  value = "${aws_cloudfront_distribution.main.hosted_zone_id}"
 }
