@@ -1,14 +1,9 @@
-resource "aws_eip" "main" {
-  vpc = "true"
-
-  tags {
-    Name      = "${var.name}-${local.aws_region}-bastion"
-    Terraform = "true"
-  }
+resource "aws_ecs_cluster" "main" {
+  name = "${var.name}-ecs"
 }
 
 resource "aws_security_group" "main" {
-  name   = "${var.name}-bastion"
+  name   = "${var.name}-ecs"
   vpc_id = "${var.vpc_id}"
 
   ingress {
@@ -29,7 +24,7 @@ resource "aws_security_group" "main" {
 }
 
 resource "aws_iam_role" "main" {
-  name               = "${var.name}-bastion-role"
+  name               = "${var.name}-ecs-role"
 
   assume_role_policy = <<EOF
 {
@@ -50,38 +45,10 @@ resource "aws_iam_role" "main" {
 EOF
 }
 
-resource "aws_iam_policy" "main-ip" {
-  name        = "${var.name}-bastion-ip-policy"
-  path        = "/"
-  description = "${var.name} Bastion IP Policy"
-
-  policy      = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:AssociateAddress"
-      ],
-      "Resource": [
-        "*"
-      ]
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "main-ip" {
-  role       = "${aws_iam_role.main.name}"
-  policy_arn = "${aws_iam_policy.main-ip.arn}"
-}
-
 resource "aws_iam_policy" "main-iam" {
-  name        = "${var.name}-bastion-iam-policy"
+  name        = "${var.name}-ecs-iam-policy"
   path        = "/"
-  description = "${var.name} Bastion SSH IAM Policy"
+  description = "${var.name} ECS SSH IAM Policy"
 
   policy      = <<EOF
 {
@@ -119,9 +86,9 @@ resource "aws_iam_role_policy_attachment" "main-iam" {
 }
 
 resource "aws_iam_policy" "main-logs" {
-  name        = "${var.name}-bastion-logs-policy"
+  name        = "${var.name}-ecs-logs-policy"
   path        = "/"
-  description = "${var.name} Bastion Logs Policy"
+  description = "${var.name} ECS Logs Policy"
 
   policy      = <<EOF
 {
@@ -150,12 +117,12 @@ resource "aws_iam_role_policy_attachment" "main-logs" {
 }
 
 resource "aws_iam_instance_profile" "main" {
-  name = "${var.name}-bastion-instance-profile"
+  name = "${var.name}-ecs-instance-profile"
   role = "${aws_iam_role.main.name}"
 }
 
 resource "aws_launch_configuration" "main" {
-  name_prefix                 = "${var.name}-bastion-"
+  name_prefix                 = "${var.name}-ecs-"
   image_id                    = "${local.image_id}"
   instance_type               = "${var.instance_type}"
   key_name                    = "${var.key_name}"
@@ -184,25 +151,25 @@ data "template_file" "main-userdata" {
 
   vars {
     REGION = "${local.aws_region}"
-    EIP_ID = "${aws_eip.main.id}"
+    ECS_CLUSTER = "${aws_ecs_cluster.main.name}"
     IAM_USER_GROUPS = "${var.iam_user_groups}"
     IAM_SUDO_GROUPS = "${var.iam_sudo_groups}"
   }
 }
 
 resource "aws_autoscaling_group" "main" {
-  name                      = "${var.name}-bastion-asg"
+  name                      = "${var.name}-ecs-asg"
   max_size                  = "${local.max_size}"
   min_size                  = "${local.min_size}"
   desired_capacity          = "${local.desired_capacity}"
   health_check_grace_period = 30
   launch_configuration      = "${aws_launch_configuration.main.name}"
   vpc_zone_identifier       = [
-    "${var.public_subnet_ids}"]
+    "${var.private_subnet_ids}"]
 
   tag {
     key                 = "Name"
-    value               = "${var.name}-bastion"
+    value               = "${var.name}-ecs"
     propagate_at_launch = "true"
   }
 
