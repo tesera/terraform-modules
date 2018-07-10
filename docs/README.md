@@ -1,6 +1,12 @@
 # Terraform
 Collection of frequently used modules and how to start a new project.
 
+## Enterprise by Default
+- Encryption at Rest (AES256 or KMS)
+- Encryption in Transit (TLSv1.2)
+- High availability and redundancy (Multi AZ)
+- Least permission roles
+- Tags: (Name, Terraform, Cost-Center, Environment)
 
 ## Getting Started
 

@@ -81,6 +81,8 @@ resource "aws_network_acl_rule" "egress_postgres" {
 - **private_route_table_ids:** array of private route tables for aws_vpc_endpoints
 - **network_acl_id:** ACL id so additional rules can be added
 
+## Known Issues:
+`Error deleting Lambda Function: InvalidParameterValueException: Lambda was unable to delete * because it is a replicated function.` See https://github.com/terraform-providers/terraform-provider-aws/issues/1721 for ongoing support.
 
 ## TODO
 - [ ] Add IPv6 - https://www.terraform.io/docs/providers/aws/r/vpc.html#assign_generated_ipv6_cidr_block

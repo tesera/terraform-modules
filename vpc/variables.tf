@@ -2,6 +2,14 @@ variable "name" {
   type = "string"
 }
 
+variable "environment" {
+  default = "Unknown"
+}
+
+//variable "cost_id" {
+//  default = "none"
+//}
+
 variable "az_count" {
   default = 2
 }

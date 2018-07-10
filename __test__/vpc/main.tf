@@ -1,9 +1,21 @@
+//terraform {
+//  backend "s3" {
+//    bucket         = "terraform-state"
+//    key            = "vpc/terraform.tfstate"
+//    region         = "ca-central-1"
+//    profile        = "tesera"
+//    dynamodb_table = "terraform-state"
+//  }
+//}
+
 locals {
   aws_region = "ca-central-1"
   profile    = "tesera"
   name       = "tesera-modules-test"
   key_name   = "${aws_key_pair.root_public_key.key_name}"
 }
+
+
 
 resource "aws_key_pair" "root_public_key" {
   key_name   = "root_public_key"
