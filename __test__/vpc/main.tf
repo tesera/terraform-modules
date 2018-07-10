@@ -34,6 +34,7 @@ provider "aws" {
   alias   = "edge"
 }
 
+# VPC
 module "vpc" {
   source = "../../vpc"
   name   = "${local.name}"
@@ -41,27 +42,52 @@ module "vpc" {
   cidr_block = "20.5.0.0/16"
 }
 
-//resource "aws_vpc_endpoint" "s3" {
-//  vpc_id          = "${module.vpc.id}"
-//  service_name    = "com.amazonaws.${local.aws_region}.s3"
-//  route_table_ids = [
-//    "${module.vpc.private_route_table_ids}"]
-//}
-//
-//module "bastion" {
-//  source            = "../../bastion"
-//  name              = "${local.name}"
-//  vpc_id            = "${module.vpc.id}"
-//  public_subnet_ids = "${module.vpc.public_subnet_ids}"
-//  key_name          = "${local.key_name}"
-//  iam_user_groups   = "Admin"
-//}
-//
-//output "bastion_ip" {
-//  value = "${module.bastion.public_ip}"
-//}
-//
-//output "bastion_billing_suggestion" {
-//  value = "${module.bastion.billing_suggestion}"
-//}
+resource "aws_vpc_endpoint" "s3" {
+  vpc_id          = "${module.vpc.id}"
+  service_name    = "com.amazonaws.${local.aws_region}.s3"
+  route_table_ids = [
+    "${module.vpc.private_route_table_ids}"]
+}
+
+# bastion
+module "bastion" {
+  source            = "../../bastion"
+  name              = "${local.name}"
+  vpc_id            = "${module.vpc.id}"
+  public_subnet_ids = "${module.vpc.public_subnet_ids}"
+  key_name          = "${local.key_name}"
+  iam_user_groups   = "Admin"
+}
+
+output "bastion_ip" {
+  value = "${module.bastion.public_ip}"
+}
+
+output "bastion_billing_suggestion" {
+  value = "${module.bastion.billing_suggestion}"
+}
+
+# database
+module "database" {
+  # depends_on bastion?? will need ssh
+  source = "../../postgres"
+  name = "${local.name}"
+  db_name = "dbname"
+  username = "dbuser"
+  password = "dbpassword"
+  engine_version = "9.4.17"
+  parameter_group_name = ""
+  vpc_id = "${module.vpc.id}"
+ private_subnet_ids = ["${module.vpc.private_subnet_ids}"]
+}
+
+resource "aws_security_group_rule" "database" {
+  source_security_group_id = "${module.bastion.security_group_id}"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  security_group_id        = "${module.database.security_group_id}"
+}
+
 
