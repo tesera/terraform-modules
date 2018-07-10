@@ -2,7 +2,7 @@ resource "aws_eip" "main" {
   vpc = "true"
 
   tags {
-    Name      = "${var.name}-bastion"
+    Name      = "${var.name}-${local.aws_region}-bastion"
     Terraform = "true"
   }
 }

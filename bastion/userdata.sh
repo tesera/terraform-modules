@@ -10,8 +10,8 @@ pip install --upgrade awscli
 #yum install epel-release -y
 
 echo "***** Setup Banner *****"
-yum install figlet -y
-BANNER=$(figlet "Bastion" | sed 's/`/\\`/')
+yum install figlet lolcat -y
+BANNER=$(figlet "Bastion" | sed 's/`/\\`/' | lolcat)
 cat << EOF > /etc/update-motd.d/30-banner
 cat << MOTD
 $BANNER
@@ -19,7 +19,7 @@ MOTD
 EOF
 /usr/sbin/update-motd
 cat /etc/motd
-yum remove figlet -y
+yum remove figlet lolcat -y
 
 # TODO apply other CIS changes
 # or swap out base image for https://aws.amazon.com/marketplace/pp/B078TPXMH2?qid=1530714745994&sr=0-1&ref_=srh_res_product_title
