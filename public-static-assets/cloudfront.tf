@@ -4,7 +4,7 @@ resource "aws_cloudfront_distribution" "main" {
   enabled      = true
   http_version = "http2"
 
-  #is_ipv6_enabled = true
+  is_ipv6_enabled = true
 
   aliases = "${var.aliases}"
   origin {
