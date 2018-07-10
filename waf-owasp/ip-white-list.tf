@@ -1,7 +1,7 @@
 
 resource "aws_waf_rule" "wafgIpWhiteListRule" {
-  name        = "${var.name}wafgIpWhiteListRule"
-  metric_name = "${var.name}wafgIpWhiteListRule"
+  name        = "${local.name}wafgIpWhiteListRule"
+  metric_name = "${local.name}wafgIpWhiteListRule"
 
   predicates {
     data_id = "${local.ipset_white_id}"

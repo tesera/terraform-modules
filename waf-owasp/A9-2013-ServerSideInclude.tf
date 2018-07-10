@@ -3,8 +3,8 @@ resource "aws_waf_rule" "wafgServerSideIncludeRule" {
     "aws_waf_byte_match_set.wafgServerSideIncludeStringSet",
   ]
 
-  name        = "${var.name}wafgServerSideIncludeRule"
-  metric_name = "${var.name}wafgServerSideIncludeRule"
+  name        = "${local.name}wafgServerSideIncludeRule"
+  metric_name = "${local.name}wafgServerSideIncludeRule"
 
   predicates {
     data_id = "${aws_waf_byte_match_set.wafgServerSideIncludeStringSet.id}"
@@ -14,7 +14,7 @@ resource "aws_waf_rule" "wafgServerSideIncludeRule" {
 }
 
 resource "aws_waf_byte_match_set" "wafgServerSideIncludeStringSet" {
-  name = "${var.name}wafgServerSideIncludeStringSet"
+  name = "${local.name}wafgServerSideIncludeStringSet"
 
   byte_match_tuples {
     text_transformation   = "URL_DECODE"

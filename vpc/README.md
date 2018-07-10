@@ -69,6 +69,8 @@ resource "aws_network_acl_rule" "egress_postgres" {
 
 ## Input
 - **name:** application name
+- **cidr_block:** Custom CIDR block, must end with `0.0/16` [Default: `10.0.0.0/16`]
+- **az_count:** Number on AZ to initialize, min of 2. See [Map](https://aws.amazon.com/about-aws/global-infrastructure/) for AZ count for each region.
 
 ## Output
 
@@ -76,7 +78,7 @@ resource "aws_network_acl_rule" "egress_postgres" {
 - **public_nat_ips:** array of ips attached to NATs
 - **public_subnet_ids:** array of public subnet ids
 - **private_subnet_ids:** array of private subnet ids
-- **private_route_table_ids:** array of private
+- **private_route_table_ids:** array of private route tables for aws_vpc_endpoints
 - **network_acl_id:** ACL id so additional rules can be added
 
 

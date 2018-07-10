@@ -3,8 +3,8 @@ resource "aws_waf_rule" "wafrXSSRule" {
     "aws_waf_xss_match_set.wafrXSSSet",
   ]
 
-  name        = "${var.name}wafrXSSRule"
-  metric_name = "${var.name}wafrXSSRule"
+  name        = "${local.name}wafrXSSRule"
+  metric_name = "${local.name}wafrXSSRule"
 
   predicates {
     data_id = "${aws_waf_xss_match_set.wafrXSSSet.id}"
@@ -14,7 +14,7 @@ resource "aws_waf_rule" "wafrXSSRule" {
 }
 
 resource "aws_waf_xss_match_set" "wafrXSSSet" {
-  name = "${var.name}wafrXSSSet"
+  name = "${local.name}wafrXSSSet"
 
   xss_match_tuples {
     text_transformation = "URL_DECODE"

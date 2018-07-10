@@ -8,9 +8,15 @@ variable "defaultAction" {
   default = "DENY"
 }
 
-variable "ipWhiteListId" {}
-variable "ipAdminListId" {}
-variable "ipBlackListId" {}
+variable "ipWhiteListId" {
+  default = ""
+}
+variable "ipAdminListId" {
+  default = ""
+}
+variable "ipBlackListId" {
+  default = ""
+}
 
 # A4
 variable "adminUrlPrefix" {
