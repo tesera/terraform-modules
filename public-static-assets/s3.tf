@@ -10,10 +10,20 @@ resource "aws_s3_bucket" "main" {
     enabled = false
   }
 
+// CloudFront unable to reach `aws:kms` - not supported yet (2018-07-10)
+//  server_side_encryption_configuration {
+//    rule {
+//      apply_server_side_encryption_by_default {
+//        sse_algorithm = "aws:kms"
+//      }
+//    }
+//  }
+
+// CloudFront forces a d download when AES256 is used
   server_side_encryption_configuration {
-    rule {
-      apply_server_side_encryption_by_default {
-        sse_algorithm = "aws:kms"
+    "rule" {
+      "apply_server_side_encryption_by_default" {
+        sse_algorithm = "${local.sse_algorithm}"
       }
     }
   }

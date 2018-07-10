@@ -3,7 +3,7 @@ output "bucket" {
 }
 
 output "server_side_encryption" {
-  value = "aws:kms"
+  value = "${local.sse_algorithm}"
 }
 
 output "id" {
