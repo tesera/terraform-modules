@@ -7,7 +7,7 @@ resource "aws_route_table" "public" {
   }
 
   tags {
-    Name      = "public-${var.name}-${local.aws_region}"
+    Name      = "public-${var.name}"
     Terraform = "true"
     Environment = "${var.environment}"
   }
@@ -20,7 +20,7 @@ resource "aws_subnet" "public" {
   availability_zone = "${local.aws_region}${local.az_name[count.index]}"
 
   tags {
-    Name      = "public-${var.name}-${local.aws_region}${local.az_name[count.index]}"
+    Name      = "public-${var.name}-az-${local.az_name[count.index]}"
     Terraform = "true"
     Environment = "${var.environment}"
   }
@@ -31,7 +31,7 @@ resource "aws_eip" "nat" {
   vpc   = true
 
   tags {
-    Name      = "${var.name}-${local.aws_region}${local.az_name[count.index]}"
+    Name      = "${var.name}-az-${local.az_name[count.index]}"
     Terraform = "true"
   }
 }
@@ -42,7 +42,7 @@ resource "aws_nat_gateway" "public" {
   subnet_id     = "${aws_subnet.public.*.id[count.index]}"
 
   tags {
-    Name      = "${var.name}-${local.aws_region}${local.az_name[count.index]}"
+    Name      = "${var.name}-az-${local.az_name[count.index]}"
     Terraform = "true"
     Environment = "${var.environment}"
   }

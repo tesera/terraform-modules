@@ -45,6 +45,35 @@ resource "aws_iam_role" "main" {
 EOF
 }
 
+resource "aws_iam_policy" "main-ecs" {
+  name        = "${var.name}-ecs-policy"
+  path        = "/"
+  description = "${var.name} ECS Policy"
+
+  policy      = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ecs:RegisterContainerInstance",
+        "ecs:DeregisterContainerInstance",
+        "ecs:DiscoverPollEndpoint",
+        "ecs:Poll"
+      ],
+      "Resource": ["${aws_ecs_cluster.main.arn}"]
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "main-ecs" {
+  role       = "${aws_iam_role.main.name}"
+  policy_arn = "${aws_iam_policy.main-ecs.arn}"
+}
+
 resource "aws_iam_policy" "main-iam" {
   name        = "${var.name}-ecs-iam-policy"
   path        = "/"
@@ -150,8 +179,8 @@ data "template_file" "main-userdata" {
   template = "${file("${path.module}/userdata.sh")}"
 
   vars {
-    REGION = "${local.aws_region}"
-    ECS_CLUSTER = "${aws_ecs_cluster.main.name}"
+    REGION          = "${local.aws_region}"
+    ECS_CLUSTER     = "${aws_ecs_cluster.main.name}"
     IAM_USER_GROUPS = "${var.iam_user_groups}"
     IAM_SUDO_GROUPS = "${var.iam_sudo_groups}"
   }

@@ -2,7 +2,7 @@ resource "aws_db_instance" "main" {
   auto_minor_version_upgrade      = true
   allow_major_version_upgrade     = false
   allocated_storage               = "${var.allocated_storage}"
-  identifier                      = "${var.name}"
+  identifier                      = "${var.name}-${var.engine}"
   storage_type                    = "${var.storage_type}"
   engine                          = "${var.engine}"
   engine_version                  = "${var.engine_version}"

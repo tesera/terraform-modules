@@ -65,6 +65,7 @@ Host cn-proxy-test
   User **USERNAME**
   ControlPath /tmp/ssh_cn-proxy-test
   LocalForward 3307 mysql-test.*****.us-east-1.rds.amazonaws.com:3306
+  LocalForward 5432 postgres-test.*****.us-east-1.rds.amazonaws.com:5432
   LocalForward 6378 redis-test.*****.0001.use1.cache.amazonaws.com:6379
 
 Host cn-bastion-test

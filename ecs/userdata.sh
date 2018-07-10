@@ -7,7 +7,7 @@ pip install --upgrade awscli
 
 echo "***** Setup Banner *****"
 yum install figlet -y
-BANNER=$(figlet "Bastion" | sed 's/`/\\`/')
+BANNER=$(figlet "AWS ECS" | sed "s/\`/\'/")
 cat << EOF > /etc/update-motd.d/30-banner
 cat << MOTD
 $BANNER
@@ -38,7 +38,7 @@ EOF
 
 /usr/bin/import_users.sh
 
-echo "***** Connect *****"
+echo "***** Connect to Cluster *****"
 echo ECS_CLUSTER=${ECS_CLUSTER} >> /etc/ecs/ecs.config
 
 echo "***** Clean Up *****"

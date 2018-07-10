@@ -2,7 +2,7 @@ resource "aws_eip" "main" {
   vpc = "true"
 
   tags {
-    Name      = "${var.name}-${local.aws_region}-bastion"
+    Name      = "${var.name}-bastion"
     Terraform = "true"
   }
 }
@@ -166,8 +166,8 @@ resource "aws_launch_configuration" "main" {
   ebs_optimized               = "false"
   enable_monitoring           = "true"
 
-  # Assign EIP in user_data instead
-  associate_public_ip_address = "false"
+  # Assign EIP in user_data overrides this, but must be true
+  associate_public_ip_address = "true"
 
   root_block_device {
     volume_type = "${var.volume_type}"
@@ -199,6 +199,12 @@ resource "aws_autoscaling_group" "main" {
   launch_configuration      = "${aws_launch_configuration.main.name}"
   vpc_zone_identifier       = [
     "${var.public_subnet_ids}"]
+
+// Not supported??
+//  tags {
+//    Name = "${var.name}-bastion"
+//    Terraform = true
+//  }
 
   tag {
     key                 = "Name"
