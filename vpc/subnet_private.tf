@@ -7,6 +7,7 @@ resource "aws_subnet" "private" {
   tags {
     Name      = "private-${var.name}-${local.aws_region}${local.az_name[count.index]}"
     Terraform = "true"
+    Environment = "${var.environment}"
   }
 }
 
@@ -22,6 +23,7 @@ resource "aws_route_table" "private" {
   tags {
     Name      = "private-${var.name}-${local.aws_region}${local.az_name[count.index]}"
     Terraform = "true"
+    Environment = "${var.environment}"
   }
 }
 resource "aws_route_table_association" "private" {
