@@ -1,5 +1,5 @@
-resource "aws_security_group" "db" {
-  name        = "${var.name}"
+resource "aws_security_group" "main" {
+  name        = "${var.name}-security-group"
   description = "SecurityGroup for RDS"
   vpc_id      = "${var.vpc_id}"
 

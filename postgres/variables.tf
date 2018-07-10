@@ -4,10 +4,12 @@ variable "vpc_id" {}
 
 variable "db_name" {
   type = "string"
+  default = ""
 }
 
 variable "username" {
   type = "string"
+  default = "admin"
 }
 
 variable "password" {
@@ -27,11 +29,11 @@ variable "engine" {
 }
 
 variable "engine_version" {
-  default = "9.5.10"
+  default = "10.3"
 }
 
 variable "instance_class" {
-  default = "db.t2.micro"
+  default = "db.t2.small"
 }
 
 variable "backup_window" {
@@ -39,7 +41,7 @@ variable "backup_window" {
 }
 
 variable "parameter_group_name" {
-  default = "default.postgres9.5"
+  default = "default.postgres10"
 }
 
 variable "allocated_storage" {
@@ -52,4 +54,8 @@ variable "backup_retention_period" {
 
 variable "multi_az" {
   default = true
+}
+
+variable "replica_count" {
+  default = "0"
 }
