@@ -9,6 +9,7 @@ resource "aws_route_table" "public" {
   tags {
     Name      = "public-${var.name}-${local.aws_region}"
     Terraform = "true"
+    Environment = "${var.environment}"
   }
 }
 
@@ -21,6 +22,7 @@ resource "aws_subnet" "public" {
   tags {
     Name      = "public-${var.name}-${local.aws_region}${local.az_name[count.index]}"
     Terraform = "true"
+    Environment = "${var.environment}"
   }
 }
 
@@ -42,6 +44,7 @@ resource "aws_nat_gateway" "public" {
   tags {
     Name      = "${var.name}-${local.aws_region}${local.az_name[count.index]}"
     Terraform = "true"
+    Environment = "${var.environment}"
   }
 }
 
