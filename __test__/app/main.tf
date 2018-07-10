@@ -1,10 +1,19 @@
+//terraform {
+//  backend "s3" {
+//    bucket         = "terraform-state"
+//    key            = "app/terraform.tfstate"
+//    region         = "ca-central-1"
+//    profile        = "tesera"
+//    dynamodb_table = "terraform-state"
+//  }
+//}
+
 locals {
   aws_region = "ca-central-1"
   profile    = "tesera"
   name       = "tesera-modules-test"
   domain     = "test.tesera.com"
 }
-
 
 provider "aws" {
   region  = "${local.aws_region}"

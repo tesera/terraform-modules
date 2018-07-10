@@ -1,9 +1,21 @@
+//terraform {
+//  backend "s3" {
+//    bucket         = "terraform-state"
+//    key            = "vpc/terraform.tfstate"
+//    region         = "ca-central-1"
+//    profile        = "tesera"
+//    dynamodb_table = "terraform-state"
+//  }
+//}
+
 locals {
   aws_region = "ca-central-1"
   profile    = "tesera"
   name       = "tesera-modules-test"
   key_name   = "${aws_key_pair.root_public_key.key_name}"
 }
+
+
 
 resource "aws_key_pair" "root_public_key" {
   key_name   = "root_public_key"
@@ -26,8 +38,11 @@ provider "aws" {
 module "vpc" {
   source = "../../vpc"
   name   = "${local.name}"
+  az_count = "1"
+  cidr_block = "20.5.0.0/16"
 }
 
+<<<<<<< HEAD
 resource "aws_vpc_endpoint" "s3" {
   vpc_id          = "${module.vpc.id}"
   service_name    = "com.amazonaws.${local.aws_region}.s3"
@@ -82,3 +97,29 @@ output "private_subnet_ids" {
   value = ["${module.private_a.id}","${module.private_b.id}"]
 }
 */
+=======
+//resource "aws_vpc_endpoint" "s3" {
+//  vpc_id          = "${module.vpc.id}"
+//  service_name    = "com.amazonaws.${local.aws_region}.s3"
+//  route_table_ids = [
+//    "${module.vpc.private_route_table_ids}"]
+//}
+//
+//module "bastion" {
+//  source            = "../../bastion"
+//  name              = "${local.name}"
+//  vpc_id            = "${module.vpc.id}"
+//  public_subnet_ids = "${module.vpc.public_subnet_ids}"
+//  key_name          = "${local.key_name}"
+//  iam_user_groups   = "Admin"
+//}
+//
+//output "bastion_ip" {
+//  value = "${module.bastion.public_ip}"
+//}
+//
+//output "bastion_billing_suggestion" {
+//  value = "${module.bastion.billing_suggestion}"
+//}
+
+>>>>>>> master

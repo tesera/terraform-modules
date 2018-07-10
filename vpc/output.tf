@@ -3,19 +3,19 @@ output "id" {
 }
 
 output "public_subnet_ids" {
-  value = ["${module.public_a.id}","${module.public_b.id}"]
+  value = ["${aws_subnet.public.*.id}"]
 }
 
 output "public_nat_ips" {
-  value = ["${module.public_a.ip}","${module.public_b.ip}"]
+  value = ["${aws_nat_gateway.public.*.public_ip}"]
 }
 
 output "private_subnet_ids" {
-  value = ["${module.private_a.id}","${module.private_b.id}"]
+  value = ["${aws_subnet.private.*.id}"]
 }
 
 output "private_route_table_ids" {
-  value = ["${module.private_a.route_table_id}","${module.private_b.route_table_id}"]
+  value = ["${aws_route_table.private.*.id}"]
 }
 
 # Used to add additional rules

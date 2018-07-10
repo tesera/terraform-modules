@@ -3,8 +3,8 @@ resource "aws_waf_rule" "wafgPathsRule" {
     "aws_waf_byte_match_set.wafgPathsStringSet",
   ]
 
-  name        = "${var.name}wafgPathsRule"
-  metric_name = "${var.name}wafgPathsRule"
+  name        = "${local.name}wafgPathsRule"
+  metric_name = "${local.name}wafgPathsRule"
 
   predicates {
     data_id = "${aws_waf_byte_match_set.wafgPathsStringSet.id}"
@@ -14,7 +14,7 @@ resource "aws_waf_rule" "wafgPathsRule" {
 }
 
 resource "aws_waf_byte_match_set" "wafgPathsStringSet" {
-  name = "${var.name}wafgPathsStringSet"
+  name = "${local.name}wafgPathsStringSet"
 
   byte_match_tuples {
     text_transformation   = "URL_DECODE"

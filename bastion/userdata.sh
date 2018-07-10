@@ -43,10 +43,11 @@ echo "***** Setup OTP [Public Subnet Only] *****"
 
 echo "***** Setup SSH via IAM *****"
 rpm -i https://s3-eu-west-1.amazonaws.com/widdix-aws-ec2-ssh-releases-eu-west-1/aws-ec2-ssh-1.9.0-1.el7.centos.noarch.rpm
-sed -i 's/IAM_AUTHORIZED_GROUPS=""/IAM_AUTHORIZED_GROUPS="${IAM_USER_GROUPS}"/' /etc/aws-ec2-ssh.conf
-sed -i 's/SUDOERS_GROUPS=""/SUDOERS_GROUPS="${IAM_SUDO_GROUPS}"/' /etc/aws-ec2-ssh.conf
-# TODO LOCAL_GROUPS - Comma separated list of UNIX groups to add the users in
-sed -i 's/^DONOTSYNC=1/d' /etc/aws-ec2-ssh.conf
+cat << EOF > /etc/aws-ec2-ssh.conf
+IAM_AUTHORIZED_GROUPS="${IAM_USER_GROUPS}"
+SUDOERS_GROUPS="${IAM_SUDO_GROUPS}"
+LOCAL_GROUPS=""
+EOF
 /usr/bin/import_users.sh
 
 echo "***** Clean Up *****"
