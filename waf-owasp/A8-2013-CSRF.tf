@@ -4,8 +4,8 @@ resource "aws_waf_rule" "wafgCSRFRule" {
     "aws_waf_size_constraint_set.wafgCSRFTokenSizeConstraint",
   ]
 
-  name        = "${var.name}wafgCSRFRule"
-  metric_name = "${var.name}wafgCSRFRule"
+  name        = "${local.name}wafgCSRFRule"
+  metric_name = "${local.name}wafgCSRFRule"
 
   predicates {
     data_id = "${aws_waf_byte_match_set.wafgCSRFMethodStringSet.id}"
@@ -21,7 +21,7 @@ resource "aws_waf_rule" "wafgCSRFRule" {
 }
 
 resource "aws_waf_byte_match_set" "wafgCSRFMethodStringSet" {
-  name = "${var.name}wafgCSRFMethodStringSet"
+  name = "${local.name}wafgCSRFMethodStringSet"
 
   byte_match_tuples {
     text_transformation   = "LOWERCASE"
@@ -35,7 +35,7 @@ resource "aws_waf_byte_match_set" "wafgCSRFMethodStringSet" {
 }
 
 resource "aws_waf_size_constraint_set" "wafgCSRFTokenSizeConstraint" {
-  name = "${var.name}wafgCSRFTokenSizeConstraint"
+  name = "${local.name}wafgCSRFTokenSizeConstraint"
 
   size_constraints {
     text_transformation = "NONE"

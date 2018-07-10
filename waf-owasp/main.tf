@@ -10,8 +10,8 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     "aws_waf_rule.wafgIpWhiteListRule",
   ]
 
-  name        = "${var.name}wafrOwaspACL"
-  metric_name = "${var.name}wafrOwaspACL"
+  name        = "${local.name}wafrOwaspACL"
+  metric_name = "${local.name}wafrOwaspACL"
 
   default_action {
     type = "${var.defaultAction}"

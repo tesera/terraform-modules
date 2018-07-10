@@ -6,8 +6,8 @@ resource "aws_waf_rule" "wafgAdminAccessRule" {
     "aws_waf_byte_match_set.wafrAdminUrlStringSet",
   ]
 
-  name        = "${var.name}wafgAdminAccessRule"
-  metric_name = "${var.name}wafgAdminAccessRule"
+  name        = "${local.name}wafgAdminAccessRule"
+  metric_name = "${local.name}wafgAdminAccessRule"
 
   predicates {
     data_id = "${aws_waf_byte_match_set.wafrAdminUrlStringSet.id}"
@@ -23,7 +23,7 @@ resource "aws_waf_rule" "wafgAdminAccessRule" {
 }
 
 resource "aws_waf_byte_match_set" "wafrAdminUrlStringSet" {
-  name = "${var.name}wafrAdminUrlStringSet"
+  name = "${local.name}wafrAdminUrlStringSet"
 
   // TODO N/A
   byte_match_tuples {

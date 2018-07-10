@@ -3,8 +3,8 @@ resource "aws_waf_rule" "wafgSQLiRule" {
     "aws_waf_sql_injection_match_set.wafrSQLiSet",
   ]
 
-  name        = "${var.name}wafgSQLiRule"
-  metric_name = "${var.name}wafgSQLiRule"
+  name        = "${local.name}wafgSQLiRule"
+  metric_name = "${local.name}wafgSQLiRule"
 
   predicates {
     data_id = "${aws_waf_sql_injection_match_set.wafrSQLiSet.id}"
@@ -14,7 +14,7 @@ resource "aws_waf_rule" "wafgSQLiRule" {
 }
 
 resource "aws_waf_sql_injection_match_set" "wafrSQLiSet" {
-  name = "${var.name}wafrSQLiSet"
+  name = "${local.name}wafrSQLiSet"
 
   sql_injection_match_tuples {
     text_transformation = "URL_DECODE"

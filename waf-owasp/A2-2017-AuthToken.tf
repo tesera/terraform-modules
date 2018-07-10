@@ -6,8 +6,8 @@ resource "aws_waf_rule" "wafgAuthTokenRule" {
     "aws_waf_byte_match_set.wafrAuthTokenStringSet",
   ]
 
-  name        = "${var.name}wafgAuthTokenRule"
-  metric_name = "${var.name}wafgAuthTokenRule"
+  name        = "${local.name}wafgAuthTokenRule"
+  metric_name = "${local.name}wafgAuthTokenRule"
 
   predicates {
     data_id = "${aws_waf_byte_match_set.wafrAuthTokenStringSet.id}"
@@ -17,7 +17,7 @@ resource "aws_waf_rule" "wafgAuthTokenRule" {
 }
 
 resource "aws_waf_byte_match_set" "wafrAuthTokenStringSet" {
-  name = "${var.name}wafrAuthTokenStringSet"
+  name = "${local.name}wafrAuthTokenStringSet"
 
   # TODO replace with real examples
   byte_match_tuples {
