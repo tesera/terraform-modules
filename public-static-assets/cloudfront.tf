@@ -1,6 +1,4 @@
 resource "aws_cloudfront_distribution" "main" {
-  depends_on = ["aws_lambda_function.response_headers"]
-
   enabled      = true
   http_version = "http2"
 
@@ -61,6 +59,11 @@ resource "aws_cloudfront_distribution" "main" {
     }
   }
   web_acl_id = "${var.web_acl_id}"
+
+  tags {
+    Name      = "${local.name} Static Assets"
+    Terraform = "true"
+  }
 }
 
 resource "aws_s3_bucket" "s3_static_website_logs" {
