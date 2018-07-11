@@ -87,8 +87,8 @@ output "ecs_billing_suggestion" {
 }
 
 ### Database
-//module "database" {
-//  source = "../../postgres"
+//module "rds" {
+//  source = "../../rds"
 //  name = "${local.name}"
 //  db_name = "dbname"
 //  username = "dbuser"
@@ -98,15 +98,15 @@ output "ecs_billing_suggestion" {
 //  private_subnet_ids = ["${module.vpc.private_subnet_ids}"]
 //}
 //
-//resource "aws_security_group_rule" "database" {
-//  security_group_id        = "${module.database.security_group_id}"
+//resource "aws_security_group_rule" "rds" {
+//  security_group_id        = "${module.rds.security_group_id}"
 //  type                     = "ingress"
 //  from_port                = 5432
 //  to_port                  = 5432
 //  protocol                 = "tcp"
-//  source_security_group_id = "${module.bastion.security_group_id}"
+//  source_security_group_id = "${module.rds.security_group_id}"
 //}
 //
-//output "database_billing_suggestion" {
-//  value = "${module.database.billing_suggestion}"
+//output "rds_billing_suggestion" {
+//  value = "${module.rds.billing_suggestion}"
 //}

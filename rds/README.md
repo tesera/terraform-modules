@@ -1,8 +1,8 @@
 # RDS
-Creates a postgres RDS instance.
+Creates a RDS instance.
 
 ## Features
-- RDS postgres instance
+- RDS instance
 - db security group 
 - db subnet group
 
@@ -11,7 +11,7 @@ Creates a postgres RDS instance.
 ### Module
 
 ```hcl-terraform
-module "database" {
+module "rds" {
   source                 = "git@github.com:tesera/terraform-modules//postgres"
   vpc_id                 = "${module.vpc.id}"
   name                   = "rds-instance-name"
@@ -24,8 +24,8 @@ module "database" {
 
 ### Add a security group rule that grants permission to security group sg-00000000 to access the db instance
 ```hcl-terraform
-resource "aws_security_group_rule" "database" {
-  security_group_id        = "${module.database.security_group_id}"
+resource "aws_security_group_rule" "rds" {
+  security_group_id        = "${module.rds.security_group_id}"
   type                     = "ingress"
   from_port                = 5432
   to_port                  = 5432
@@ -79,6 +79,5 @@ resource "aws_security_group_rule" "database" {
 
 
 ## TODO
-- [ ] Add ability to add read replicas by using https://www.terraform.io/docs/providers/aws/r/db_instance.html#replicate_source_db
 - [ ] Add ability to create custom db parameter group - https://www.terraform.io/docs/providers/aws/r/db_parameter_group.html
 - [ ] Add ability to add the PostGis extension - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Appendix.PostgreSQL.CommonDBATasks.html#Appendix.PostgreSQL.CommonDBATasks.PostGIS
