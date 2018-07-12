@@ -6,17 +6,29 @@ resource "aws_cloudfront_distribution" "main" {
   aliases = "${var.aliases}"
 
   origin {
-    origin_id   = "${local.name}"
-    domain_name = "${aws_s3_bucket.main.bucket_domain_name}"
+    origin_id   = "${local.name}-apig"
+    domain_name = "${replace(aws_api_gateway_deployment.main.invoke_url, "/^https:\\/\\/(.*?)\\/.*$/", "$1")}"
+    origin_path = "/${local.api_path}"
 
-    s3_origin_config {
-      origin_access_identity = "${aws_cloudfront_origin_access_identity.main.cloudfront_access_identity_path}"
+    custom_origin_config {
+      http_port = 80
+      https_port = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols = [
+        "TLSv1.2"]
     }
   }
 
   default_cache_behavior {
-    target_origin_id = "${local.name}"
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = "${local.name}-apig"
+    allowed_methods  = [
+      "DELETE",
+      "GET",
+      "HEAD",
+      "OPTIONS",
+      "PATCH",
+      "POST",
+      "PUT"]
     cached_methods   = ["GET", "HEAD"]
 
     viewer_protocol_policy = "redirect-to-https"
@@ -31,11 +43,6 @@ resource "aws_cloudfront_distribution" "main" {
       cookies {
         forward = "none"
       }
-    }
-
-    lambda_function_association {
-      event_type = "viewer-response"
-      lambda_arn = "${aws_lambda_function.response_headers.qualified_arn}"
     }
   }
 
@@ -53,28 +60,21 @@ resource "aws_cloudfront_distribution" "main" {
 
   logging_config {
     include_cookies = false
-    bucket          = "${aws_s3_bucket.main-logs.bucket_domain_name}"
-  }
-
-  default_root_object = "index.html"
-
-  custom_error_response {
-    error_code            = 404
-    error_caching_min_ttl = 5
-    response_page_path    = "/index.html"
-    response_code         = 200
+    bucket = "${aws_s3_bucket.main-logs.bucket_domain_name}"
   }
 
   web_acl_id = "${var.web_acl_id}"
 
   tags {
-    Name      = "${local.name} Static Assets"
+    Name      = "${local.name} API Gateway"
     Terraform = "true"
   }
 }
 
+// TODO update archive policy
 resource "aws_s3_bucket" "main-logs" {
-  bucket = "${local.name}-access-logs"
+  bucket = "${local.name}-api-access-logs"
+  acl = "private"
 
   lifecycle_rule {
     enabled = true
