@@ -68,46 +68,7 @@ module "api" {
     "${local.domain}"]
   acm_certificate_arn     = "${data.aws_acm_certificate.main.arn}"
   web_acl_id              = "${module.waf.id}"
-  authorizer_path         = "${data.archive_file.authorizer.output_path}"
-  authorizer_base64sha256 = "${data.archive_file.authorizer.output_base64sha256}"
-}
-
-data "archive_file" "authorizer" {
-  type        = "zip"
-  output_path = "${path.module}/authorizer.zip"
-  source_dir  = "${path.module}/authorizer"
-}
-
-### Endpoints
-# TODO move route generation into module and automate
-resource "aws_api_gateway_resource" "ping" {
-  rest_api_id = "${module.api.rest_api_id}"
-  parent_id   = "${module.api.root_resource_id}"
-  path_part   = "ping"
-}
-
-resource "aws_api_gateway_resource" "ping_pong" {
-  rest_api_id = "${module.api.rest_api_id}"
-  parent_id   = "${aws_api_gateway_resource.ping.id}"
-  path_part   = "pong"
-}
-
-module "ping" {
-  source              = "../../public-api-endpoint"
-  name                = "${local.name}"
-  rest_api_id         = "${module.api.rest_api_id}"
-  resource_id         = "${aws_api_gateway_resource.ping_pong.id}"
-  http_method         = "GET"
-  stage_name          = "${module.api.stage_name}"
-  resource_path       = "${aws_api_gateway_resource.ping_pong.path}"
-  lambda_path         = "${data.archive_file.ping_pong.output_path}"
-  lambda_base64sha256 = "${data.archive_file.ping_pong.output_base64sha256}"
-}
-
-data "archive_file" "ping_pong" {
-  type        = "zip"
-  output_path = "${path.module}/ping.zip"
-  source_dir  = "${path.module}/ping"
+  authorizer_path         = "${path.module}/authorizer" # TODO use path pattern from endpoint module
 }
 
 

@@ -1,0 +1,27 @@
+{
+  "args": {
+    "source": "../../public-api-endpoint",
+    "name": "${local.name}",
+    "security_group_ids": "${module.api.secuity_group_id}",
+    "private_subnet_ids": "${data.vpc.private_subnet_ids}",
+    "rest_api_id": "${module.api.rest_api_id}",
+    "stage_name": "${module.api.stage_name}"
+  },
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/ping/pong",
+      "src": "ping"
+    },
+    {
+      "method": "GET",
+      "path": "/ping/:pong",
+      "src": "ping"
+    },
+    {
+      "method": "GET",
+      "path": "/ping/pang",
+      "src": "ping"
+    }
+  ]
+}
