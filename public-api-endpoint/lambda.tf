@@ -1,7 +1,13 @@
+data "archive_file" "lambda" {
+  type        = "zip"
+  output_path = "${var.source_dir}/../api${local.path_name}.zip"
+  source_dir  = "${var.source_dir}"
+}
+
 resource "aws_lambda_function" "lambda" {
   function_name    = "${local.name}-api-${local.http_method}${local.path_name}"
-  filename         = "${local.lambda_path}"
-  source_code_hash = "${local.lambda_base64sha256}"
+  filename         = "${data.archive_file.lambda.output_path}"
+  source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
   role             = "${aws_iam_role.lambda.arn}"
   handler          = "index.handler"
   runtime          = "nodejs8.10"
@@ -11,7 +17,7 @@ resource "aws_lambda_function" "lambda" {
 
   //  vpc_config {
   //    subnet_ids = ["${var.private_subnet_ids}"]
-  //    security_group_ids = ["${aws_security_group.poller.id}"]
+  //    security_group_ids = ["${var.security_group_ids}"]
   //  }
 }
 
@@ -45,7 +51,7 @@ resource "aws_lambda_permission" "main" {
 
 resource "aws_iam_policy" "lambda" {
   name   = "${local.name}-api-${local.http_method}${local.path_name}-policy"
-  policy = "${local.lambda_policy}"
+  policy = "${local.policy}"
 }
 
 resource "aws_iam_role_policy_attachment" "lambda" {

@@ -22,6 +22,11 @@ output "stage_name" {
   value = "${aws_api_gateway_deployment.main.stage_name}"
 }
 
+output "secuity_group_id" {
+  value = "${aws_security_group.main.id}"
+}
+
+# not used
 output "execution_arn" {
   value = "${aws_api_gateway_deployment.main.execution_arn}"
 }

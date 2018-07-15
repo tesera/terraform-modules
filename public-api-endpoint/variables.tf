@@ -1,5 +1,12 @@
 variable "name" {}
 
+variable "security_group_ids" {
+  type = "list"
+}
+variable "private_subnet_ids" {
+  type = "list"
+}
+
 variable "rest_api_id" {}
 variable "resource_id" {}
 variable "stage_name" {}
@@ -9,12 +16,15 @@ variable "http_method" {
 }
 variable "resource_path" {}
 
-variable "lambda_policy" {
+variable "policy" {
   default = ""
 }
-variable "lambda_path" {
+variable "source_dir" {
   default = ""
 }
-variable "lambda_base64sha256" {
-  default = ""
-}
+//variable "lambda_path" {
+//  default = ""
+//}
+//variable "lambda_base64sha256" {
+//  default = ""
+//}
