@@ -42,9 +42,6 @@ resource "aws_api_gateway_deployment" "main" {
   stage_name = "${local.api_path}"
 }
 
-
-
-
 # arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
 
 # Workaround: https://github.com/terraform-providers/terraform-provider-aws/issues/1153

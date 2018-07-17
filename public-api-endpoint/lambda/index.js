@@ -1,12 +1,17 @@
-const handler = (event, context, callback) => {
+const app = async (event, context) => {
 
-  return callback(
-    null,
-    {
-      statusCode: 200,
-      body:JSON.stringify({data:{success:true}})
-    }
-  )
+  return {
+    statusCode: 200,
+    body: {data: {success: true}}
+  }
 }
+
+const inputSchema = {type: 'object'}
+const outputSchema = {type: 'object'}
+
+const handler = require('./middleware')(app, {
+  inputSchema,
+  outputSchema
+})
 
 module.exports = {handler}

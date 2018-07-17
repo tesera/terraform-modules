@@ -18,11 +18,9 @@ variable "web_acl_id" {
     description = "WAF ACL ID"
 }
 
+variable "vpc_id" {}
 
 variable "authorizer_path" {
-    default = ""
-}
-variable "authorizer_base64sha256" {
     default = ""
 }
 //variable "authorizer_client_id" {}

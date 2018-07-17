@@ -4,6 +4,7 @@
 *.tfstate.lock.info
 *.tfstate.backup
 *.zip
+package-lock.json
 
 # Logs
 logs

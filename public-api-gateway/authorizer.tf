@@ -67,8 +67,8 @@ EOF
 
 resource "aws_lambda_function" "authorizer" {
   function_name    = "${local.name}-api-authorizer"
-  filename         = "${var.authorizer_path}"
-  source_code_hash = "${var.authorizer_base64sha256}"
+  filename         = "${data.archive_file.authorizer.output_path}"
+  source_code_hash = "${data.archive_file.authorizer.output_base64sha256}"
   role             = "${aws_iam_role.authorizer.arn}"
   handler          = "index.handler"
   runtime          = "nodejs8.10"
@@ -91,10 +91,8 @@ resource "aws_lambda_function" "authorizer" {
   }
 }
 
-
-# Default Authorizer
 data "archive_file" "authorizer" {
   type        = "zip"
-  output_path = "${path.module}/authorizer.zip"
-  source_dir  = "${path.module}/authorizer"
+  output_path = "${local.authorizer_path}/../authorizer.zip"
+  source_dir  = "${local.authorizer_path}"
 }

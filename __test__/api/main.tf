@@ -16,6 +16,18 @@ locals {
   domain      = "test.tesera.com"
 }
 
+variable "private_subnet_ids" {
+  type    = "list"
+  default = [
+    "subnet-a6e850ce",
+    "subnet-fd4e9b87"
+  ]
+}
+
+variable "vpc_id" {
+  default = "vpc-180c8070"
+}
+
 provider "aws" {
   region  = "${local.aws_region}"
   profile = "${local.profile}"
@@ -60,15 +72,23 @@ data "aws_acm_certificate" "main" {
 }
 
 ## APIG
-module "api" {
-  source                  = "../../public-api-gateway"
-  name                    = "${local.name}"
+//data "terraform_remote_state" "vpc" {
+//
+//}
 
-  aliases                 = [
+
+
+module "api" {
+  source              = "../../public-api-gateway"
+  name                = "${local.name}"
+
+  aliases             = [
     "${local.domain}"]
-  acm_certificate_arn     = "${data.aws_acm_certificate.main.arn}"
-  web_acl_id              = "${module.waf.id}"
-  authorizer_path         = "${path.module}/authorizer" # TODO use path pattern from endpoint module
+  acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
+  web_acl_id          = "${module.waf.id}"
+  authorizer_path     = "${path.module}/authorizer"
+
+  vpc_id              = "${var.vpc_id}"
 }
 
 
