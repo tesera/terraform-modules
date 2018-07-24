@@ -41,6 +41,14 @@ module "vpc" {
   cidr_block = "20.5.0.0/16"
 }
 
+output "vpc_id" {
+  value = "${module.vpc.id}"
+}
+
+output "private_subnet_ids" {
+  value = "${module.vpc.private_subnet_ids}"
+}
+
 ## Public Subnets
 ### Bastion
 module "bastion" {
@@ -69,22 +77,22 @@ resource "aws_vpc_endpoint" "s3" {
 }
 
 ### Docker Cluster
-module "ecs" {
-  source             = "../../ecs"
-  name               = "${local.name}"
-  vpc_id             = "${module.vpc.id}"
-  private_subnet_ids = "${module.vpc.private_subnet_ids}"
-  key_name           = "${local.key_name}"
-  iam_user_groups    = "Admin"
-}
-
-output "ecs_name" {
-  value = "${module.ecs.name}"
-}
-
-output "ecs_billing_suggestion" {
-  value = "${module.ecs.billing_suggestion}"
-}
+//module "ecs" {
+//  source             = "../../ecs"
+//  name               = "${local.name}"
+//  vpc_id             = "${module.vpc.id}"
+//  private_subnet_ids = "${module.vpc.private_subnet_ids}"
+//  key_name           = "${local.key_name}"
+//  iam_user_groups    = "Admin"
+//}
+//
+//output "ecs_name" {
+//  value = "${module.ecs.name}"
+//}
+//
+//output "ecs_billing_suggestion" {
+//  value = "${module.ecs.billing_suggestion}"
+//}
 
 ### Database
 //module "rds" {

@@ -14,3 +14,20 @@ module "api" {
   authorizer_path         = "${path.module}/authorizer"
 }
 ```
+
+### Place inside VPC
+See [AWS Docs](https://docs.aws.amazon.com/lambda/latest/dg/vpc.html) for limitations.
+```hcl-terraform
+resource "aws_security_group" "lambda" {
+  name   = "${var.name}-api"
+  vpc_id = "${var.vpc_id}"
+
+  egress {
+    protocol    = -1
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = [
+      "0.0.0.0/0"]
+  }
+}
+```

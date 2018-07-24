@@ -18,8 +18,7 @@ resource "aws_iam_role" "main" {
       "Principal": {
         "Service": "apigateway.amazonaws.com"
       },
-      "Effect": "Allow",
-      "Sid": ""
+      "Effect": "Allow"
     }
   ]
 }
@@ -35,7 +34,7 @@ resource "aws_iam_role_policy" "authorizer" {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Action": "lambda:InvokeFunction",
+      "Action": ["lambda:InvokeFunction"],
       "Effect": "Allow",
       "Resource": "${aws_lambda_function.authorizer.arn}"
     }
@@ -56,14 +55,17 @@ resource "aws_iam_role" "authorizer" {
       "Principal": {
         "Service": "lambda.amazonaws.com"
       },
-      "Effect": "Allow",
-      "Sid": ""
+      "Effect": "Allow"
     }
   ]
 }
 EOF
 }
 
+resource "aws_iam_role_policy_attachment" "authorizer" {
+  role       = "${aws_iam_role.authorizer.name}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}
 
 resource "aws_lambda_function" "authorizer" {
   function_name    = "${local.name}-api-authorizer"
@@ -71,16 +73,12 @@ resource "aws_lambda_function" "authorizer" {
   source_code_hash = "${data.archive_file.authorizer.output_base64sha256}"
   role             = "${aws_iam_role.authorizer.arn}"
   handler          = "index.handler"
-  runtime          = "nodejs8.10"
-  memory_size      = 128
-  timeout          = 30
+  runtime          = "${var.runtime}"
+  memory_size      = "${var.memory_size}"
+  timeout          = "${var.tiemout}"
   publish          = true,
 
-  // TODO
-  //  vpc_config {
-  //    subnet_ids = ["${var.private_subnet_ids}"]
-  //    security_group_ids = ["${aws_security_group.poller.id}"]
-  //  }
+  // Has no need to be in a VPC
 
   // TODO pass in var
   environment {
@@ -88,6 +86,11 @@ resource "aws_lambda_function" "authorizer" {
       CLIENT_ID = ""
       CLIENT_SECRET = ""
     }
+  }
+
+  tags {
+    Name = "Authorizer for API Gateway"
+    Terraform = true
   }
 }
 

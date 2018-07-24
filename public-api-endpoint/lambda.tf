@@ -10,15 +10,24 @@ resource "aws_lambda_function" "lambda" {
   source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
   role             = "${aws_iam_role.lambda.arn}"
   handler          = "index.handler"
-  runtime          = "nodejs8.10"
+  runtime          = "${var.runtime}"
   memory_size      = 128
   timeout          = 30
   publish          = true
 
-  //  vpc_config {
-  //    subnet_ids = ["${var.private_subnet_ids}"]
-  //    security_group_ids = ["${var.security_group_ids}"]
-  //  }
+  vpc_config {
+    subnet_ids = ["${var.private_subnet_ids}"]
+    security_group_ids = ["${var.security_group_ids}"]
+  }
+}
+
+resource "aws_lambda_permission" "main" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.lambda.function_name}"
+  principal     = "apigateway.amazonaws.com"
+  # "${aws_api_gateway_deployment.example.execution_arn}/*/${var.http_method}${var.resource_path}"
+  source_arn    = "arn:aws:execute-api:${local.aws_region}:${local.account_id}:${var.rest_api_id}/*/${var.http_method}${var.resource_path}"
 }
 
 resource "aws_iam_role" "lambda" {
@@ -40,15 +49,6 @@ resource "aws_iam_role" "lambda" {
 POLICY
 }
 
-resource "aws_lambda_permission" "main" {
-  statement_id  = "AllowExecutionFromAPIGateway"
-  action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.lambda.function_name}"
-  principal     = "apigateway.amazonaws.com"
-  # "${aws_api_gateway_deployment.example.execution_arn}/*/${var.http_method}${var.resource_path}"
-  source_arn    = "arn:aws:execute-api:${local.aws_region}:${local.account_id}:${var.rest_api_id}/*/${var.http_method}${var.resource_path}"
-}
-
 resource "aws_iam_policy" "lambda" {
   name   = "${local.name}-api-${local.http_method}${local.path_name}-policy"
   policy = "${local.policy}"
@@ -59,7 +59,7 @@ resource "aws_iam_role_policy_attachment" "lambda" {
   policy_arn = "${aws_iam_policy.lambda.arn}"
 }
 
-resource "aws_iam_role_policy_attachment" "lambda-AWSLambdaBasicExecutionRole" {
+resource "aws_iam_role_policy_attachment" "lambda-AWSLambdaVPCAccessExecutionRole" {
   role       = "${aws_iam_role.lambda.name}"
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
- }
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+}

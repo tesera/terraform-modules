@@ -16,18 +16,6 @@ locals {
   domain      = "test.tesera.com"
 }
 
-variable "private_subnet_ids" {
-  type    = "list"
-  default = [
-    "subnet-a6e850ce",
-    "subnet-fd4e9b87"
-  ]
-}
-
-variable "vpc_id" {
-  default = "vpc-180c8070"
-}
-
 provider "aws" {
   region  = "${local.aws_region}"
   profile = "${local.profile}"
@@ -76,8 +64,6 @@ data "aws_acm_certificate" "main" {
 //
 //}
 
-
-
 module "api" {
   source              = "../../public-api-gateway"
   name                = "${local.name}"
@@ -87,13 +73,6 @@ module "api" {
   acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
   web_acl_id          = "${module.waf.id}"
   authorizer_path     = "${path.module}/authorizer"
-
-  vpc_id              = "${var.vpc_id}"
-}
-
-
-output "resource_path" {
-  value = "${aws_api_gateway_resource.ping_pong.path}"
 }
 
 output "execution_arn" {

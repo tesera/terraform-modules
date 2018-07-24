@@ -14,8 +14,8 @@ resource "aws_api_gateway_resource" "ping_pong" {
 module "GET_ping_pong" {
   source             = "../../public-api-endpoint"
   name               = "${local.name}"
-  security_group_ids = ["${module.api.secuity_group_id}"]
-  private_subnet_ids = ["${var.private_subnet_ids}"]
+  security_group_ids = []
+  private_subnet_ids = []
   rest_api_id        = "${module.api.rest_api_id}"
   resource_id        = "${aws_api_gateway_resource.ping_pong.id}"
   http_method        = "GET"
@@ -33,8 +33,8 @@ resource "aws_api_gateway_resource" "ping_-pong" {
 module "GET_ping_-pong" {
   source             = "../../public-api-endpoint"
   name               = "${local.name}"
-  security_group_ids = ["${module.api.secuity_group_id}"]
-  private_subnet_ids = ["${var.private_subnet_ids}"]
+  security_group_ids = []
+  private_subnet_ids = []
   rest_api_id        = "${module.api.rest_api_id}"
   resource_id        = "${aws_api_gateway_resource.ping_-pong.id}"
   http_method        = "GET"
@@ -52,8 +52,8 @@ resource "aws_api_gateway_resource" "ping_pang" {
 module "GET_ping_pang" {
   source             = "../../public-api-endpoint"
   name               = "${local.name}"
-  security_group_ids = ["${module.api.secuity_group_id}"]
-  private_subnet_ids = ["${var.private_subnet_ids}"]
+  security_group_ids = []
+  private_subnet_ids = []
   rest_api_id        = "${module.api.rest_api_id}"
   resource_id        = "${aws_api_gateway_resource.ping_pang.id}"
   http_method        = "GET"

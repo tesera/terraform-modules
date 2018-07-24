@@ -2,10 +2,13 @@
   "args": {
     "source": "../../public-api-endpoint",
     "name": "${local.name}",
-    "security_group_ids": "${module.api.secuity_group_id}",
-    "private_subnet_ids": "${var.private_subnet_ids}",
+    "security_group_ids": null,
+    "private_subnet_ids": null,
     "rest_api_id": "${module.api.rest_api_id}",
-    "stage_name": "${module.api.stage_name}"
+    "stage_name": "${module.api.stage_name}",
+    "authorization":"NONE",
+    "authorize_id":"",
+    "authorization_scopes":""
   },
   "routes": [
     {

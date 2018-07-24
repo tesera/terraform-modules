@@ -18,10 +18,17 @@ variable "web_acl_id" {
     description = "WAF ACL ID"
 }
 
-variable "vpc_id" {}
-
 variable "authorizer_path" {
     default = ""
+}
+variable "runtime" {
+    default = "nodejs8.10"
+}
+variable "memory_size" {
+    default = 128
+}
+variable "tiemout" {
+    default = 30
 }
 //variable "authorizer_client_id" {}
 //variable "authorizer_client_secret" {}

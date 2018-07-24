@@ -22,8 +22,8 @@ output "stage_name" {
   value = "${aws_api_gateway_deployment.main.stage_name}"
 }
 
-output "secuity_group_id" {
-  value = "${aws_security_group.main.id}"
+output "authorizer_id" {
+  value = "${aws_lambda_function.authorizer.id}"
 }
 
 # not used

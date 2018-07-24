@@ -2,9 +2,11 @@ variable "name" {}
 
 variable "security_group_ids" {
   type = "list"
+  default = []
 }
 variable "private_subnet_ids" {
   type = "list"
+  default = []
 }
 
 variable "rest_api_id" {}
@@ -22,9 +24,28 @@ variable "policy" {
 variable "source_dir" {
   default = ""
 }
-//variable "lambda_path" {
-//  default = ""
-//}
-//variable "lambda_base64sha256" {
-//  default = ""
-//}
+variable "runtime" {
+  default = "nodejs8.10"
+}
+variable "memory_size" {
+  default = 128
+}
+variable "tiemout" {
+  default = 30
+}
+
+// NONE, CUSTOM, AWS_IAM, COGNITO_USER_POOLS
+variable "authorization" {
+  default = "NONE"
+}
+
+// CUSTOM or COGNITO_USER_POOLS
+variable "authorizer_id" {
+  default = ""
+}
+
+// COGNITO_USER_POOLS
+variable "authorization_scopes" {
+  type = "list"
+  default = []
+}

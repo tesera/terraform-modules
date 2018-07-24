@@ -14,8 +14,8 @@ const endpoint = (input, name, id, src) => `
 module "${name}" {
   source             = "${input.source}"
   name               = "${input.name}"
-  security_group_ids = ["${input.security_group_ids}"]
-  private_subnet_ids = ["${input.private_subnet_ids}"]
+  security_group_ids = [${input.security_group_ids ? '"'+input.security_group_ids+'"' : ''}]
+  private_subnet_ids = [${input.private_subnet_ids ? '"'+input.private_subnet_ids+'"' : ''}]
   rest_api_id        = "${input.rest_api_id}"
   resource_id        = "\${aws_api_gateway_resource.${id}.id}"
   http_method        = "GET"
@@ -59,8 +59,8 @@ const input = JSON.parse(fs.readFileSync('routes.json'))
 input.args = Object.assign({
   "source": "../../public-api-endpoint",
   "name": "${local.name}",
-  "security_group_ids": "${module.api.secuity_group_id}",
-  "private_subnet_ids": "${data.vpc.private_subnet_ids}",
+  "security_group_ids": null,
+  "private_subnet_ids": null,
   "rest_api_id": "${module.api.rest_api_id}",
   "stage_name": "${module.api.stage_name}"
 }, input.args)
