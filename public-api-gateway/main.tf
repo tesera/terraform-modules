@@ -37,6 +37,7 @@ resource "aws_api_gateway_rest_api" "main" {
   }
 }
 
+# aws_api_gateway_deployment.main: Error creating API Gateway Deployment: BadRequestException: The REST API doesn't contain any methods
 resource "aws_api_gateway_deployment" "main" {
   rest_api_id = "${aws_api_gateway_rest_api.main.id}"
   stage_name = "${local.api_path}"

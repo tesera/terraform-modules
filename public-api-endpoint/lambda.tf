@@ -15,10 +15,11 @@ resource "aws_lambda_function" "lambda" {
   timeout          = 30
   publish          = true
 
-  vpc_config {
-    subnet_ids = ["${var.private_subnet_ids}"]
-    security_group_ids = ["${var.security_group_ids}"]
-  }
+  # Even though empty list are used, still throws error. Docs incorrect
+//  vpc_config {
+//    subnet_ids = ["${var.private_subnet_ids}"]
+//    security_group_ids = ["${var.security_group_ids}"]
+//  }
 }
 
 resource "aws_lambda_permission" "main" {

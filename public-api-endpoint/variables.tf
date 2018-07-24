@@ -1,13 +1,13 @@
 variable "name" {}
 
-variable "security_group_ids" {
-  type = "list"
-  default = []
-}
-variable "private_subnet_ids" {
-  type = "list"
-  default = []
-}
+//variable "security_group_ids" {
+//  type = "list"
+//  default = []
+//}
+//variable "private_subnet_ids" {
+//  type = "list"
+//  default = []
+//}
 
 variable "rest_api_id" {}
 variable "resource_id" {}
