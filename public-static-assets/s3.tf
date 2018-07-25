@@ -60,7 +60,6 @@ resource "aws_s3_bucket" "main" {
 //    }
 //  }
 
-// CloudFront forces a d download when AES256 is used
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
