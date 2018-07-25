@@ -1,3 +1,7 @@
+resource "aws_cloudfront_origin_access_identity" "main" {
+  comment = "${local.name} S3 static assets origin access policy"
+}
+
 resource "aws_cloudfront_distribution" "main" {
   enabled      = true
   http_version = "http2"

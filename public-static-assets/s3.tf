@@ -75,10 +75,6 @@ resource "aws_s3_bucket" "main" {
   }
 }
 
-resource "aws_cloudfront_origin_access_identity" "main" {
-  comment = "${local.name} S3 static assets origin access policy"
-}
-
 data "aws_iam_policy_document" "s3" {
   statement {
     actions    = [
