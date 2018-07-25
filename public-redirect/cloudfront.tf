@@ -37,8 +37,6 @@ resource "aws_cloudfront_distribution" "main" {
     }
   }
 
-  default_root_object = "index.html"
-
   viewer_certificate {
     acm_certificate_arn      = "${var.acm_certificate_arn}"
     minimum_protocol_version = "TLSv1.2_2018"
