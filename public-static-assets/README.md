@@ -44,7 +44,7 @@ module "app" {
   aliases             = ["${var.env != "prod" ? "${var.env}-": ""}appname.example.com"]
   acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
   web_acl_id          = "${module.waf.id}"
-  lambda_edge_content = "${replace(file("${path.module}/edge.js"), "{pkphash}", "${var.pkphash}")}"
+  lambda_edge_content = "${file("${path.module}/edge.js")}"
 }
 ```
 
