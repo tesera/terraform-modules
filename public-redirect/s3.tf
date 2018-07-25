@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "main" {
   }
 
   tags {
-    Name      = "Domain Redirection (${var.aliases} -> ${var.redirect}"
+    Name      = "Domain Redirection (${var.redirect})"
     Terraform = "true"
   }
 }
