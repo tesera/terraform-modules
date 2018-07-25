@@ -38,7 +38,7 @@ module "waf" {
 ### Module
 ```hcl-terraform
 module "app" {
-  source              = "github.com/tesera/terraform-modules/public-static-assets"
+  source              = "git@github.com:tesera/terraform-modules//public-static-assets"
 
   name                = "${var.env}-myapp"
   aliases             = ["${var.env != "prod" ? "${var.env}-": ""}appname.example.com"]
