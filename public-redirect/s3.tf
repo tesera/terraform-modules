@@ -7,6 +7,14 @@ resource "aws_s3_bucket" "main" {
     redirect_all_requests_to = "https://${var.redirect}"
   }
 
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "${local.sse_algorithm}"
+      }
+    }
+  }
+
   tags {
     Name      = "Domain Redirection (${var.redirect})"
     Terraform = "true"

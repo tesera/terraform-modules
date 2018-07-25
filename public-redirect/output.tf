@@ -2,6 +2,10 @@ output "bucket" {
   value = "${aws_s3_bucket.main.id}"
 }
 
+output "server_side_encryption" {
+  value = "${local.sse_algorithm}"
+}
+
 output "id" {
   value = "${aws_cloudfront_distribution.main.id}"
 }
