@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "main" {
-  bucket              = "${var.name}"
+  bucket              = "${var.name}-redirect"
   region              = "${local.aws_region}"
   acl                 = "private"
 

@@ -10,7 +10,7 @@ resource "aws_cloudfront_distribution" "main" {
   aliases = "${var.aliases}"
 
   origin {
-    origin_id   = "${local.name}"
+    origin_id   = "${local.name}-redirect"
     domain_name = "${aws_s3_bucket.main.bucket_domain_name}"
 
     s3_origin_config {
@@ -19,7 +19,7 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   default_cache_behavior {
-    target_origin_id = "${local.name}"
+    target_origin_id = "${local.name}-redirect"
     allowed_methods  = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
 
@@ -61,7 +61,7 @@ resource "aws_cloudfront_distribution" "main" {
 }
 
 resource "aws_s3_bucket" "main-logs" {
-  bucket = "${local.name}-access-logs"
+  bucket = "${local.name}-redirect-access-logs"
 
   lifecycle_rule {
     enabled = true
