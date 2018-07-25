@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "main" {
-  bucket              = "${var.name}-redirect"
+  bucket              = "${local.name}-redirect"
   region              = "${local.aws_region}"
   acl                 = "private"
 
@@ -16,7 +16,7 @@ resource "aws_s3_bucket" "main" {
   }
 
   tags {
-    Name      = "Domain Redirection (${var.redirect})"
+    Name      = "${local.name} Domain Redirection"
     Terraform = "true"
   }
 }
