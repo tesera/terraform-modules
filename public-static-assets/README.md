@@ -44,7 +44,7 @@ module "app" {
   aliases             = ["${var.env != "prod" ? "${var.env}-": ""}appname.example.com"]
   acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
   web_acl_id          = "${module.waf.id}"
-  lambda_edge_content = "${file("${path.module}/edge.js")}"
+  lambda_edge_content = "${replace(file("${path.module}/edge.js"), "{report-uri}", "${var.report_uri}")}"
 }
 ```
 
@@ -61,5 +61,3 @@ module "app" {
 - **domain_name:** `${aws_cloudfront_distribution.main.domain_name}` CloudFront Domain Name for DNS updating.
 - **hosted_zone_id:** `${aws_cloudfront_distribution.main.hosted_zone_id}` CloudFront Hosted Zone ID.
 
-## TODO
-- [ ] IPv6 support
