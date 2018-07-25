@@ -61,7 +61,7 @@ resource "aws_cloudfront_distribution" "main" {
 }
 
 resource "aws_s3_bucket" "main-logs" {
-  bucket = "${local.name}-redirect-access-logs"
+  bucket = "${local.name}-cdn-redirect-access-logs"
 
   lifecycle_rule {
     enabled = true

@@ -71,7 +71,7 @@ resource "aws_cloudfront_distribution" "main" {
 }
 
 resource "aws_s3_bucket" "s3_static_website_logs" {
-  bucket = "${local.name}-access-logs"
+  bucket = "${local.name}-cdn-access-logs"
 
   lifecycle_rule {
     enabled = true

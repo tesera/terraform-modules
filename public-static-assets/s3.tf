@@ -1,7 +1,7 @@
 # TODO add in logging bucket??
 
 resource "aws_s3_bucket" "main-logs" {
-  bucket              = "${local.name}-static-assets-logs"
+  bucket              = "${local.name}-static-assets-access-logs"
   acl                 = "log-delivery-write"
   acceleration_status = "Enabled"
 
@@ -31,7 +31,7 @@ resource "aws_s3_bucket" "main-logs" {
   }
 
   tags {
-    Name = "${local.name} Terraform State Logging"
+    Name = "${local.name} Static Assets Access Logs"
     Terraform = "true"
   }
 }
