@@ -21,6 +21,10 @@ variable "web_acl_id" {
 variable "authorizer_path" {
     default = ""
 }
+
+variable "lambda_dir" {}
+variable "lambda_config" {}
+
 variable "runtime" {
     default = "nodejs8.10"
 }

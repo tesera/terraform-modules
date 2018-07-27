@@ -1,30 +1,17 @@
-{
-  "args": {
-    "source": "../../public-api-endpoint",
-    "name": "${local.name}",
-    "security_group_ids": null,
-    "private_subnet_ids": null,
-    "rest_api_id": "${module.api.rest_api_id}",
-    "stage_name": "${module.api.stage_name}",
-    "authorization":"NONE",
-    "authorize_id":"",
-    "authorization_scopes":""
+[
+  {
+    "method": "GET",
+    "path": "/ping/pong",
+    "src": "ping"
   },
-  "routes": [
-    {
-      "method": "GET",
-      "path": "/ping/pong",
-      "src": "ping"
-    },
-    {
-      "method": "GET",
-      "path": "/ping/:pong",
-      "src": "ping"
-    },
-    {
-      "method": "GET",
-      "path": "/ping/pang",
-      "src": "ping"
-    }
-  ]
-}
+  {
+    "method": "GET",
+    "path": "/ping/:pong",
+    "src": "ping"
+  },
+  {
+    "method": "GET",
+    "path": "/ping/pang",
+    "src": "ping"
+  }
+]

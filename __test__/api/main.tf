@@ -11,9 +11,9 @@
 locals {
   aws_region  = "ca-central-1"
   profile     = "tesera"
-  name        = "tesera-modules_test"
+  name        = "tesera-modules-test"
   domain_root = "tesera.com"
-  domain      = "test.tesera.com"
+  domain      = "api.test.tesera.com"
 }
 
 provider "aws" {
@@ -35,6 +35,14 @@ module "waf" {
 }
 
 # API
+## TLS
+data "aws_acm_certificate" "main" {
+  provider = "aws.edge"
+  domain   = "${local.domain}"
+  statuses = [
+    "ISSUED"]
+}
+
 ## DNS
 data "aws_route53_zone" "main" {
   name = "${local.domain_root}."
@@ -51,19 +59,7 @@ resource "aws_route53_record" "main" {
   }
 }
 
-## TLS
-data "aws_acm_certificate" "main" {
-  provider = "aws.edge"
-  domain   = "${local.domain}"
-  statuses = [
-    "ISSUED"]
-}
-
 ## APIG
-//data "terraform_remote_state" "vpc" {
-//
-//}
-
 module "api" {
   source              = "../../public-api-gateway"
   name                = "${local.name}"
@@ -73,9 +69,7 @@ module "api" {
   acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
   web_acl_id          = "${module.waf.id}"
   authorizer_path     = "${path.module}/authorizer"
-}
-
-output "execution_arn" {
-  value = "${module.api.execution_arn}"
+  lambda_dir          = "${path.module}"
+  lambda_config       = "${path.module}/routes.json"
 }
 

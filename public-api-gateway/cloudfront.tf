@@ -7,8 +7,8 @@ resource "aws_cloudfront_distribution" "main" {
 
   origin {
     origin_id   = "${local.name}-apig"
-    domain_name = "${replace(aws_api_gateway_deployment.main.invoke_url, "/^https:\\/\\/(.*?)\\/.*$/", "$1")}"
-    origin_path = "/${local.api_path}"
+    domain_name = "willfarrell.ca"//"${replace(aws_api_gateway_deployment.main.invoke_url, "/^https:\\/\\/(.*?)\\/.*$/", "$1")}"
+    origin_path = "/${local.stage_name}"
 
     custom_origin_config {
       http_port = 80

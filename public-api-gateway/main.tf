@@ -38,20 +38,29 @@ resource "aws_api_gateway_rest_api" "main" {
 }
 
 # aws_api_gateway_deployment.main: Error creating API Gateway Deployment: BadRequestException: The REST API doesn't contain any methods
-resource "aws_api_gateway_deployment" "main" {
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-  stage_name = "${local.api_path}"
+//resource "aws_api_gateway_deployment" "main" {
+//  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+//  stage_name = "${local.stage_name}"
+//}
+
+# Hook to build Endpoints
+//resource "null_resource" "pre-flight" {
+//  provisioner "local-exec" {
+//    command = "node routes.js "
+//  }
+//}
+
+data "external" "endpoints" {
+  program = ["node", "${path.module}/routes.js", "${path.module}"]
+
+  query = {
+    config = "${var.lambda_config}"
+  }
 }
 
 # arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
 
 # Workaround: https://github.com/terraform-providers/terraform-provider-aws/issues/1153
-
-//resource "aws_api_gateway_stage" "main" {
-//  stage_name = "api"
-//  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-//  deployment_id = "${aws_api_gateway_deployment.main.id}"
-//}
 
 
 

@@ -18,15 +18,15 @@ output "root_resource_id" {
   value = "${aws_api_gateway_rest_api.main.root_resource_id}"
 }
 
-output "stage_name" {
-  value = "${aws_api_gateway_deployment.main.stage_name}"
-}
+//output "stage_name" {
+//  value = "${aws_api_gateway_deployment.main.stage_name}"
+//}
 
 output "authorizer_id" {
   value = "${aws_lambda_function.authorizer.id}"
 }
 
 # not used
-output "execution_arn" {
-  value = "${aws_api_gateway_deployment.main.execution_arn}"
-}
+//output "execution_arn" {
+//  value = "${aws_api_gateway_deployment.main.execution_arn}"
+//}
