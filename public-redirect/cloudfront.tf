@@ -11,7 +11,7 @@ resource "aws_cloudfront_distribution" "main" {
 
   origin {
     origin_id   = "${local.name}-redirect"
-    domain_name = "${aws_s3_bucket.main.bucket_domain_name}"
+    domain_name = "${aws_s3_bucket.main.website_endpoint}"
 
     s3_origin_config {
       origin_access_identity = "${aws_cloudfront_origin_access_identity.main.cloudfront_access_identity_path}"
