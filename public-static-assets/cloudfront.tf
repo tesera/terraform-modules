@@ -62,12 +62,15 @@ resource "aws_cloudfront_distribution" "main" {
 
   default_root_object = "index.html"
 
-  custom_error_response {
-    error_code            = 404
-    error_caching_min_ttl = 5
-    response_page_path    = "/index.html"
-    response_code         = 200
-  }
+  // TODO - https://stackoverflow.com/questions/46262030/single-page-application-with-lambdaedge
+  // 404 pages don't run through lambda@edge response
+  // https://aws.amazon.com/about-aws/whats-new/2017/12/lambda-at-edge-now-allows-you-to-customize-error-responses-from-your-origin/
+//  custom_error_response {
+//    error_code            = 404
+//    error_caching_min_ttl = 5
+//    response_page_path    = "/index.html"
+//    response_code         = 200
+//  }
 
   web_acl_id = "${var.web_acl_id}"
 
