@@ -6,6 +6,7 @@ const headers = {
         "X-Content-Type-Options": "nosniff",
         "Referrer-Policy": "no-referrer",
         "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload"
+      //"Expect-CT":""
     },
     "html": {
         // Content-Security-Policy-Report-Only: https://{report-uri}.report-uri.com/r/d/csp/reportOnly
@@ -20,6 +21,25 @@ const headers = {
             " block-all-mixed-content;" +
             " upgrade-insecure-requests;" +
             " report-uri https://{report-uri}.report-uri.com/r/d/csp/reportOnly",
+        // https://github.com/WICG/feature-policy/blob/master/features.md
+        "Feature-Policy": ""+
+          " accelerometer 'none'" +
+          " ambient-light-sensor 'none'" +
+          " autoplay 'none'" +
+          " camera 'none'" +
+          " encrypted-media 'none'" +
+          " fullscreen 'none'" +
+          " geolocation 'none'" +
+          " gyroscope 'none'" +
+          " magnetometer 'none'" +
+          " microphone 'none'" +
+          " midi 'none'" +
+          " payment 'none'" +
+          " picture-in-picture 'none'" +
+          " speaker 'none'" +
+          " usb 'none'" +
+          " vr 'none'" +
+          " sync-xhr 'none'",
         "X-Frame-Options": "DENY",
         "X-XSS-Protection": "1; mode=block",
         "X-UA-Compatible":"ie=edge"

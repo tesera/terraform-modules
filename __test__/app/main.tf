@@ -11,9 +11,9 @@
 locals {
   aws_region  = "ca-central-1"
   profile     = "tesera"
-  name        = "tesera-modules_test"
+  name        = "tesera-modules-test"
   domain_root = "tesera.com"
-  domain      = "test.tesera.com"
+  domain      = "app.test.tesera.com"
 }
 
 provider "aws" {
@@ -28,11 +28,11 @@ provider "aws" {
 }
 
 # WAF
-module "waf" {
-  source        = "../../waf-owasp"
-  name          = "${local.name}"
-  defaultAction = "ALLOW"
-}
+//module "waf" {
+//  source        = "../../waf-owasp"
+//  name          = "${local.name}"
+//  defaultAction = "ALLOW"
+//}
 
 # APP
 ## DNS
@@ -67,7 +67,7 @@ module "app" {
   aliases             = [
     "${local.domain}"]
   acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
-  web_acl_id          = "${module.waf.id}"
+ // web_acl_id          = "${module.waf.id}"
   #lambda_edge_content = "${replace(file("${path.module}/edge.js"), "{pkphash}", "${var.pkphash}")}"
 }
 
