@@ -28,11 +28,11 @@ provider "aws" {
 }
 
 # WAF
-module "waf" {
-  source        = "../../waf-owasp"
-  name          = "${local.name}"
-  defaultAction = "ALLOW"
-}
+//module "waf" {
+//  source        = "../../waf-owasp"
+//  name          = "${local.name}"
+//  defaultAction = "ALLOW"
+//}
 
 # API
 ## TLS
@@ -61,15 +61,16 @@ resource "aws_route53_record" "main" {
 
 ## APIG
 module "api" {
+  #source              = "git@github.com:tesera/terraform-modules//public-api-gateway?ref=feature/apig2"
   source              = "../../public-api-gateway"
   name                = "${local.name}"
 
   aliases             = [
     "${local.domain}"]
   acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
-  web_acl_id          = "${module.waf.id}"
+  //web_acl_id          = "${module.waf.id}"
   authorizer_path     = "${path.module}/authorizer"
   lambda_dir          = "${path.module}"
-  lambda_config       = "${path.module}/routes.json"
+  lambda_config_path  = "${path.module}/routes.json"
 }
 

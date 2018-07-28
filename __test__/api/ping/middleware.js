@@ -11,6 +11,7 @@ const {
   validator
 } = require('middy/middlewares')
 const jsonapi = require('middy-jsonapi')
+const httpSecurityHeaders = require('./http-security-headers')
 //const authorization = require('@company/authorization')
 
 const ajvOptions = {
@@ -36,6 +37,7 @@ module.exports = (app, { inputSchema, outputSchema }) =>
     .use(urlEncodeBodyParser())
     .use(jsonBodyParser())
 
+    .use(httpSecurityHeaders())
     .use(cors())
     .use(jsonapi({ response }))
     .use(

@@ -7,8 +7,8 @@ resource "aws_cloudfront_distribution" "main" {
 
   origin {
     origin_id   = "${local.name}-apig"
-    domain_name = "willfarrell.ca"//"${replace(aws_api_gateway_deployment.main.invoke_url, "/^https:\\/\\/(.*?)\\/.*$/", "$1")}"
-    origin_path = "/${local.stage_name}"
+    domain_name = "${replace(aws_api_gateway_deployment.main.invoke_url, "/^https:\\/\\/(.*?)\\/.*$/", "$1")}"
+    origin_path = "/${aws_api_gateway_deployment.main.stage_name}"
 
     custom_origin_config {
       http_port = 80
@@ -33,8 +33,8 @@ resource "aws_cloudfront_distribution" "main" {
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
-    default_ttl            = 86400    # 1d
-    max_ttl                = 31536000 # 1y
+    default_ttl            = 0 # 1d
+    max_ttl                = 0 # 1y
     compress               = true
 
     forwarded_values {

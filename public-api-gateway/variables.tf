@@ -23,7 +23,7 @@ variable "authorizer_path" {
 }
 
 variable "lambda_dir" {}
-variable "lambda_config" {}
+variable "lambda_config_path" {}
 
 variable "runtime" {
     default = "nodejs8.10"

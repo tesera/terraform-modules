@@ -38,10 +38,10 @@ resource "aws_api_gateway_rest_api" "main" {
 }
 
 # aws_api_gateway_deployment.main: Error creating API Gateway Deployment: BadRequestException: The REST API doesn't contain any methods
-//resource "aws_api_gateway_deployment" "main" {
-//  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
-//  stage_name = "${local.stage_name}"
-//}
+resource "aws_api_gateway_deployment" "main" {
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  stage_name = "${local.stage_name}"
+}
 
 # Hook to build Endpoints
 //resource "null_resource" "pre-flight" {
@@ -51,11 +51,7 @@ resource "aws_api_gateway_rest_api" "main" {
 //}
 
 data "external" "endpoints" {
-  program = ["node", "${path.module}/routes.js", "${path.module}"]
-
-  query = {
-    config = "${var.lambda_config}"
-  }
+  program = ["node", "${path.module}/routes.js", "${var.lambda_dir}", "${var.lambda_config_path}"]
 }
 
 # arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs
