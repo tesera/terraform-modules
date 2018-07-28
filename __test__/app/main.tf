@@ -79,3 +79,11 @@ resource "aws_s3_bucket_object" "index" {
   server_side_encryption = "${module.app.server_side_encryption}"
 }
 
+resource "aws_s3_bucket_object" "404" {
+  bucket                 = "${module.app.bucket}"
+  key                    = "404.html"
+  source                 = "${path.module}/404.html"
+  content_type           = "text/html"
+  server_side_encryption = "${module.app.server_side_encryption}"
+}
+
