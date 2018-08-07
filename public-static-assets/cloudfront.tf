@@ -5,10 +5,10 @@ resource "aws_cloudfront_origin_access_identity" "main" {
 resource "aws_cloudfront_distribution" "main" {
   enabled      = true
   http_version = "http2"
-
   is_ipv6_enabled = true
 
   aliases = "${var.aliases}"
+
   origin {
     origin_id   = "${local.name}"
     domain_name = "${aws_s3_bucket.main.bucket_domain_name}"
@@ -17,6 +17,7 @@ resource "aws_cloudfront_distribution" "main" {
       origin_access_identity = "${aws_cloudfront_origin_access_identity.main.cloudfront_access_identity_path}"
     }
   }
+
   default_cache_behavior {
     target_origin_id = "${local.name}"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
@@ -41,27 +42,36 @@ resource "aws_cloudfront_distribution" "main" {
       lambda_arn = "${aws_lambda_function.response_headers.qualified_arn}"
     }
   }
+
   viewer_certificate {
     acm_certificate_arn      = "${var.acm_certificate_arn}"
     minimum_protocol_version = "TLSv1.2_2018"
     ssl_support_method       = "sni-only"
   }
-  logging_config {
-    include_cookies = false
-    bucket          = "${aws_s3_bucket.s3_static_website_logs.bucket_domain_name}"
-  }
-  default_root_object = "index.html"
-  custom_error_response {
-    error_code            = 404
-    error_caching_min_ttl = 5
-    response_page_path    = "/index.html"
-    response_code         = 200
-  }
+
   restrictions {
     geo_restriction {
       restriction_type = "none"
     }
   }
+
+  logging_config {
+    include_cookies = false
+    bucket          = "${aws_s3_bucket.main-cdn-logs.bucket_domain_name}"
+  }
+
+  default_root_object = "index.html"
+
+  // TODO - https://stackoverflow.com/questions/46262030/single-page-application-with-lambdaedge
+  // 404 pages don't run through lambda@edge response
+  // https://aws.amazon.com/about-aws/whats-new/2017/12/lambda-at-edge-now-allows-you-to-customize-error-responses-from-your-origin/
+//  custom_error_response {
+//    error_code            = 404
+//    error_caching_min_ttl = 5
+//    response_page_path    = "/index.html"
+//    response_code         = 200
+//  }
+
   web_acl_id = "${var.web_acl_id}"
 
   tags {
@@ -70,7 +80,8 @@ resource "aws_cloudfront_distribution" "main" {
   }
 }
 
-resource "aws_s3_bucket" "s3_static_website_logs" {
+
+resource "aws_s3_bucket" "main-cdn-logs" {
   bucket = "${local.name}-cdn-access-logs"
 
   lifecycle_rule {

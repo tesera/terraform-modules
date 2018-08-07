@@ -1,6 +1,4 @@
-# TODO add in logging bucket??
-
-resource "aws_s3_bucket" "main-logs" {
+resource "aws_s3_bucket" "main-s3-logs" {
   bucket              = "${local.name}-static-assets-access-logs"
   acl                 = "log-delivery-write"
   acceleration_status = "Enabled"
@@ -47,7 +45,7 @@ resource "aws_s3_bucket" "main" {
   }
 
   logging {
-    target_bucket = "${aws_s3_bucket.main-logs.id}"
+    target_bucket = "${aws_s3_bucket.main-s3-logs.id}"
     target_prefix = "log/"
   }
 

@@ -1,0 +1,17 @@
+[
+  {
+    "method": "GET",
+    "path": "/ping/pong",
+    "src": "ping"
+  },
+  {
+    "method": "GET",
+    "path": "/ping/:pong",
+    "src": "ping"
+  },
+  {
+    "method": "GET",
+    "path": "/ping/pang",
+    "src": "ping"
+  }
+]

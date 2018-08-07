@@ -1,7 +1,3 @@
-resource "aws_cloudfront_origin_access_identity" "main" {
-  comment = "${local.name} S3 domain redirect origin access policy"
-}
-
 resource "aws_cloudfront_distribution" "main" {
   enabled      = true
   http_version = "http2"
@@ -10,23 +6,36 @@ resource "aws_cloudfront_distribution" "main" {
   aliases = "${var.aliases}"
 
   origin {
-    origin_id   = "${local.name}-redirect"
-    domain_name = "${aws_s3_bucket.main.website_endpoint}"
+    origin_id   = "${local.name}-apig"
+    domain_name = "${replace(aws_api_gateway_deployment.main.invoke_url, "/^https:\\/\\/(.*?)\\/.*$/", "$1")}"
+    origin_path = "/${aws_api_gateway_deployment.main.stage_name}"
 
-    s3_origin_config {
-      origin_access_identity = "${aws_cloudfront_origin_access_identity.main.cloudfront_access_identity_path}"
+    custom_origin_config {
+      http_port = 80
+      https_port = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols = [
+        "TLSv1.2"]
     }
   }
 
   default_cache_behavior {
-    target_origin_id = "${local.name}-redirect"
-    allowed_methods  = ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
+    target_origin_id = "${local.name}-apig"
+    allowed_methods  = [
+      "DELETE",
+      "GET",
+      "HEAD",
+      "OPTIONS",
+      "PATCH",
+      "POST",
+      "PUT"]
     cached_methods   = ["GET", "HEAD"]
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
-    default_ttl            = 0
-    max_ttl                = 0
+    default_ttl            = 0 # 1d
+    max_ttl                = 0 # 1y
+    compress               = true
 
     forwarded_values {
       query_string = true
@@ -51,17 +60,21 @@ resource "aws_cloudfront_distribution" "main" {
 
   logging_config {
     include_cookies = false
-    bucket          = "${aws_s3_bucket.main-logs.bucket_domain_name}"
+    bucket = "${aws_s3_bucket.main-logs.bucket_domain_name}"
   }
 
+  web_acl_id = "${var.web_acl_id}"
+
   tags {
-    Name      = "${local.name} Domain Redirection"
+    Name      = "${local.name} API Gateway"
     Terraform = "true"
   }
 }
 
+// TODO update archive policy
 resource "aws_s3_bucket" "main-logs" {
-  bucket = "${local.name}-cdn-redirect-access-logs"
+  bucket = "${local.name}-api-access-logs"
+  acl = "private"
 
   lifecycle_rule {
     enabled = true

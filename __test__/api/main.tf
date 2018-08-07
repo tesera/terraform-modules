@@ -13,7 +13,7 @@ locals {
   profile     = "tesera"
   name        = "tesera-modules-test"
   domain_root = "tesera.com"
-  domain      = "app.test.tesera.com"
+  domain      = "api.test.tesera.com"
 }
 
 provider "aws" {
@@ -34,7 +34,15 @@ provider "aws" {
 //  defaultAction = "ALLOW"
 //}
 
-# APP
+# API
+## TLS
+data "aws_acm_certificate" "main" {
+  provider = "aws.edge"
+  domain   = "${local.domain}"
+  statuses = [
+    "ISSUED"]
+}
+
 ## DNS
 data "aws_route53_zone" "main" {
   name = "${local.domain_root}."
@@ -45,45 +53,24 @@ resource "aws_route53_record" "main" {
   name    = "${local.domain}"
   type    = "A"
   alias   = {
-    name                   = "${module.app.domain_name}"
-    zone_id                = "${module.app.hosted_zone_id}"
+    name                   = "${module.api.domain_name}"
+    zone_id                = "${module.api.hosted_zone_id}"
     evaluate_target_health = true
   }
 }
 
-## TLS
-data "aws_acm_certificate" "main" {
-  provider = "aws.edge"
-  domain   = "${local.domain}"
-  statuses = [
-    "ISSUED"]
-}
-
-## CDN
-module "app" {
-  source              = "../../public-static-assets"
+## APIG
+module "api" {
+  #source              = "git@github.com:tesera/terraform-modules//public-api-gateway?ref=feature/apig2"
+  source              = "../../public-api-gateway"
   name                = "${local.name}"
 
   aliases             = [
     "${local.domain}"]
   acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
- // web_acl_id          = "${module.waf.id}"
-  #lambda_edge_content = "${replace(file("${path.module}/edge.js"), "{pkphash}", "${var.pkphash}")}"
-}
-
-resource "aws_s3_bucket_object" "index" {
-  bucket                 = "${module.app.bucket}"
-  key                    = "index.html"
-  source                 = "${path.module}/index.html"
-  content_type           = "text/html"
-  server_side_encryption = "${module.app.server_side_encryption}"
-}
-
-resource "aws_s3_bucket_object" "404" {
-  bucket                 = "${module.app.bucket}"
-  key                    = "404.html"
-  source                 = "${path.module}/404.html"
-  content_type           = "text/html"
-  server_side_encryption = "${module.app.server_side_encryption}"
+  //web_acl_id          = "${module.waf.id}"
+  authorizer_path     = "${path.module}/authorizer"
+  lambda_dir          = "${path.module}"
+  lambda_config_path  = "${path.module}/routes.json"
 }
 

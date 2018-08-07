@@ -1,0 +1,17 @@
+{
+  "name": "authorizer",
+  "version": "1.0.0",
+  "description": "",
+  "copyright":"© 2018",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "authors": ["willfarrell"],
+  "license": "MIT",
+  "dependencies": {
+    "jsonwebtoken": "^8.3.0",
+    "middy": "^0.15.10",
+    "middy-jsonapi": "^0.1.5"
+  }
+}

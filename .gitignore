@@ -4,6 +4,9 @@
 *.tfstate.lock.info
 *.tfstate.backup
 *.zip
+package-lock.json
+
+public-api-gateway/routes.tf
 
 # Logs
 logs
