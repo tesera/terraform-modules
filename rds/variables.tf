@@ -3,12 +3,12 @@ variable "name" {}
 variable "vpc_id" {}
 
 variable "db_name" {
-  type = "string"
+  type    = "string"
   default = ""
 }
 
 variable "username" {
-  type = "string"
+  type    = "string"
   default = "admin"
 }
 
@@ -59,3 +59,17 @@ variable "multi_az" {
 variable "replica_count" {
   default = "0"
 }
+
+variable "bastion_ssh_key_filename" {
+  default = ""
+}
+
+variable "bastion_username" {
+  default = "ec2-user"
+}
+
+variable "bastion_ip" {
+  default = ""
+}
+
+variable "db_init_filename" {}

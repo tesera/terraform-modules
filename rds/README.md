@@ -5,6 +5,7 @@ Creates a RDS instance.
 - RDS instance
 - db security group 
 - db subnet group
+- executes initial sql script against the newly created DB
 
 ## Setup
 
@@ -12,13 +13,17 @@ Creates a RDS instance.
 
 ```hcl-terraform
 module "rds" {
-  source                 = "git@github.com:tesera/terraform-modules//postgres"
-  vpc_id                 = "${module.vpc.id}"
-  name                   = "rds-instance-name"
-  db_name                = "dbname"
-  username               = "dbuser"
-  password               = "SomePassword123"
-  private_subnet_ids     = ["${module.vpc.private_subnet_ids}"]
+  source                   = "git@github.com:tesera/terraform-modules//postgres"
+  vpc_id                   = "${module.vpc.id}"
+  name                     = "rds-instance-name"
+  db_name                  = "dbname"
+  username                 = "dbuser"
+  password                 = "SomePassword123"
+  private_subnet_ids       = ["${module.vpc.private_subnet_ids}"]
+  bastion_ssh_key_filename = "key"
+  bastion_ip               = "${module.bastion.public_ip}"
+  db_init_filename         = "init.sql"
+  bastion_username         = "ec2-user"
 }
 ```
 
@@ -67,7 +72,11 @@ resource "aws_security_group_rule" "rds" {
 - **allocated_storage:** amount of allocated storage in GB
 - **backup_retention_period:** backup retention period
 - **multi_az:** if the RDS instance is multi AZ enabled
-- **replica_count:** Number of read replicas to deploy
+- **replica_count:** number of read replicas to deploy
+- **bastion_ssh_key_filename:** SSH key filename for connecting to the bastion host
+- **bastion_ip:** IP of the bastion host. If it is not provided the psql command will run directly against the RDS host without SSH tunneling 
+- **db_init_filename:** filename of the sql script init file to be executed
+- **bastion_username:** username for connecting to the bastion host
 
 ## Output
 
