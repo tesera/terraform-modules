@@ -19,7 +19,7 @@ module "rds-proxy" {
   iam_user_groups   = "Developers"
   iam_sudo_groups   = "Admin"
   
-  rds_domain        = "app-master-postgres.********.ca-central-1.rds.amazonaws.com"
+  rds_endpoint      = "app-master-postgres.********.ca-central-1.rds.amazonaws.com"
 }
 ```
 
@@ -47,7 +47,7 @@ resource "aws_security_group_rule" "rds-proxy" {
 - **rds_name:** name of the proxy [Default: postgres]
 - **rds_port:** port to proxy [Default: 5432]
 - **rds_health_port:** port to proxy DB health check [Default: 9200]
-- **rds_domain:** RDS domain endpoint
+- **rds_endpoint:** RDS domain endpoint
 
 ## Output
 - **public_ip:** public ip
