@@ -57,7 +57,6 @@ resource "aws_security_group_rule" "proxy" {
 - **proxy_name:** name of the proxy [Default: proxy]
 - **proxy_endpoint:** RDS domain endpoint
 - **proxy_port:** port to proxy [Default: 443]
-- **proxy_health_port:** port to proxy DB health check [Default: 9200]
 
 ## Output
 - **public_ip:** public ip
@@ -68,6 +67,6 @@ resource "aws_security_group_rule" "proxy" {
 
 
 ## TODO
-- [ ] Have bastion SG be passed in
+- [ ] only able to proxy streams
 - [ ] Allow multiple proxies
 - [ ] Connect proxy logs to cloudwatch

@@ -152,7 +152,7 @@ resource "aws_iam_role_policy_attachment" "main-logs" {
 }
 
 resource "aws_iam_instance_profile" "main" {
-  name = "${var.name}-rds-proxy-instance-profile"
+  name = "${var.name}-proxy-instance-profile"
   role = "${aws_iam_role.main.name}"
 }
 
@@ -192,7 +192,7 @@ data "template_file" "main-userdata" {
 
     PROXY_NAME        = "${var.proxy_name}"
     PROXY_PORT        = "${var.proxy_port}"
-    PROXY_HEALTH_PORT = "${var.proxy_health_port}"
+    #PROXY_HEALTH_PORT = "${local.proxy_health_port}"
     PROXY_ENDPOINT    = "${var.proxy_endpoint}"
   }
 }
@@ -215,7 +215,7 @@ resource "aws_autoscaling_group" "main" {
 
   tag {
     key                 = "Name"
-    value               = "${var.name}-rds-proxy"
+    value               = "${var.name}-proxy"
     propagate_at_launch = "true"
   }
 

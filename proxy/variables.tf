@@ -43,8 +43,4 @@ variable "proxy_port" {
   default = "443"
 }
 
-variable "proxy_health_port" {
-  default = ""
-}
-
 
