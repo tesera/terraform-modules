@@ -33,16 +33,18 @@ variable "bastion_security_group_id" {
   default = ""
 }
 
-variable "rds_name" {
-  default = "database"
+variable "proxy_name" {
+  default = "proxy"
 }
 
-variable "rds_port" {
-  default = "5432"
+variable "proxy_endpoint" {}
+
+variable "proxy_port" {
+  default = "443"
 }
 
-variable "rds_health_port" {
-  default = "9200"
+variable "proxy_health_port" {
+  default = ""
 }
 
-variable "rds_endpoint" {}
+

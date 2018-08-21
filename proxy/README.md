@@ -10,8 +10,8 @@ Allow direct connection to private subnet rds instances. This should only be use
 ## Setup
 ### Module
 ```hcl-terraform
-module "rds-proxy" {
-  source            = "git@github.com:tesera/terraform-modules//rds-proxy"
+module "proxy" {
+  source            = "git@github.com:tesera/terraform-modules//proxy"
   name              = "${local.name}"
   vpc_id            = "${module.vpc.id}"
   public_subnet_ids = "${module.vpc.public_subnet_ids}"
@@ -21,17 +21,27 @@ module "rds-proxy" {
   
   rds_endpoint      = "app-master-postgres.********.ca-central-1.rds.amazonaws.com"
 }
+
+resource "aws_security_group_rule" "proxy" {
+  security_group_id        = "${module.proxy.security_group_id}"
+  type                     = "ingress"
+  from_port                = "5432"
+  to_port                  = "5432"
+  protocol                 = "tcp"
+  cidr_blocks              = ["0.0.0.0/0"]
+}
+
 ```
 
 ### Add a security group rule that grants permission to external server to access the db instance
 ```hcl-terraform
-resource "aws_security_group_rule" "rds-proxy" {
-  security_group_id        = "${module.proxy.security_group_id}"
+resource "aws_security_group_rule" "proxy" {
+  security_group_id        = "${module.rds.security_group_id}"
   type                     = "ingress"
   from_port                = 5432
   to_port                  = 5432
   protocol                 = "tcp"
-  cidr_blocks              = ["0.0.0.0/0"]
+  source_security_group_id = "${module.proxy.security_group_id}"
 }
 ```
 
@@ -44,10 +54,10 @@ resource "aws_security_group_rule" "rds-proxy" {
 - **image_id:** override the base image, must be CentOS based (ie has yum and rpm) [Default: AWS Linux]
 - **instance_type:** override the instance type [Default: t2.micro]
 - **bastion_security_group_id:** bastion security group id [Default: none]
-- **rds_name:** name of the proxy [Default: postgres]
-- **rds_port:** port to proxy [Default: 5432]
-- **rds_health_port:** port to proxy DB health check [Default: 9200]
-- **rds_endpoint:** RDS domain endpoint
+- **proxy_name:** name of the proxy [Default: proxy]
+- **proxy_endpoint:** RDS domain endpoint
+- **proxy_port:** port to proxy [Default: 443]
+- **proxy_health_port:** port to proxy DB health check [Default: 9200]
 
 ## Output
 - **public_ip:** public ip

@@ -2,13 +2,13 @@ resource "aws_eip" "main" {
   vpc = "true"
 
   tags {
-    Name      = "${var.name}-rds-proxy"
+    Name      = "${var.name}-proxy"
     Terraform = "true"
   }
 }
 
 resource "aws_security_group" "main" {
-  name   = "${var.name}-rds-proxy"
+  name   = "${var.name}-proxy"
   vpc_id = "${var.vpc_id}"
 
   egress {
@@ -31,7 +31,7 @@ resource "aws_security_group_rule" "ssh" {
 }
 
 resource "aws_iam_role" "main" {
-  name               = "${var.name}-rds-proxy-role"
+  name               = "${var.name}-proxy-role"
 
   assume_role_policy = <<EOF
 {
@@ -53,9 +53,9 @@ EOF
 }
 
 resource "aws_iam_policy" "main-ip" {
-  name        = "${var.name}-rds-proxy-ip-policy"
+  name        = "${var.name}-proxy-ip-policy"
   path        = "/"
-  description = "${var.name} RDS Proxy IP Policy"
+  description = "${var.name} Proxy IP Policy"
 
   policy      = <<EOF
 {
@@ -81,9 +81,9 @@ resource "aws_iam_role_policy_attachment" "main-ip" {
 }
 
 resource "aws_iam_policy" "main-iam" {
-  name        = "${var.name}-rds-proxy-iam-policy"
+  name        = "${var.name}-proxy-iam-policy"
   path        = "/"
-  description = "${var.name} RDS Proxy SSH IAM Policy"
+  description = "${var.name} Proxy SSH IAM Policy"
 
   policy      = <<EOF
 {
@@ -121,9 +121,9 @@ resource "aws_iam_role_policy_attachment" "main-iam" {
 }
 
 resource "aws_iam_policy" "main-logs" {
-  name        = "${var.name}-rds-proxy-logs-policy"
+  name        = "${var.name}-proxy-logs-policy"
   path        = "/"
-  description = "${var.name} RDS Proxy Logs Policy"
+  description = "${var.name} Proxy Logs Policy"
 
   policy      = <<EOF
 {
@@ -157,7 +157,7 @@ resource "aws_iam_instance_profile" "main" {
 }
 
 resource "aws_launch_configuration" "main" {
-  name_prefix                 = "${var.name}-rds-proxy-"
+  name_prefix                 = "${var.name}-proxy-"
   image_id                    = "${local.image_id}"
   instance_type               = "${var.instance_type}"
   key_name                    = "${var.key_name}"
@@ -190,15 +190,15 @@ data "template_file" "main-userdata" {
     IAM_USER_GROUPS = "${var.iam_user_groups}"
     IAM_SUDO_GROUPS = "${var.iam_sudo_groups}"
 
-    RDS_NAME        = "${var.rds_name}"
-    RDS_PORT        = "${var.rds_port}"
-    RDS_HEALTH_PORT = "${var.rds_health_port}"
-    RDS_ENDPOINT    = "${var.rds_endpoint}"
+    PROXY_NAME        = "${var.proxy_name}"
+    PROXY_PORT        = "${var.proxy_port}"
+    PROXY_HEALTH_PORT = "${var.proxy_health_port}"
+    PROXY_ENDPOINT    = "${var.proxy_endpoint}"
   }
 }
 
 resource "aws_autoscaling_group" "main" {
-  name                      = "${var.name}-rds-proxy-asg"
+  name                      = "${var.name}-proxy-asg"
   max_size                  = "${local.max_size}"
   min_size                  = "${local.min_size}"
   desired_capacity          = "${local.desired_capacity}"

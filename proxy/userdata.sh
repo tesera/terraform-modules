@@ -60,18 +60,18 @@ stream {
 EOF
 
 # https://www.nginx.com/blog/advanced-mysql-load-balancing-with-nginx-plus/
-cat << EOF > /etc/nginx/conf.d/${RDS_NAME}.conf
-upstream ${RDS_NAME} {
+cat << EOF > /etc/nginx/conf.d/${PROXY_NAME}.conf
+upstream ${PROXY_NAME} {
     zone backend 64k;
-    server ${RDS_ENDPOINT}:${RDS_PORT}
+    server ${PROXY_ENDPOINT}:${PROXY_PORT}
 }
 
 server {
-    listen ${RDS_PORT};
+    listen ${PROXY_PORT};
     status_zone tcp_server;
-    proxy_pass ${RDS_NAME};
+    proxy_pass ${PROXY_NAME};
     proxy_connect_timeout 1s;
-    health_check port=${RDS_HEALTH_PORT};
+    health_check port=${PROXY_HEALTH_PORT};
 }
 EOF
 
