@@ -87,3 +87,6 @@ resource "aws_network_acl_rule" "egress_postgres" {
 ## TODO
 - [ ] Add IPv6 - https://www.terraform.io/docs/providers/aws/r/vpc.html#assign_generated_ipv6_cidr_block
 - [ ] Option to modify CIDR if VPC peering ever happen
+- [ ] Main route table created without name - make public? or name?
+- [ ] "" same for Network ACLs
+
