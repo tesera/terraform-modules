@@ -39,7 +39,8 @@ EOF
 /usr/bin/import_users.sh
 
 echo "***** Nginx *****"
-#rm /etc/nginx/conf.d/default.conf
+rm /etc/nginx/conf.d/virtual.conf
+mkdir -p /etc/nginx/conf.d/streams
 
 cat << EOF > /etc/nginx/nginx.conf
 load_module /usr/lib64/nginx/modules/ngx_stream_module.so;
@@ -49,7 +50,6 @@ worker_processes  auto;
 
 error_log  /var/log/nginx/error.log warn;
 pid        /var/run/nginx.pid;
-
 
 include    main.d/*.conf;
 
