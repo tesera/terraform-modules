@@ -76,7 +76,6 @@ module "proxy" {
   public_subnet_ids         = "${module.vpc.public_subnet_ids}"
   key_name                  = "${local.key_name}"
   iam_user_groups           = "Admin"
-  iam_sudo_groups           = "Admin"
   proxy_name                = "postgres"
   proxy_endpoint            = "${module.rds.endpoint}"
   proxy_port                = "5432"
