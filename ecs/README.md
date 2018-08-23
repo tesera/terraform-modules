@@ -43,6 +43,7 @@ resource "aws_iam_group" "developers" {
 - **iam_sudo_groups:** name of iam group that should have ssh sudo access, comma separated list
 - **image_id:** override the base image, must be CentOS based (ie has yum, rpm, docker) [Default: AWS ECS-Optimized]
 - **instance_type:** override the instance type [Default: t2.micro]
+- **bastion_security_group_id:** bastion security group id [Default: none]
 - **min_size:** auto-scalling - min instance count [Default: 1]
 - **max_size:** auto-scalling - max instance count [Default: 1]
 - **desired_capacity:** auto-scalling - desired instance count [Default: 1]
