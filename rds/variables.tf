@@ -3,12 +3,12 @@ variable "name" {}
 variable "vpc_id" {}
 
 variable "db_name" {
-  type = "string"
+  type    = "string"
   default = ""
 }
 
 variable "username" {
-  type = "string"
+  type    = "string"
   default = "admin"
 }
 
@@ -58,4 +58,8 @@ variable "multi_az" {
 
 variable "replica_count" {
   default = "0"
+}
+
+variable "publicly_accessible" {
+  default = "false"
 }
