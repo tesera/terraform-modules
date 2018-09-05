@@ -68,6 +68,7 @@ resource "aws_security_group_rule" "rds" {
 - **backup_retention_period:** backup retention period
 - **multi_az:** if the RDS instance is multi AZ enabled
 - **replica_count:** Number of read replicas to deploy
+- **bastion_security_group_id:** bastion security group id [Default: none]
 
 ## Output
 
