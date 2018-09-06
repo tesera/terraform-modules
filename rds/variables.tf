@@ -72,6 +72,10 @@ variable "cpu_alarm_threshold" {
   default = "80"
 }
 
+variable "cpu_alarm_evaluation_periods" {
+  default = "3"
+}
+
 variable "swap_alarm_threshold" {
   default = "0"
 }

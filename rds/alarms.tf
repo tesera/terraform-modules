@@ -13,7 +13,7 @@ resource "aws_cloudwatch_metric_alarm" "rds-cpu-alarm" {
   }
 
   statistic           = "Average"
-  evaluation_periods  = 1
+  evaluation_periods  = "${var.cpu_alarm_evaluation_periods}"
   period              = 300
   threshold           = "${var.cpu_alarm_threshold}"
   comparison_operator = "GreaterThanThreshold"
