@@ -8,6 +8,7 @@ const {
   httpEventNormalizer,
   httpHeaderNormalizer,
   httpContentNegotiation,
+  httpSecurityHeaders,
   validator
 } = require('middy/middlewares')
 const jsonapi = require('middy-jsonapi')
@@ -36,6 +37,7 @@ module.exports = (app, { inputSchema, outputSchema }) =>
     .use(urlEncodeBodyParser())
     .use(jsonBodyParser())
 
+    .use(httpSecurityHeaders())
     .use(cors())
     .use(jsonapi({ response }))
     .use(

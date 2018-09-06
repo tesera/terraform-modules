@@ -18,21 +18,25 @@ variable "web_acl_id" {
     description = "WAF ACL ID"
 }
 
-variable "authorizer_path" {
+variable "authorizer_dir" {
     default = ""
 }
 
 variable "lambda_dir" {}
 variable "lambda_config_path" {}
 
+variable "handler" {
+    default = "index.handler"
+}
 variable "runtime" {
     default = "nodejs8.10"
 }
 variable "memory_size" {
     default = 128
 }
-variable "tiemout" {
+variable "timeout" {
     default = 30
 }
+
 //variable "authorizer_client_id" {}
 //variable "authorizer_client_secret" {}

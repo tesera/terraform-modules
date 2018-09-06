@@ -60,6 +60,14 @@ variable "replica_count" {
   default = "0"
 }
 
+variable "publicly_accessible" {
+  default = "false"
+}
+
+variable "bastion_security_group_id" {
+  default = ""
+}
+
 variable "cpu_alarm_threshold" {
   default = "80"
 }
