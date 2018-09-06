@@ -60,10 +60,34 @@ variable "replica_count" {
   default = "0"
 }
 
-
 variable "publicly_accessible" {
   default = "false"
 }
+
 variable "bastion_security_group_id" {
   default = ""
+}
+
+variable "cpu_alarm_threshold" {
+  default = "80"
+}
+
+variable "cpu_alarm_evaluation_periods" {
+  default = "3"
+}
+
+variable "swap_alarm_threshold" {
+  default = "0"
+}
+
+variable "free_space_alarm_threshold" {
+  default = 1073741824 # 1G
+}
+
+variable "read_latency_alarm_threshold" {
+  default = "0.2" # 200ms
+}
+
+variable "write_latency_alarm_threshold" {
+  default = "0.2" # 200ms
 }
