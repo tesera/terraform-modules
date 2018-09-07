@@ -32,7 +32,11 @@ resource "aws_security_group" "lambda" {
 }
 ```
 
-### routes.json Sample
+### routes.json
+
+- **method:** HTTP Method (`GET`,`POST`,`PUT`, `PATCH`,`DELETE`)
+- **path:** uri path, must start with `/`, supports inline var using `:id` and `{id}`
+- **src:** path, relative to `lambda_dir` from module input
 
 ```json
 [
