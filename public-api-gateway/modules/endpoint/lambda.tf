@@ -9,7 +9,7 @@ resource "aws_lambda_function" "lambda" {
   filename         = "${data.archive_file.lambda.output_path}"
   source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
   role             = "${aws_iam_role.lambda.arn}"
-  handler          = "index.handler"
+  handler          = "${var.handler}"
   runtime          = "${var.runtime}"
   memory_size      = 128
   timeout          = 30

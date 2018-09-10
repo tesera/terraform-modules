@@ -41,4 +41,7 @@ variable "iam_sudo_groups" {
   default = ""
 }
 
+variable "bastion_security_group_id" {
+  default = ""
+}
 
