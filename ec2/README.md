@@ -88,7 +88,8 @@ resource "aws_iam_group" "developers" {
 - **subnet_public:** is the subnet public? [Default: false]
 - **key_name:** name of root ssh key
 - **iam_user_groups:** name of iam group that should have ssh access, comma separated list
-- **iam_sudo_groups:** name of iam group that should have ssh sudo access, comma separated list
+- **iam_sudo_groups:** name of iam group that should have ssh sudo access (must also be in user_groups), comma separated list
+- **iam_local_groups:** name of groups on the iam that users should be in
 - **image_id:** override the base image, must be CentOS based (ie has yum, rpm, docker) [Default: AWS ECS-Optimized]
 - **instance_type:** override the instance type [Default: t2.micro]
 - **bastion_security_group_id:** bastion security group id [Default: none]

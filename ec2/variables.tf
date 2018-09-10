@@ -18,7 +18,10 @@ variable "instance_type" {
   default = "t2.micro"
 }
 variable "key_name" {}
-variable "userdata" {
+variable "banner" {
+  default = "AWS EC2"
+}
+variable "user_data" {
   default = ""
 }
 variable "volume_type" {
@@ -45,6 +48,10 @@ variable "iam_user_groups" {
 }
 
 variable "iam_sudo_groups" {
+  default = ""
+}
+
+variable "iam_local_groups" {
   default = ""
 }
 

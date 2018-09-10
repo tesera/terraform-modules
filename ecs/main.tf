@@ -4,27 +4,27 @@ resource "aws_ecs_cluster" "main" {
   name = "${var.name}-ecs"
 }
 
-data "template_file" "main-userdata" {
-  template = "${file("${path.module}/userdata.sh")}"
+data "template_file" "userdata" {
+  template = "${file("${path.module}/user_data.sh")}"
 
   vars {
-    REGION          = "${local.aws_region}"
     ECS_CLUSTER     = "${aws_ecs_cluster.main.name}"
-    IAM_USER_GROUPS = "${var.iam_user_groups}"
-    IAM_SUDO_GROUPS = "${var.iam_sudo_groups}"
   }
 }
 
 module "ec2" {
   source           = "../ec2"
   name             = "${var.name}-ecs"
+  account_id       = "${local.account_id}"
   vpc_id           = "${var.vpc_id}"
   subnet_ids       = "${var.private_subnet_ids}"
   image_id         = "${local.image_id}"
   key_name         = "${var.key_name}"
-  userdata         = "${data.template_file.main-userdata.rendered}"
+  banner           = "AWS ECS"
+  user_data         = "${data.template_file.userdata.rendered}"
   iam_user_groups  = "${var.iam_user_groups}"
   iam_sudo_groups  = "${var.iam_sudo_groups}"
+  local_groups     = "docker"
   min_size         = "${local.min_size}"
   max_size         = "${local.max_size}"
   desired_capacity = "${local.desired_capacity}"
