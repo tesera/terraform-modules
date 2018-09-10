@@ -49,7 +49,7 @@ resource "aws_security_group_rule" "pubic-ssh" {
 resource "aws_iam_policy" "main-ip" {
   name        = "${var.name}-bastion-ip-policy"
   path        = "/"
-  description = "${var.name}-bastion IP Policy"
+  description = "${var.name}-bastion-ip Policy"
 
   policy      = <<EOF
 {
