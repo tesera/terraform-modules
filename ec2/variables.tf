@@ -7,6 +7,10 @@ variable "subnet_ids" {
   type = "list"
 }
 
+variable "subnet_public" {
+  default = "false"
+}
+
 variable "image_id" {
   default = ""
 }

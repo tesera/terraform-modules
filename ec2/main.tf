@@ -10,8 +10,8 @@ resource "aws_launch_configuration" "main" {
   ebs_optimized               = "false"
   enable_monitoring           = "true"
 
-  # Assign EIP in user_data instead
-  associate_public_ip_address = "false"
+  # Must be true in public subnets if assigning EIP in userdata
+  associate_public_ip_address = "${var.subnet_public}"
 
   root_block_device {
     volume_type = "${var.volume_type}"

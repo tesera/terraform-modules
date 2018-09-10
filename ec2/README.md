@@ -85,6 +85,7 @@ resource "aws_iam_group" "developers" {
 ## Input
 - **vpc_id:** vpc id
 - **subnet_ids:** array of public subnet ids
+- **subnet_public:** is the subnet public? [Default: false]
 - **key_name:** name of root ssh key
 - **iam_user_groups:** name of iam group that should have ssh access, comma separated list
 - **iam_sudo_groups:** name of iam group that should have ssh sudo access, comma separated list

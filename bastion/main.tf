@@ -23,6 +23,7 @@ module "ec2" {
   name             = "${var.name}-bastion"
   vpc_id           = "${var.vpc_id}"
   subnet_ids       = "${var.public_subnet_ids}"
+  subnet_public     = "true"
   image_id         = "${local.image_id}"
   key_name         = "${var.key_name}"
   userdata         = "${data.template_file.main-userdata.rendered}"
