@@ -1,4 +1,4 @@
-# bastion
+# Bastion
 Allow ssh to private subnet services.
 
 ## Features
@@ -7,6 +7,11 @@ Allow ssh to private subnet services.
 - `authorized_keys` generated from users in an IAM group
 - `fail2ban` enabled
 - CloudWatch logging enabled
+
+## Test
+```bash
+ssh -i ~/.ssh/id_rsa username@{bastion_ip}
+```
 
 ## Setup
 ### Module
