@@ -17,7 +17,9 @@ variable "image_id" {
 variable "instance_type" {
   default = "t2.micro"
 }
-variable "key_name" {}
+variable "key_name" {
+  default = ""
+}
 variable "banner" {
   default = "AWS EC2"
 }

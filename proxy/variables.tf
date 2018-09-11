@@ -13,7 +13,6 @@ variable "image_id" {
 variable "instance_type" {
   default = "t2.micro"
 }
-variable "key_name" {}
 variable "volume_type" {
   default = "gp2"
 }
@@ -44,3 +43,7 @@ variable "proxy_port" {
 }
 
 
+
+variable "key_name" {
+  default = ""
+}

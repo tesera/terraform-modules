@@ -6,7 +6,6 @@ resource "aws_iam_role" "main" {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "",
       "Effect": "Allow",
       "Principal": {
         "Service": [
@@ -19,6 +18,61 @@ resource "aws_iam_role" "main" {
 }
 EOF
 }
+
+
+//resource "aws_iam_policy" "main-user-pam" {
+//  name        = "${var.name}-user-pam-policy"
+//  path        = "/"
+//  description = "${var.name} User PAM Policy"
+//
+//  policy      = <<EOF
+//{
+//  "Version": "2012-10-17",
+//  "Statement": [
+//    {
+//      "Effect": "Allow",
+//      "Action": "sts:AssumeRole",
+//      "Resource": "arn:aws:iam::${local.account_id}:role/${var.name}-pam-role"
+//    }
+//  ]
+//}
+//EOF
+//}
+
+//resource "aws_iam_group_policy_attachment" "main-user-pam" {
+//  # may run into issues if this group is in another account
+//  group      = "${var.iam_user_groups}"
+//  policy_arn = "${aws_iam_policy.main-user-pam.arn}"
+//}
+
+# Will be assumed via PAM, but has no access to anything
+//resource "aws_iam_role" "main-pam" {
+//  name               = "${var.name}-pam-assume-role"
+//
+//  assume_role_policy = <<EOF
+//{
+//  "Version": "2012-10-17",
+//  "Statement": [
+//    {
+//      "Effect": "Allow",
+//      "Principal": {
+//        "Service": [
+//          "ec2.amazonaws.com"
+//        ]
+//      },
+//      "Action": "sts:AssumeRole",
+//      "Condition": {
+//        "Bool": {
+//          "aws:MultiFactorAuthPresent": "true"
+//        }
+//      }
+//    }
+//  ]
+//}
+//EOF
+//}
+
+
 
 resource "aws_iam_policy" "main-iam" {
   name        = "${var.name}-iam-policy"
@@ -46,9 +100,9 @@ resource "aws_iam_policy" "main-iam" {
         "arn:aws:iam::${local.account_id}:user/*"
       ]
     }, {
-        "Effect": "Allow",
-        "Action": "ec2:DescribeTags",
-        "Resource": "*"
+      "Effect": "Allow",
+      "Action": "ec2:DescribeTags",
+      "Resource": "*"
     }
   ]
 }

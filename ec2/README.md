@@ -14,11 +14,10 @@ module "ec2" {
   name              = "${local.name}-usecase"
   vpc_id            = "${module.vpc.id}"
   subnet_ids        = "${module.vpc.private_subnet_ids}"
-  key_name          = "${aws_key_pair.root_public_key.key_name}"
   iam_user_groups   = "Developers"
   iam_sudo_groups   = "Admin"
   image_id          = "${local.image_id}"
-  userdata          = "${data.template_file.main-userdata.rendered}"
+  user_data          = "${data.template_file.main-userdata.rendered}"
 }
 ```
 
@@ -86,17 +85,17 @@ resource "aws_iam_group" "developers" {
 - **vpc_id:** vpc id
 - **subnet_ids:** array of public subnet ids
 - **subnet_public:** is the subnet public? [Default: false]
-- **key_name:** name of root ssh key
 - **iam_user_groups:** name of iam group that should have ssh access, comma separated list
 - **iam_sudo_groups:** name of iam group that should have ssh sudo access (must also be in user_groups), comma separated list
 - **iam_local_groups:** name of groups on the iam that users should be in
 - **image_id:** override the base image, must be CentOS based (ie has yum, rpm, docker) [Default: AWS ECS-Optimized]
 - **instance_type:** override the instance type [Default: t2.micro]
 - **bastion_security_group_id:** bastion security group id [Default: none]
-- **userdata:** path to 
+- **user_data:** contents of user data to apply to ec2
 - **min_size:** auto-scalling - min instance count [Default: 1]
 - **max_size:** auto-scalling - max instance count [Default: 1]
 - **desired_capacity:** auto-scalling - desired instance count [Default: 1]
+- **key_name:** name of root ssh key, for testing only [Default: none]
 
 ## Output
 - **security_group_id:** security group applied, add to ingress on private instance security group

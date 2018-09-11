@@ -32,6 +32,8 @@ yum install -y awslogs
 sed -i "s/{instance_id}/$INSTANCE_ID/" /etc/awslogs/awslogs.conf
 service awslogs start
 
+${USER_DATA}
+
 echo "***** Setup SSH via IAM *****"
 rpm -i https://s3-eu-west-1.amazonaws.com/widdix-aws-ec2-ssh-releases-eu-west-1/aws-ec2-ssh-1.9.1-1.el7.centos.noarch.rpm
 cat << EOF > /etc/aws-ec2-ssh.conf
@@ -41,7 +43,5 @@ LOCAL_GROUPS="${LOCAL_GROUPS}"
 EOF
 
 /usr/bin/import_users.sh
-
-${USER_DATA}
 
 echo "***** Clean Up *****"

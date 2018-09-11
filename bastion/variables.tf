@@ -13,9 +13,6 @@ variable "image_id" {
 variable "instance_type" {
   default = "t2.micro"
 }
-variable "key_name" {
-  default = ""
-}
 variable "volume_type" {
   default = "gp2"
 }
@@ -32,3 +29,7 @@ variable "iam_sudo_groups" {
 }
 
 
+
+variable "key_name" {
+  default = ""
+}
