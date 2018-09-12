@@ -2,20 +2,24 @@ output "id" {
   value = "${aws_vpc.main.id}"
 }
 
+# For bastion, proxy
 output "public_subnet_ids" {
   value = ["${aws_subnet.public.*.id}"]
 }
 
-output "public_nat_ips" {
-  value = ["${aws_nat_gateway.public.*.public_ip}"]
-}
-
+# For ECS, RDS, etc
 output "private_subnet_ids" {
   value = ["${aws_subnet.private.*.id}"]
 }
 
+# For VPC endpoints
 output "private_route_table_ids" {
-  value = ["${aws_route_table.private.*.id}"]
+  value = ["${var.nat_type == "gateway" ? aws_route_table.private-gateway.*.id : aws_route_table.private-instance.*.id}"]
+}
+
+# For whitelisting on 3rd party services
+output "public_ips" {
+  value = ["${aws_eip.nat.*.public_ip}"]
 }
 
 # Used to add additional rules

@@ -36,6 +36,8 @@ if [ "\$PAM_TTY" != "ssh" ]; then
   exit \$PAM_IGNORE
 fi
 
+# TODO if user == ec2-user exit 0 - discussion
+
 # Virtual Device
 # https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_checking-status.html
 MFA_RESULT=\$(aws sts assume-role \
