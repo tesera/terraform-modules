@@ -19,7 +19,7 @@ Creates a VPC over two AZ w/ NAT.
 ```hcl-terraform
 module "vpc" {
   source = "git@github.com:tesera/terraform-modules//vpc"
-  name = "${env}-myapp"
+  name   = "${env}-myapp"
 }
 ```
 
@@ -70,7 +70,7 @@ resource "aws_network_acl_rule" "egress_postgres" {
 ## Input
 - **name:** application name
 - **cidr_block:** Custom CIDR block, must end with `.0.0/16` [Default: `10.0.0.0/16`]
-- **az_count:** Number on AZ to initialize [Default: 1]. Note: RDS requires min of 2. See [Map](https://aws.amazon.com/about-aws/global-infrastructure/) for AZ count for each region.
+- **az_count:** Number on AZ to initialize [Default: 2]. Note: RDS requires min of 2. See [Map](https://aws.amazon.com/about-aws/global-infrastructure/) for AZ count for each region.
 - **nat_type:** Type of NAT to use `gateway` or `instance` [Default: `gateway`]. See [Comparison](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-comparison.html)
 
 ### Input for NAT instance
