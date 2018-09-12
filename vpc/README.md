@@ -19,7 +19,7 @@ Creates a VPC over two AZ w/ NAT.
 ```hcl-terraform
 module "vpc" {
   source = "git@github.com:tesera/terraform-modules//vpc"
-  name = "${env}-myapp"
+  name   = "${env}-myapp"
 }
 ```
 
@@ -69,13 +69,20 @@ resource "aws_network_acl_rule" "egress_postgres" {
 
 ## Input
 - **name:** application name
-- **cidr_block:** Custom CIDR block, must end with `0.0/16` [Default: `10.0.0.0/16`]
-- **az_count:** Number on AZ to initialize, min of 2. See [Map](https://aws.amazon.com/about-aws/global-infrastructure/) for AZ count for each region.
+- **cidr_block:** Custom CIDR block, must end with `.0.0/16` [Default: `10.0.0.0/16`]
+- **az_count:** Number on AZ to initialize [Default: 2]. Note: RDS requires min of 2. See [Map](https://aws.amazon.com/about-aws/global-infrastructure/) for AZ count for each region.
+- **nat_type:** Type of NAT to use `gateway` or `instance` [Default: `gateway`]. See [Comparison](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-comparison.html)
+
+### Input for NAT instance
+- **key_name:** name of root ssh key [Default: none]
+- **iam_user_groups:** name of iam group that should have ssh access, comma separated list [Default: none]
+- **iam_sudo_groups:** name of iam group that should have ssh sudo access, comma separated list [Default: none]
+- **instance_type:** override the instance type [Default: t2.micro]
+- **bastion_security_group_id:** bastion security group id [Default: none]
 
 ## Output
-
 - **id:** vpc id
-- **public_nat_ips:** array of ips attached to NATs
+- **public_ips:** array of ips attached to NATs
 - **public_subnet_ids:** array of public subnet ids
 - **private_subnet_ids:** array of private subnet ids
 - **private_route_table_ids:** array of private route tables for aws_vpc_endpoints

@@ -1,31 +1,35 @@
 data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
+
+data "external" "az_name" {
+  program = [
+    "node",
+    "${path.module}/locals-az_name.js",
+    "${var.az_count}"]
+}
+
+data "external" "public_cidr" {
+  program = [
+    "node",
+    "${path.module}/locals-public_cidr.js",
+    "${var.cidr_block}",
+    "${var.az_count}"]
+}
+
+data "external" "private_cidr" {
+  program = [
+    "node",
+    "${path.module}/locals-private_cidr.js",
+    "${var.cidr_block}",
+    "${var.az_count}"]
+}
 
 locals {
-  aws_region = "${data.aws_region.current.name}"
-  az_count = "${var.az_count > 2 ? var.az_count : 2}"
-  az_name = {
-    "0" = "a"
-    "1" = "b"
-    "2" = "c"
-    "3" = "d"
-    "4" = "e"
-    "5" = "f" # us-east-1 has 6 AZ 2018-07
-  }
-  cidr_block = "${var.cidr_block}"
-  public_cidr = {
-    "0" = "${replace(var.cidr_block, ".0.0/16", "")}.10.0/24"
-    "1" = "${replace(var.cidr_block, ".0.0/16", "")}.20.0/24"
-    "2" = "${replace(var.cidr_block, ".0.0/16", "")}.30.0/24"
-    "3" = "${replace(var.cidr_block, ".0.0/16", "")}.40.0/24"
-    "4" = "${replace(var.cidr_block, ".0.0/16", "")}.50.0/24"
-    "5" = "${replace(var.cidr_block, ".0.0/16", "")}.60.0/24"
-  }
-  private_cidr = {
-    "0" = "${replace(var.cidr_block, ".0.0/16", "")}.11.0/24"
-    "1" = "${replace(var.cidr_block, ".0.0/16", "")}.21.0/24"
-    "2" = "${replace(var.cidr_block, ".0.0/16", "")}.31.0/24"
-    "3" = "${replace(var.cidr_block, ".0.0/16", "")}.41.0/24"
-    "4" = "${replace(var.cidr_block, ".0.0/16", "")}.51.0/24"
-    "5" = "${replace(var.cidr_block, ".0.0/16", "")}.61.0/24"
-  }
+  account_id   = "${data.aws_caller_identity.current.account_id}"
+  aws_region   = "${data.aws_region.current.name}"
+  cidr_block   = "${var.cidr_block}"
+  az_count     = "${var.az_count > 1 ? var.az_count : 1}"
+  az_name      = "${data.external.az_name.result}"
+  public_cidr  = "${data.external.public_cidr.result}"
+  private_cidr = "${data.external.private_cidr.result}"
 }

@@ -13,7 +13,6 @@ variable "image_id" {
 variable "instance_type" {
   default = "t2.micro"
 }
-variable "key_name" {}
 variable "volume_type" {
   default = "gp2"
 }
@@ -45,3 +44,7 @@ variable "bastion_security_group_id" {
   default = ""
 }
 
+
+variable "key_name" {
+  default = ""
+}

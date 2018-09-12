@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+echo "***** Instance ENV *****"
+REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
+INSTANCE_ID=$(curl -s -m 60 http://169.254.169.254/latest/meta-data/instance-id)
+
 echo "***** Update *****"
 yum update -y
 pip install --upgrade awscli
@@ -7,7 +11,7 @@ pip install --upgrade awscli
 
 echo "***** Setup Banner *****"
 yum install figlet -y
-BANNER=$(figlet "AWS ECS" | sed "s/\`/\'/")
+BANNER=$(figlet "${BANNER}" | sed "s/\`/\'/")
 cat << EOF > /etc/update-motd.d/30-banner
 cat << MOTD
 $BANNER
@@ -25,21 +29,19 @@ yum remove figlet -y
 
 echo "***** Setup CloudWatch Logging *****"
 yum install -y awslogs
-sed -i 's/{instance_id}/$INSTANCE_ID/' /etc/awslogs/awslogs.conf
+sed -i "s/{instance_id}/$INSTANCE_ID/" /etc/awslogs/awslogs.conf
 service awslogs start
 
+${USER_DATA}
+
 echo "***** Setup SSH via IAM *****"
-rpm -i https://s3-eu-west-1.amazonaws.com/widdix-aws-ec2-ssh-releases-eu-west-1/aws-ec2-ssh-1.9.0-1.el7.centos.noarch.rpm
+rpm -i https://s3-eu-west-1.amazonaws.com/widdix-aws-ec2-ssh-releases-eu-west-1/aws-ec2-ssh-1.9.1-1.el7.centos.noarch.rpm
 cat << EOF > /etc/aws-ec2-ssh.conf
-IAM_AUTHORIZED_GROUPS="${IAM_USER_GROUPS}"
-SUDOERS_GROUPS="${IAM_SUDO_GROUPS}"
-LOCAL_GROUPS="docker"
+IAM_AUTHORIZED_GROUPS="${IAM_AUTHORIZED_GROUPS}"
+SUDOERS_GROUPS="${SUDOERS_GROUPS}"
+LOCAL_GROUPS="${LOCAL_GROUPS}"
 EOF
 
 /usr/bin/import_users.sh
 
-echo "***** Connect to Cluster *****"
-echo ECS_CLUSTER=${ECS_CLUSTER} >> /etc/ecs/ecs.config
-
 echo "***** Clean Up *****"
-

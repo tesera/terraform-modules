@@ -8,13 +8,10 @@ resource "aws_eip" "main" {
 }
 
 data "template_file" "main-userdata" {
-  template = "${file("${path.module}/userdata.sh")}"
+  template = "${file("${path.module}/user_data.sh")}"
 
   vars {
-    REGION          = "${local.aws_region}"
     EIP_ID          = "${aws_eip.main.id}"
-    IAM_USER_GROUPS = "${var.iam_user_groups}"
-    IAM_SUDO_GROUPS = "${var.iam_sudo_groups}"
 
     PROXY_NAME      = "${var.proxy_name}"
     PROXY_PORT      = "${var.proxy_port}"
@@ -26,11 +23,13 @@ data "template_file" "main-userdata" {
 module "ec2" {
   source                    = "../ec2"
   name                      = "${var.name}-proxy"
+  account_id                = "${local.account_id}"
   vpc_id                    = "${var.vpc_id}"
   subnet_ids                = "${var.public_subnet_ids}"
   subnet_public             = "true"
   image_id                  = "${local.image_id}"
   key_name                  = "${var.key_name}"
+  banner                    = "Proxy"
   userdata                  = "${data.template_file.main-userdata.rendered}"
   iam_user_groups           = "${var.iam_user_groups}"
   iam_sudo_groups           = "${var.iam_sudo_groups}"

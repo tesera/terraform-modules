@@ -14,7 +14,6 @@ module "ecs" {
   name              = "${local.name}"
   vpc_id            = "${module.vpc.id}"
   private_subnet_ids = "${module.vpc.private_subnet_ids}"
-  key_name          = "${local.key_name}"
   iam_user_groups   = "Developers"
   iam_sudo_groups   = "Admin"
 }
@@ -38,7 +37,7 @@ resource "aws_iam_group" "developers" {
 ## Input
 - **vpc_id:** vpc id
 - **private_subnet_ids:** array of private subnet ids
-- **key_name:** name of root ssh key
+- **key_name:** name of root ssh key [Default: none]
 - **iam_user_groups:** name of iam group that should have ssh access, comma separated list
 - **iam_sudo_groups:** name of iam group that should have ssh sudo access, comma separated list
 - **image_id:** override the base image, must be CentOS based (ie has yum, rpm, docker) [Default: AWS ECS-Optimized]

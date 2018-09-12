@@ -6,7 +6,7 @@ resource "aws_launch_configuration" "main" {
   iam_instance_profile        = "${aws_iam_instance_profile.main.name}"
   security_groups             = [
     "${aws_security_group.main.id}"]
-  user_data                   = "${local.userdata}"
+  user_data                   = "${local.user_data}"
   ebs_optimized               = "false"
   enable_monitoring           = "true"
 

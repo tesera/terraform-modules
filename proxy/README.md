@@ -15,7 +15,6 @@ module "proxy" {
   name              = "${local.name}"
   vpc_id            = "${module.vpc.id}"
   public_subnet_ids = "${module.vpc.public_subnet_ids}"
-  key_name          = "${local.key_name}"
   iam_user_groups   = "Developers"
   iam_sudo_groups   = "Admin"
   
@@ -48,9 +47,9 @@ resource "aws_security_group_rule" "proxy" {
 ## Input
 - **vpc_id:** vpc id
 - **public_subnet_ids:** array of public subnet ids
-- **key_name:** name of root ssh key
-- **iam_user_groups:** name of iam group that should have ssh access, comma separated list
-- **iam_sudo_groups:** name of iam group that should have ssh sudo access, comma separated list
+- **key_name:** name of root ssh key [Default: none]
+- **iam_user_groups:** name of iam group that should have ssh access, comma separated list [Default: none]
+- **iam_sudo_groups:** name of iam group that should have ssh sudo access, comma separated list [Default: none]
 - **image_id:** override the base image, must be CentOS based (ie has yum and rpm) [Default: AWS Linux]
 - **instance_type:** override the instance type [Default: t2.micro]
 - **bastion_security_group_id:** bastion security group id [Default: none]

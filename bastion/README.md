@@ -21,8 +21,7 @@ module "bastion" {
   name              = "${local.name}"
   vpc_id            = "${module.vpc.id}"
   public_subnet_ids = "${module.vpc.public_subnet_ids}"
-  key_name          = "${local.key_name}"
-  iam_user_groups   = "Developers"
+  iam_user_groups   = "Developer,Admin"
   iam_sudo_groups   = "Admin"
 }
 ```
