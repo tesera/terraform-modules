@@ -14,7 +14,7 @@ output "private_subnet_ids" {
 
 # For VPC endpoints
 output "private_route_table_ids" {
-  value = ["${var.nat_type == "gateway" ? aws_route_table.private-gateway.*.id : aws_route_table.private-instance.*.id}"]
+  value = ["${concat(aws_route_table.private-gateway.*.id, aws_route_table.private-instance.*.id)}"]
 }
 
 # For whitelisting on 3rd party services

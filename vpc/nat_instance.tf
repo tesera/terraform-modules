@@ -110,24 +110,37 @@ resource "aws_security_group" "main" {
   name   = "${var.name}-nat-${local.az_name[count.index]}"
   vpc_id = "${aws_vpc.main.id}"
 
+  ingress {
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
+    cidr_blocks = [
+      "${aws_subnet.private.*.cidr_block[count.index]}"]
+  }
+
+  ingress {
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    cidr_blocks = [
+      "${aws_subnet.private.*.cidr_block[count.index]}"]
+  }
+
   egress {
-    protocol    = -1
-    from_port   = 0
-    to_port     = 0
+    protocol    = "tcp"
+    from_port   = 80
+    to_port     = 80
     cidr_blocks = [
       "0.0.0.0/0"]
   }
-}
 
-resource "aws_security_group_rule" "nat" {
-  count             = "${var.nat_type == "instance" ? local.az_count : 0}"
-  security_group_id = "${aws_security_group.main.*.id[count.index]}"
-  type              = "ingress"
-  protocol          = -1
-  from_port         = 0
-  to_port           = 0
-  cidr_blocks       = [
-    "${aws_subnet.private.*.cidr_block[count.index]}"]
+  egress {
+    protocol    = "tcp"
+    from_port   = 443
+    to_port     = 443
+    cidr_blocks = [
+      "0.0.0.0/0"]
+  }
 }
 
 resource "aws_security_group_rule" "ssh" {
@@ -187,7 +200,8 @@ resource "aws_iam_policy" "main-nat" {
           "ec2:DeleteRoute",
           "ec2:DescribeRouteTables",
           "ec2:DescribeNetworkInterfaces",
-          "ec2:DescribeInstanceAttribute"
+          "ec2:DescribeInstanceAttribute",
+          "ec2:ModifyInstanceAttribute"
         ],
         "Effect": "Allow",
         "Resource": "*"
