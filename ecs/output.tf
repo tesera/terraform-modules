@@ -2,14 +2,15 @@ output "name" {
   value = "${aws_ecs_cluster.main.name}"
 }
 
+# EC2 Output
 output "iam_role_name" {
-  value = "${aws_iam_role.main.name}"
+  value = "${module.ec2.iam_role_name}"
 }
 
 output "security_group_id" {
-  value = "${aws_security_group.main.id}"
+  value = "${module.ec2.security_group_id}"
 }
 
 output "billing_suggestion" {
-  value = "Reserved Instances: ${var.instance_type} x ${local.desired_capacity}"
+  value = "${module.ec2.billing_suggestion}"
 }

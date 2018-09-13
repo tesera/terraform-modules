@@ -72,10 +72,10 @@ resource "aws_lambda_function" "authorizer" {
   filename         = "${data.archive_file.authorizer.output_path}"
   source_code_hash = "${data.archive_file.authorizer.output_base64sha256}"
   role             = "${aws_iam_role.authorizer.arn}"
-  handler          = "index.handler"
+  handler          = "${var.handler}"
   runtime          = "${var.runtime}"
   memory_size      = "${var.memory_size}"
-  timeout          = "${var.tiemout}"
+  timeout          = "${var.timeout}"
   publish          = true,
 
   // Has no need to be in a VPC
@@ -96,6 +96,6 @@ resource "aws_lambda_function" "authorizer" {
 
 data "archive_file" "authorizer" {
   type        = "zip"
-  output_path = "${local.authorizer_path}/../authorizer.zip"
-  source_dir  = "${local.authorizer_path}"
+  output_path = "${local.authorizer_dir}/../authorizer.zip"
+  source_dir  = "${local.authorizer_dir}"
 }

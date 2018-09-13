@@ -8,10 +8,10 @@ const {
   httpEventNormalizer,
   httpHeaderNormalizer,
   httpContentNegotiation,
+  httpSecurityHeaders,
   validator
 } = require('middy/middlewares')
 const jsonapi = require('middy-jsonapi')
-const httpSecurityHeaders = require('./http-security-headers')
 //const authorization = require('@company/authorization')
 
 const ajvOptions = {

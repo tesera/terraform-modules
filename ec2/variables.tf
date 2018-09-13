@@ -3,8 +3,12 @@ variable "account_id" {
   default = ""
 }
 variable "vpc_id" {}
-variable "private_subnet_ids" {
+variable "subnet_ids" {
   type = "list"
+}
+
+variable "subnet_public" {
+  default = "false"
 }
 
 variable "image_id" {
@@ -14,6 +18,9 @@ variable "instance_type" {
   default = "t2.micro"
 }
 variable "key_name" {}
+variable "userdata" {
+  default = ""
+}
 variable "volume_type" {
   default = "gp2"
 }

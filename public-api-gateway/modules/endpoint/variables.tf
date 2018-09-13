@@ -24,6 +24,9 @@ variable "policy" {
 variable "source_dir" {
   default = ""
 }
+variable "handler" {
+  default = "index.handler"
+}
 variable "runtime" {
   default = "nodejs8.10"
 }

@@ -1,26 +1,37 @@
 data "template_file" "pgsql" {
+  count    = "${var.init_scripts_folder == "" ? 0 : 1}"
   template = "${file("${path.module}/pgsql_template.sh")}"
 
   vars {
-    SSH_KEY_FILE_NAME = "${var.bastion_ssh_key_filename}"
-    BASTION_USERNAME  = "${var.bastion_username}"
-    BASTION_IP        = "${var.bastion_ip}"
-    DB_HOST           = "${aws_db_instance.main.address}"
-    DB_PORT           = "${aws_db_instance.main.port}"
-    DATABASE_NAME     = "${local.db_name}"
-    DB_INITFILENAME   = "${var.db_init_filename}"
+    SSH_IDENTITY_FILE   = "${var.ssh_identity_file}"
+    SSH_USERNAME        = "${var.ssh_username}"
+    BASTION_IP          = "${var.bastion_ip}"
+    DB_HOST             = "${aws_db_instance.main.address}"
+    DB_PORT             = "${aws_db_instance.main.port}"
+    DATABASE_NAME       = "${local.db_name}"
+    INIT_SCRIPTS_FOLDER = "${var.init_scripts_folder}"
   }
 }
 
 resource "local_file" "pgsql" {
+  count    = "${var.init_scripts_folder == "" ? 0 : 1}"
   content  = "${data.template_file.pgsql.rendered}"
   filename = "${path.cwd}/pgsql.sh"
 }
 
+data "archive_file" "init_scripts" {
+  count       = "${var.init_scripts_folder == "" ? 0 : 1}"
+  type        = "zip"
+  output_path = "${path.cwd}/init_sql_script.zip"
+  source_dir  = "${var.init_scripts_folder}"
+}
+
 resource "null_resource" "docker" {
-  # Changes to db_init_filename will execute the script
+  count = "${var.init_scripts_folder == "" ? 0 : 1}"
+
+  # Changes to the files in init_scripts_folder will execute the script
   triggers {
-    files = "${md5(file("${path.cwd}/${var.db_init_filename}"))}"
+    scripts_hash = "${data.archive_file.init_scripts.output_base64sha256}"
   }
 
   provisioner "local-exec" {

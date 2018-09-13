@@ -60,11 +60,43 @@ variable "replica_count" {
   default = "0"
 }
 
-variable "bastion_ssh_key_filename" {
+variable "publicly_accessible" {
+  default = "false"
+}
+
+variable "bastion_security_group_id" {
   default = ""
 }
 
-variable "bastion_username" {
+variable "cpu_alarm_threshold" {
+  default = "80"
+}
+
+variable "cpu_alarm_evaluation_periods" {
+  default = "3"
+}
+
+variable "swap_alarm_threshold" {
+  default = "0"
+}
+
+variable "free_space_alarm_threshold" {
+  default = 1073741824 # 1G
+}
+
+variable "read_latency_alarm_threshold" {
+  default = "0.2" # 200ms
+}
+
+variable "write_latency_alarm_threshold" {
+  default = "0.2" # 200ms
+}
+
+variable "ssh_identity_file" {
+  default = ""
+}
+
+variable "ssh_username" {
   default = "ec2-user"
 }
 
@@ -72,4 +104,6 @@ variable "bastion_ip" {
   default = ""
 }
 
-variable "db_init_filename" {}
+variable "init_scripts_folder" {
+  default = ""
+}

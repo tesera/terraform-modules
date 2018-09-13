@@ -68,6 +68,38 @@ output "bastion_billing_suggestion" {
   value = "${module.bastion.billing_suggestion}"
 }
 
+### Proxy
+module "proxy" {
+  source                    = "../../proxy"
+  name                      = "${local.name}"
+  vpc_id                    = "${module.vpc.id}"
+  public_subnet_ids         = "${module.vpc.public_subnet_ids}"
+  key_name                  = "${local.key_name}"
+  iam_user_groups           = "Admin"
+  proxy_name                = "postgres"
+  proxy_endpoint            = "${module.rds.endpoint}"
+  proxy_port                = "5432"
+  bastion_security_group_id = "${module.bastion.security_group_id}"
+}
+
+resource "aws_security_group_rule" "proxy-public" {
+  security_group_id = "${module.proxy.security_group_id}"
+  type              = "ingress"
+  from_port         = "5432"
+  to_port           = "5432"
+  protocol          = "tcp"
+  cidr_blocks       = [
+    "0.0.0.0/0"]
+}
+
+output "proxy_ip" {
+  value = "${module.proxy.public_ip}"
+}
+
+output "proxy_billing_suggestion" {
+  value = "${module.proxy.billing_suggestion}"
+}
+
 ## Private Subnets
 resource "aws_vpc_endpoint" "s3" {
   vpc_id          = "${module.vpc.id}"
@@ -95,26 +127,28 @@ resource "aws_vpc_endpoint" "s3" {
 //}
 
 ### Database
-//module "rds" {
-//  source = "../../rds"
-//  name = "${local.name}"
-//  db_name = "dbname"
-//  username = "dbuser"
-//  password = "dbpassword"
-//  parameter_group_name = ""
-//  vpc_id = "${module.vpc.id}"
-//  private_subnet_ids = ["${module.vpc.private_subnet_ids}"]
-//}
-//
-//resource "aws_security_group_rule" "rds" {
-//  security_group_id        = "${module.rds.security_group_id}"
-//  type                     = "ingress"
-//  from_port                = 5432
-//  to_port                  = 5432
-//  protocol                 = "tcp"
-//  source_security_group_id = "${module.rds.security_group_id}"
-//}
-//
-//output "rds_billing_suggestion" {
-//  value = "${module.rds.billing_suggestion}"
-//}
+module "rds" {
+  source                    = "../../rds"
+  name                      = "${local.name}"
+  db_name                   = "dbname"
+  username                  = "dbuser"
+  password                  = "dbpassword"
+  parameter_group_name      = ""
+  vpc_id                    = "${module.vpc.id}"
+  private_subnet_ids        = [
+    "${module.vpc.private_subnet_ids}"]
+  bastion_security_group_id = "${module.bastion.security_group_id}"
+}
+
+resource "aws_security_group_rule" "rds-proxy" {
+  security_group_id        = "${module.rds.security_group_id}"
+  type                     = "ingress"
+  from_port                = 5432
+  to_port                  = 5432
+  protocol                 = "tcp"
+  source_security_group_id = "${module.proxy.security_group_id}"
+}
+
+output "rds_billing_suggestion" {
+  value = "${module.rds.billing_suggestion}"
+}
