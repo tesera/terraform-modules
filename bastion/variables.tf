@@ -1,12 +1,12 @@
 variable "name" {}
-variable "account_id" {
-  default = ""
-}
 variable "vpc_id" {}
 variable "public_subnet_ids" {
   type = "list"
 }
 
+variable "account_id" {
+  default = ""
+}
 variable "image_id" {
   default = ""
 }
