@@ -5,6 +5,7 @@ Creates a RDS instance.
 - RDS instance
 - db security group 
 - db subnet group
+- executes initial sql script against the newly created DB
 
 ## Setup
 
@@ -12,13 +13,17 @@ Creates a RDS instance.
 
 ```hcl-terraform
 module "rds" {
-  source                 = "git@github.com:tesera/terraform-modules//postgres"
-  vpc_id                 = "${module.vpc.id}"
-  name                   = "rds-instance-name"
-  db_name                = "dbname"
-  username               = "dbuser"
-  password               = "SomePassword123"
-  private_subnet_ids     = ["${module.vpc.private_subnet_ids}"]
+  source                   = "git@github.com:tesera/terraform-modules//postgres"
+  vpc_id                   = "${module.vpc.id}"
+  name                     = "rds-instance-name"
+  db_name                  = "dbname"
+  username                 = "dbuser"
+  password                 = "SomePassword123"
+  private_subnet_ids       = ["${module.vpc.private_subnet_ids}"]
+  ssh_identity_file        = "key"
+  bastion_ip               = "${module.bastion.public_ip}"
+  init_scripts_folder      = "scripts"
+  ssh_username             = "ec2-user"
 }
 ```
 
@@ -67,8 +72,13 @@ resource "aws_security_group_rule" "rds" {
 - **allocated_storage:** amount of allocated storage in GB
 - **backup_retention_period:** backup retention period
 - **multi_az:** if the RDS instance is multi AZ enabled
-- **replica_count:** Number of read replicas to deploy
+- **replica_count:** number of read replicas to deploy
 - **bastion_security_group_id:** bastion security group id [Default: none]
+- **ssh_identity_file:** SSH key filename for connecting to the bastion host
+- **bastion_ip:** IP of the bastion host. If it is not provided the psql command will run directly against the RDS host without SSH tunneling 
+- **init_scripts_folder:** sub folder containingthe sql init scripts to be executed. The script files must have .sql extenstion. And all of the scripts must end with ";".
+All scripts are going to be executed in a single transaction against the database specified in db_name. 
+- **ssh_username:** username for connecting to the bastion host
 
 ## Output
 

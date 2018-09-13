@@ -91,3 +91,19 @@ variable "read_latency_alarm_threshold" {
 variable "write_latency_alarm_threshold" {
   default = "0.2" # 200ms
 }
+
+variable "ssh_identity_file" {
+  default = ""
+}
+
+variable "ssh_username" {
+  default = "ec2-user"
+}
+
+variable "bastion_ip" {
+  default = ""
+}
+
+variable "init_scripts_folder" {
+  default = ""
+}
