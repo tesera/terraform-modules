@@ -32,9 +32,10 @@ resource "null_resource" "docker" {
   # Changes to the files in init_scripts_folder will execute the script
   triggers {
     scripts_hash = "${data.archive_file.init_scripts.output_base64sha256}"
+    script       = "${md5("${local_file.pgsql.content}")}"
   }
 
   provisioner "local-exec" {
-    command = "docker run --rm -v ${path.cwd}:/data -e PGPASSWORD=${var.password} -e PGUSER=${var.username} -e USE_BASTION=${var.bastion_ip == "" ? "false" : "true"} kkirov/psql-ssh:latest /bin/bash /data/pgsql.sh"
+    command = "docker run --rm -v ${path.cwd}:/data -e PGPASSWORD=${var.password} -e PGUSER=${var.username} -e USE_BASTION=${var.bastion_ip == "" ? "false" : "true"} tesera/psql-ssh:latest /bin/bash /data/pgsql.sh"
   }
 }
