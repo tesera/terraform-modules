@@ -2,8 +2,9 @@ variable "name" {
   type = "string"
 }
 
-variable "environment" {
-  default = "unknown"
+variable "default_tags" {
+  type = "map"
+  default = {}
 }
 
 //variable "cost_id" {

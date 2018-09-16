@@ -4,11 +4,9 @@ resource "aws_route_table" "private-instance" {
   count  = "${var.nat_type == "instance" ? local.az_count : 0}"
   vpc_id = "${aws_vpc.main.id}"
 
-  tags {
-    Name        = "private-${var.name}-az-${local.az_name[count.index]}"
-    Terraform   = "true"
-    Environment = "${var.environment}"
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "private-${local.name}-az-${local.az_name[count.index]}"
+  ))}"
 }
 
 resource "aws_route_table_association" "private-instance" {
@@ -91,6 +89,7 @@ resource "aws_autoscaling_group" "main" {
   vpc_zone_identifier       = [
     "${aws_subnet.public.*.id[count.index]}"]
 
+  // TODO tags (list, not map)
   tag {
     key                 = "Name"
     value               = "${var.name}-nat-${local.az_name[count.index]}"

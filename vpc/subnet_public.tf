@@ -6,11 +6,9 @@ resource "aws_route_table" "public" {
     gateway_id = "${aws_internet_gateway.main.id}"
   }
 
-  tags {
-    Name      = "public-${var.name}"
-    Terraform = "true"
-    Environment = "${var.environment}"
-  }
+  tags   = "${merge(local.tags, map(
+    "Name", "public-${local.name}"
+  ))}"
 }
 
 resource "aws_subnet" "public" {
@@ -19,11 +17,9 @@ resource "aws_subnet" "public" {
   cidr_block        = "${local.public_cidr[count.index]}"
   availability_zone = "${local.aws_region}${local.az_name[count.index]}"
 
-  tags {
-    Name      = "public-${var.name}-az-${local.az_name[count.index]}"
-    Terraform = "true"
-    Environment = "${var.environment}"
-  }
+  tags              = "${merge(local.tags, map(
+    "Name", "public-${local.name}-az-${local.az_name[count.index]}"
+  ))}"
 }
 
 resource "aws_route_table_association" "public" {

@@ -4,11 +4,9 @@ resource "aws_subnet" "private" {
   cidr_block        = "${local.private_cidr[count.index]}"
   availability_zone = "${local.aws_region}${local.az_name[count.index]}"
 
-  tags {
-    Name        = "private-${var.name}-az-${local.az_name[count.index]}"
-    Terraform   = "true"
-    Environment = "${var.environment}"
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "private-${local.name}-az-${local.az_name[count.index]}"
+  ))}"
 }
 
 # route_table is handled by the NAT
