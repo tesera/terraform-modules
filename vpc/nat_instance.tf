@@ -89,18 +89,7 @@ resource "aws_autoscaling_group" "main" {
   vpc_zone_identifier       = [
     "${aws_subnet.public.*.id[count.index]}"]
 
-  // TODO tags (list, not map)
-  tag {
-    key                 = "Name"
-    value               = "${var.name}-nat-${local.az_name[count.index]}"
-    propagate_at_launch = "true"
-  }
-
-  tag {
-    key                 = "Terraform"
-    value               = "true"
-    propagate_at_launch = "true"
-  }
+  tags = ["${module.defaults.tags_as_list_of_maps}"]
 }
 
 ## SG

@@ -5,6 +5,7 @@ Collection of module defaults
 - aws_region
 - name:
 - tags: 
+- tags_as_list_of_maps: tags in a list
 
 ## Use
 ```hcl-terraform
@@ -36,11 +37,17 @@ resource "****" "main" {
 
 ```
 
-## TODO ... tags: should be a list
+### Error: ... tags: should be a list
 ```hcl-terraform
-resource "****" "main" {
+resource "aws_security_group" "main" {
   ...
-  tags = ["${module.defaults.tags_list}"]
+  tags = ["${module.defaults.tags_as_list_of_maps}"]
 }
 
 ```
+
+Refs:
+- https://github.com/jonbrouse/terraform-style-guide/blob/master/README.md#naming-conventions
+- https://github.com/cloudposse/terraform-null-label
+
+

@@ -13,3 +13,7 @@ output "name" {
 output "tags" {
   value = "${local.tags}"
 }
+
+output "tags_as_list_of_maps" {
+  value = ["${data.null_data_source.tags_as_list_of_maps.*.outputs}"]
+}
