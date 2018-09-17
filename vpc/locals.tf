@@ -1,6 +1,3 @@
-data "aws_region" "current" {}
-data "aws_caller_identity" "current" {}
-
 data "external" "az_name" {
   program = [
     "node",
@@ -24,9 +21,17 @@ data "external" "private_cidr" {
     "${var.az_count}"]
 }
 
+module "defaults" {
+  source = "../defaults"
+  name   = "${var.name}"
+  tags   = "${var.default_tags}"
+}
+
 locals {
-  account_id   = "${data.aws_caller_identity.current.account_id}"
-  aws_region   = "${data.aws_region.current.name}"
+  account_id   = "${module.defaults.account_id}"
+  aws_region   = "${module.defaults.aws_region}"
+  name         = "${module.defaults.name}"
+  tags         = "${module.defaults.tags}"
   cidr_block   = "${var.cidr_block}"
   az_count     = "${var.az_count > 1 ? var.az_count : 1}"
   az_name      = "${data.external.az_name.result}"

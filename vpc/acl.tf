@@ -1,11 +1,9 @@
 resource "aws_network_acl" "main" {
   vpc_id = "${aws_vpc.main.id}"
-  
-  tags {
-    Name      = "${var.name}"
-    Terraform = "true"
-    Environment = "${var.environment}"
-  }
+
+  tags = "${merge(local.tags, map(
+    "Name", "${local.name}"
+  ))}"
 }
 
 # HTTP

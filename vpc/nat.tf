@@ -3,8 +3,7 @@ resource "aws_eip" "nat" {
   count = "${local.az_count}"
   vpc   = true
 
-  tags {
-    Name      = "${var.name}-az-${local.az_name[count.index]}"
-    Terraform = "true"
-  }
+  tags  = "${merge(local.tags, map(
+    "Name", "${local.name}-az-${local.az_name[count.index]}"
+  ))}"
 }
