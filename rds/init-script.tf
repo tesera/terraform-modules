@@ -6,8 +6,8 @@ data "template_file" "pgsql" {
     SSH_IDENTITY_FILE   = "${var.ssh_identity_file}"
     SSH_USERNAME        = "${var.ssh_username}"
     BASTION_IP          = "${var.bastion_ip}"
-    DB_HOST             = "${aws_db_instance.main.address}"
-    DB_PORT             = "${aws_db_instance.main.port}"
+    DB_HOST             = "${local.endpoint}"
+    DB_PORT             = "${local.port}"
     DATABASE_NAME       = "${local.db_name}"
     INIT_SCRIPTS_FOLDER = "${var.init_scripts_folder}"
   }

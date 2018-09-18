@@ -1,6 +1,6 @@
 resource "aws_security_group" "main" {
-  name        = "${local.identifier}-security-group"
-  description = "SecurityGroup for ${local.identifier}"
+  name        = "${var.name}-security-group"
+  description = "SecurityGroup for RDS"
   vpc_id      = "${var.vpc_id}"
 
   # Allow all outbound traffic.

@@ -1,4 +1,4 @@
-variable "name" {}
+variable "cluster_name" {}
 
 variable "vpc_id" {}
 
@@ -30,10 +30,6 @@ variable "engine" {
 
 variable "engine_version" {
   default = "10.3"
-}
-
-variable "engine_mode" {
-  default = "provisioned"
 }
 
 variable "instance_class" {
@@ -110,24 +106,4 @@ variable "bastion_ip" {
 
 variable "init_scripts_folder" {
   default = ""
-}
-
-variable "rds_type" {
-  default = "rds"
-}
-
-variable "apply_immediately" {
-  default = "true"
-}
-
-variable "skip_final_snapshot" {
-  default = "false"
-}
-
-variable "instance_count" {
-  default = "1"
-}
-
-variable "cluster_engine" {
-  default = "aurora-postgresql"
 }
