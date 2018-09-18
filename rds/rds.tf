@@ -36,7 +36,7 @@ resource "aws_db_instance" "main" {
   # Availability
   multi_az = "${var.multi_az}"
   tags {
-    Name      = "${var.name} ${var.engine} Master/Slave"
+    Name      = "${local.identifier} Master/Slave"
     Terraform = true
   }
 }
