@@ -117,7 +117,7 @@ variable "rds_type" {
 }
 
 variable "apply_immediately" {
-  default = "true"
+  default = "false"
 }
 
 variable "skip_final_snapshot" {
