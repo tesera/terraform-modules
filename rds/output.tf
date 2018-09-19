@@ -1,13 +1,21 @@
 output "endpoint" {
-  value = "${aws_db_instance.main.endpoint}"
+  value = "${local.endpoint}"
+}
+
+output "port" {
+  value = "${local.port}"
+}
+
+output "reader_endpoints" {
+  value = "${aws_rds_cluster.main.*.reader_endpoint}"
 }
 
 output "username" {
-  value = "${aws_db_instance.main.username}"
+  value = "${element(concat(aws_rds_cluster.main.*.master_username, aws_db_instance.main.*.username),0)}"
 }
 
 output "password" {
-  value = "${aws_db_instance.main.password}"
+  value = "${element(concat(aws_rds_cluster.main.*.master_password, aws_db_instance.main.*.password),0)}"
 }
 
 output "security_group_id" {

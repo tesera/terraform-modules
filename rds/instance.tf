@@ -1,4 +1,5 @@
 resource "aws_db_instance" "main" {
+  count                       = "${var.type == "cluster" ? 0 : 1}"
   auto_minor_version_upgrade  = true
   allow_major_version_upgrade = false
   allocated_storage           = "${var.allocated_storage}"
@@ -9,7 +10,7 @@ resource "aws_db_instance" "main" {
   instance_class              = "${var.instance_class}"
   name                        = "${local.db_name}"
   parameter_group_name        = "${var.parameter_group_name}"
-  apply_immediately           = true
+  apply_immediately           = "${var.apply_immediately}"
 
   # Confidentiality
   username             = "${var.username}"
@@ -29,19 +30,19 @@ resource "aws_db_instance" "main" {
   # TODO add back in
   #enabled_cloudwatch_logs_exports = [ "audit" ]
   # TODO add in `monitoring_interval` & `monitoring_role_arn`
-  final_snapshot_identifier = "${var.name}"
+  final_snapshot_identifier = "${local.identifier}-final"
   backup_retention_period = "${var.backup_retention_period}"
   backup_window           = "${var.backup_window}"
   # Availability
   multi_az = "${var.multi_az}"
   tags {
-    Name      = "${var.name} ${var.engine} Master/Slave"
+    Name      = "${local.identifier} Master/Slave"
     Terraform = true
   }
 }
 
 resource "aws_db_instance" "replica" {
-  count               = "${var.replica_count}"
+  count               = "${var.type == "cluster" ? 0 : var.replica_count}"
   replicate_source_db = "${aws_db_instance.main.name}"
 
   auto_minor_version_upgrade  = true

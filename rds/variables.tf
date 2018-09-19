@@ -32,6 +32,10 @@ variable "engine_version" {
   default = "10.3"
 }
 
+variable "engine_mode" {
+  default = "provisioned"
+}
+
 variable "instance_class" {
   default = "db.t2.small"
 }
@@ -106,4 +110,24 @@ variable "bastion_ip" {
 
 variable "init_scripts_folder" {
   default = ""
+}
+
+variable "type" {
+  default = "service"
+}
+
+variable "apply_immediately" {
+  default = "false"
+}
+
+variable "skip_final_snapshot" {
+  default = "false"
+}
+
+variable "instance_count" {
+  default = "2"
+}
+
+variable "cluster_engine" {
+  default = "aurora-postgresql"
 }
