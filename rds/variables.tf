@@ -112,8 +112,8 @@ variable "init_scripts_folder" {
   default = ""
 }
 
-variable "rds_type" {
-  default = "rds"
+variable "type" {
+  default = "service"
 }
 
 variable "apply_immediately" {
@@ -125,7 +125,7 @@ variable "skip_final_snapshot" {
 }
 
 variable "instance_count" {
-  default = "1"
+  default = "2"
 }
 
 variable "cluster_engine" {

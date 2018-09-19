@@ -14,9 +14,10 @@ data "template_file" "pgsql" {
 }
 
 resource "local_file" "pgsql" {
-  count    = "${var.init_scripts_folder == "" ? 0 : 1}"
-  content  = "${data.template_file.pgsql.rendered}"
-  filename = "${path.cwd}/pgsql.sh"
+  count      = "${var.init_scripts_folder == "" ? 0 : 1}"
+  content    = "${data.template_file.pgsql.rendered}"
+  filename   = "${path.cwd}/pgsql.sh"
+  depends_on = ["aws_rds_cluster_instance.main"]
 }
 
 data "archive_file" "init_scripts" {

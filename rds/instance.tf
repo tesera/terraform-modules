@@ -1,5 +1,5 @@
 resource "aws_db_instance" "main" {
-  count                       = "${var.rds_type == "aurora" ? 0 : 1}"
+  count                       = "${var.type == "cluster" ? 0 : 1}"
   auto_minor_version_upgrade  = true
   allow_major_version_upgrade = false
   allocated_storage           = "${var.allocated_storage}"
@@ -42,7 +42,7 @@ resource "aws_db_instance" "main" {
 }
 
 resource "aws_db_instance" "replica" {
-  count               = "${var.rds_type == "aurora" ? 0 : var.replica_count}"
+  count               = "${var.type == "cluster" ? 0 : var.replica_count}"
   replicate_source_db = "${aws_db_instance.main.name}"
 
   auto_minor_version_upgrade  = true

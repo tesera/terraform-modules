@@ -56,7 +56,7 @@ resource "aws_security_group_rule" "rds" {
 ```
 
 ## Input
-- **rds_type:** the type of RDS. [Default: `rds`]. Valid values: rds, aurora.
+- **type:** type of RDS. [Default: `service`]. Valid values: service, cluster.
 - **name:** name of the RDS instance
 - **vpc_id:** VPC id 
 - **db_name:** name of the database to create when the DB instance is created [Defaults to `var.name`]
@@ -66,7 +66,7 @@ resource "aws_security_group_rule" "rds" {
 - **storage_type:** "gp2" (general purpose SSD) is the best default choice - https://www.terraform.io/docs/providers/aws/r/db_instance.html#storage_type
 - **engine:** database engine [Default: postgres]
 - **engine_version:** database engine version. [Default: 10.x] The currently supported version can be checked here - https://aws.amazon.com/rds/postgresql/faqs/
-- **engine_mode:** The database engine mode. Used only with rds_type = aurora. Valid values: provisioned, serverless. [Default: provisioned]. Limitations when using serverless - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/aurora-serverless.html
+- **engine_mode:** The database engine mode. Used only with type = cluster. Valid values: provisioned, serverless. [Default: provisioned]. Limitations when using serverless - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/aurora-serverless.html
 - **instance_class:** instance type of the RDS instance. encryption will be turned on for all `db.*.*large` instances
 - **backup_window:** window of time when a backup can be triggered
 - **parameter_group_name:** name of the DB parameter group to associate - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithParamGroups.html. If we haven't created a custom group we should use the default group matching the engine version
@@ -82,8 +82,8 @@ All scripts are going to be executed in a single transaction against the databas
 - **ssh_username:** username for connecting to the bastion host
 - **apply_immediately:** specifies whether any database modifications are applied immediately, or during the next maintenance window. [Default: false]. 
 - **skip_final_snapshot:**  determines whether a final DB snapshot is created before the DB cluster is deleted. If true is specified, no DB snapshot is created. If false is specified, a DB snapshot is created before the DB cluster is deleted, using the value from final_snapshot_identifier. [Default: false].
-- **instance_count:** count of aurora instances to be created in the aurora cluster. Used only with rds_type = aurora. [Default: 1].
-- **cluster_engine:** database engine for the aurora cluster. Used only with rds_type = aurora. [Default: aurora-postgresql]
+- **instance_count:** count of aurora instances to be created in the aurora cluster. Used only with type = cluster. [Default: 1].
+- **cluster_engine:** database engine for the aurora cluster. Used only with type = cluster. [Default: aurora-postgresql]
 
 ## Output
 

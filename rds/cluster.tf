@@ -1,5 +1,5 @@
 resource "aws_rds_cluster" "main" {
-  count                           = "${var.rds_type == "aurora" ? 1 : 0}"
+  count                           = "${var.type == "cluster" ? 1 : 0}"
   cluster_identifier              = "${local.identifier}-cluster"
   database_name                   = "${var.db_name}"
   master_username                 = "${var.username}"
@@ -25,8 +25,8 @@ resource "aws_rds_cluster" "main" {
 }
 
 resource "aws_rds_cluster_instance" "main" {
-  count                   = "${var.rds_type == "aurora" ? var.instance_count : 0}"
-  identifier              = "${local.identifier}-instance"
+  count                   = "${var.type == "cluster" ? var.instance_count : 0}"
+  identifier              = "${local.identifier}-instance-${count.index}"
   cluster_identifier      = "${aws_rds_cluster.main.0.id}"
   instance_class          = "${var.instance_class}"
   engine                  = "${var.cluster_engine}"
