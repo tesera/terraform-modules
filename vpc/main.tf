@@ -34,3 +34,59 @@ resource "aws_default_route_table" "default" {
 resource "aws_default_security_group" "default" {
   vpc_id = "${aws_vpc.main.id}"
 }
+
+# Logs
+resource "aws_flow_log" "logs" {
+  log_group_name = "${aws_cloudwatch_log_group.logs.name}"
+  iam_role_arn   = "${aws_iam_role.logs.arn}"
+  vpc_id         = "${aws_vpc.main.id}"
+  traffic_type   = "ALL"
+}
+
+resource "aws_cloudwatch_log_group" "logs" {
+  name = "/vpc"
+}
+
+resource "aws_iam_role" "logs" {
+  name = "${local.name}-vpc-logs-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "vpc-flow-logs.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy" "logs" {
+  name = "${local.name}-vpc-logs-policy"
+  role = "${aws_iam_role.logs.id}"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
