@@ -9,6 +9,11 @@ resource "aws_route_table" "private-gateway" {
     nat_gateway_id = "${aws_nat_gateway.public.*.id[count.index]}"
   }
 
+  route {
+    cidr_block     = "::/0"
+    nat_gateway_id = "${aws_nat_gateway.public.*.id[count.index]}"
+  }
+
   tags = "${merge(local.tags, map(
     "Name", "private-${local.name}-az-${local.az_name[count.index]}"
   ))}"

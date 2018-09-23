@@ -53,7 +53,9 @@ aws ec2 --region $REGION modify-instance-attribute --no-source-dest-check --inst
 
 echo "***** Setup Networking Route Table *****"
 aws ec2 --region $REGION delete-route --destination-cidr-block 0.0.0.0/0 --route-table-id ${ROUTE_TABLE_ID}
+aws ec2 --region $REGION delete-route --destination-cidr-block ::/0 --route-table-id ${ROUTE_TABLE_ID}
 aws ec2 --region $REGION create-route --destination-cidr-block 0.0.0.0/0 --route-table-id ${ROUTE_TABLE_ID} --instance-id $INSTANCE_ID
+aws ec2 --region $REGION create-route --destination-cidr-block ::/0 --route-table-id ${ROUTE_TABLE_ID} --instance-id $INSTANCE_ID
 
 echo "***** Setup Auto-Tuning *****"
 # https://aws.amazon.com/premiumsupport/knowledge-center/vpc-nat-instance/
