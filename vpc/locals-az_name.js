@@ -1,6 +1,6 @@
 
 let count = process.argv[2]
-count = Math.min(Math.max(count, 1), 26)
+count = Math.min(Math.max(count, 1), 15)
 
 const zones="abcdefghijklmnopqrstuvwxyz"
 const json = {}
