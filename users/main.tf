@@ -4,18 +4,11 @@ resource "aws_iam_account_alias" "alias" {
 }
 
 # Groups
-resource "aws_iam_group" "administrators" {
-  name = "Administrators"
-}
-
 resource "aws_iam_group" "billing" {
   name = "Billing"
 }
 // TODO billing policy
 
-resource "aws_iam_group" "developers" {
-  name = "Developers"
-}
 
 // TODO allow custom groups
 resource "aws_iam_group" "groups" {
