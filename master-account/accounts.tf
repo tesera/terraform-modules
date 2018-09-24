@@ -14,10 +14,9 @@
 // Docs: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_create.html
 // To set password go to root sign up and enter email
 resource "aws_organizations_account" "main" {
-  //count = "${length(local.subaccounts)}"
-  count                      = 1
-  name                       = "${local.subaccounts[count.index]}"
-  email                      = "${local.account_email_local_part}+${local.subaccounts[count.index]}@${local.account_email_domain}"
+  count                      = "${length(var.sub_accounts)}"
+  name                       = "${var.sub_accounts[count.index]}"
+  email                      = "${local.account_email_local_part}+${var.sub_accounts[count.index]}@${local.account_email_domain}"
   iam_user_access_to_billing = "DENY"
 }
 

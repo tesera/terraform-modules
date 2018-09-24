@@ -3,8 +3,7 @@ resource "aws_organizations_organization" "account" {
   feature_set = "ALL"
 }
 
-# NOTE: Must request from support to up the limit for Ogranizations / Number of Accounts
-
-
-
+resource "aws_iam_account_alias" "alias" {
+  account_alias = "${local.name}"
+}
 

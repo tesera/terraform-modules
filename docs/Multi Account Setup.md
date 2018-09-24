@@ -3,6 +3,7 @@
 // Testing: will.farrell+master@tetsera.com
 ## Manual Steps
 - [ ] Create Master Account
+- [ ] Must request from support to up the limit for Organizations / Number of Accounts to 6+ from 2
 - [ ] Create `terraform` User
 - [ ] Services activation can take up to 24h.
 - [ ] `terraform apply` `./master/state`

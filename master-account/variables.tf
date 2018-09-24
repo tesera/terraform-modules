@@ -22,6 +22,23 @@
 //  default = "us-east-1"
 //}
 
+variable "name" {
+  type = "string"
+}
+
+//
+variable "roles" {
+  type = "list"
+  default = ["administrator","developer"]
+}
+
+// {username:[role,role]}
+variable "users" {
+  type = "map"
+  default = {}
+}
+
+
 variable "account_email" {
   description = "Organization account email"
 }
@@ -38,3 +55,15 @@ variable "account_email" {
 //variable "billing_default_arn" {
 //  default = "arn:aws:iam::aws:policy/job-function/Billing"
 //}
+
+variable "sub_accounts" {
+  type = "list"
+  default = [
+    "operations",
+    "production",
+    "staging",
+    "testing",
+    "development",
+    "forensics"
+  ]
+}
