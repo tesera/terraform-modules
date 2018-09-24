@@ -9,26 +9,23 @@
 //  description = "For provider has allowed_account_ids"
 //}
 
-variable "aws_account_id" {
-  type = "string"
-  description = "For provider has allowed_account_ids"
+//variable "aws_account_id" {
+//  type = "string"
+//  description = "For provider has allowed_account_ids"
+//}
+//
+//variable "aws_profile" {
+//  default = "default"
+//}
+//
+//variable "aws_default_region" {
+//  default = "us-east-1"
+//}
+
+variable "account_email" {
+  description = "Organization account email"
 }
 
-variable "aws_profile" {
-  default = "default"
-}
-
-variable "aws_default_region" {
-  default = "us-east-1"
-}
-
-variable "account_email_local_part" {
-  description = "Organization account email local-part"
-}
-
-variable "account_email_domain" {
-  description = "Organization account email domain"
-}
 
 //variable "administrator_default_arn" {
 //  default = "arn:aws:iam::aws:policy/AdministratorAccess"
