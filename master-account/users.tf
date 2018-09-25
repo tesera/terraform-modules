@@ -15,7 +15,7 @@ resource "aws_iam_user_group_membership" "users" {
   user   = "${element(keys(var.users), count.index)}"
 
   groups = [
-    "${split(",",element(values(var.users), count.index))}"]
+    "${concat(list("User"),split(",",element(values(var.users), count.index)))}"]
 }
 
 # TODO - ssh https://www.terraform.io/docs/providers/aws/r/iam_user_ssh_key.html - pull form gh

@@ -1,6 +1,6 @@
 
 resource "aws_iam_role" "administrator" {
-    name = "${local.name}-administrator-role"
+    name = "account-administrator-role"
     assume_role_policy = <<EOF
     {
       "Version": "2012-10-17",
@@ -22,26 +22,9 @@ resource "aws_iam_role" "administrator" {
 EOF
 }
 
-resource "aws_iam_policy" "administrator" {
-    name        = "${local.name}-administrator-policy"
-    description = "A test policy"
-    policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "*",
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
-}
-POLICY
-}
-
 resource "aws_iam_role_policy_attachment" "administrator" {
     role       = "${aws_iam_role.administrator.name}"
-    policy_arn = "${aws_iam_policy.administrator.arn}"
+    policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
 

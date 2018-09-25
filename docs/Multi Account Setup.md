@@ -11,6 +11,7 @@
 1. Delete `terraform` User from account
 1. Verify email on master account
 1. Setup Sub Accounts *
+1. Setup Login Account *
 
 \* See collection of steps below.
 
@@ -41,6 +42,10 @@ See [How do I create and activate a new Amazon Web Services account?](https://aw
 1. `tfe apply` `./environments/account`
 1. Delete `terraform` User from account
 1. Repeat for each environments, operations, adn forensics accounts
+
+### Setup Login Account
+// User logs in and setts up MFA and generated access keys
+1. TODO
 
 ## TODO
 - how do users log in with/up pass
