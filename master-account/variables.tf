@@ -29,7 +29,7 @@ variable "name" {
 //
 variable "roles" {
   type = "list"
-  default = ["administrator","developer"]
+  default = ["admin","developer"]
 }
 
 // {username:[role,role]}
