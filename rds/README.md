@@ -24,18 +24,7 @@ module "rds" {
   bastion_ip               = "${module.bastion.public_ip}"
   init_scripts_folder      = "scripts"
   ssh_username             = "ec2-user"
-}
-```
-
-### Add a security group rule that grants permission to security group sg-00000000 to access the db instance
-```hcl-terraform
-resource "aws_security_group_rule" "rds" {
-  security_group_id        = "${module.rds.security_group_id}"
-  type                     = "ingress"
-  from_port                = 5432
-  to_port                  = 5432
-  protocol                 = "tcp"
-  source_security_group_id = "${module.bastion.security_group_id}"
+  security_group_ids       = ["${module.bastion.security_group_id}"]
 }
 ```
 
@@ -74,7 +63,7 @@ resource "aws_security_group_rule" "rds" {
 - **backup_retention_period:** backup retention period
 - **multi_az:** if the RDS instance is multi AZ enabled
 - **replica_count:** number of read replicas to deploy
-- **bastion_security_group_id:** bastion security group id [Default: none]
+- **security_group_ids:** list of security group ids which are going to be granted access to the DB. [Default: []]
 - **ssh_identity_file:** SSH key filename for connecting to the bastion host
 - **bastion_ip:** IP of the bastion host. If it is not provided the psql command will run directly against the RDS host without SSH tunneling 
 - **init_scripts_folder:** sub folder containingthe sql init scripts to be executed. The script files must have .sql extenstion. And all of the scripts must end with ";".

@@ -12,12 +12,12 @@ resource "aws_security_group" "main" {
   }
 }
 
-resource "aws_security_group_rule" "ssh" {
-  count                    = "${var.bastion_security_group_id != "" ? 1 : 0}"
+resource "aws_security_group_rule" "rds_access" {
+  count                    = "${length(var.security_group_ids)}"
   security_group_id        = "${aws_security_group.main.id}"
   type                     = "ingress"
-  from_port                = 22
-  to_port                  = 22
+  from_port                = "5432"
+  to_port                  = "5432"
   protocol                 = "tcp"
-  source_security_group_id = "${var.bastion_security_group_id}"
+  source_security_group_id = "${var.security_group_ids[count.index]}"
 }
