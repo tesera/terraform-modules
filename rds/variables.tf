@@ -68,8 +68,9 @@ variable "publicly_accessible" {
   default = "false"
 }
 
-variable "bastion_security_group_id" {
-  default = ""
+variable "security_group_ids" {
+  type    = "list"
+  default = []
 }
 
 variable "cpu_alarm_threshold" {
