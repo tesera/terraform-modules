@@ -1,10 +1,15 @@
 variable "name" {}
 
+variable "default_tags" {
+  type    = "map"
+  default = {}
+}
+
 variable "engine" {
   default = "redis"
 }
 
-variable "engine_version" {
+variable "version" {
   default = "4.0.10"
 }
 
@@ -18,12 +23,12 @@ variable "parameter_group_name" {
 
 variable "vpc_id" {}
 
-variable "subnet_ids" {
+variable "private_subnet_ids" {
   type = "list"
 }
 
-variable "node_type" {
-  default = "cache.t2.small"
+variable "instance_type" {
+  default = "cache.t2.micro"
 }
 
 variable "maintenance_window" {
@@ -34,32 +39,20 @@ variable "apply_immediately" {
   default = "false"
 }
 
-variable "replica_count" {
+variable "read_replicas" {
   default = 0
 }
 
-variable "automatic_failover_enabled" {
+variable "multi_az" {
   default = "true"
-}
-
-variable "availability_zones" {
-  type = "list"
 }
 
 variable "num_node_groups" {
   default = 1
 }
 
-variable "cluster_mode_enabled" {
-  default = "false"
-}
-
-variable "at_rest_encryption_enabled" {
-  default = "false"
-}
-
-variable "transit_encryption_enabled" {
-  default = "false"
+variable "type" {
+  default = "standalone"
 }
 
 variable "security_group_ids" {

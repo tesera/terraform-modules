@@ -1,6 +1,6 @@
 resource "aws_security_group" "main" {
-  name        = "${local.identifier}-sg"
-  description = "SecurityGroup for ${local.identifier}"
+  name        = "${local.name}-sg"
+  description = "SecurityGroup for ${local.name}"
   vpc_id      = "${var.vpc_id}"
 }
 
