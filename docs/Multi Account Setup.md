@@ -8,10 +8,10 @@
 1. Services activation can take up to 24h.
 1. `terraform apply` `./master/state`
 1. `terraform apply` `./master/account`
-1. Delete `terraform` User from account
-1. Verify email on master account
-1. Setup Sub Accounts *
+1. You should of received an `AWS Organizations email verification request`, Click `Verify your email address` in the email. 
 1. Setup Login Account *
+1. Delete `terraform` User from account
+1. Setup Sub Accounts *
 
 \* See collection of steps below.
 
@@ -25,6 +25,7 @@ See [How do I create and activate a new Amazon Web Services account?](https://aw
 1. Enter `Securitty Check` and press `Call me now`.
 1. Enter 4-digit code into your phone after picking up and press `Continue`.
 1. Press `Free`.
+1. Setup MFA *
 
 ### Create `terraform` User
 1. Go to IAM.
@@ -32,7 +33,7 @@ See [How do I create and activate a new Amazon Web Services account?](https://aw
 1. Enter `User name` as `terraform`, check `Programmatic access` and press `Next: Permissions`.
 1. Press `Attach existing policies directly`, check `AdministratorAccess` and press `Next Review`.
 1. Press `Create user`.
-1. Copy `Access key ID` and `Secret access key` to `~/.aws/credentials` into `[tmp]`.
+1. Copy `Access key ID` and `Secret access key` to `~/.aws/credentials` into `[username]`.
 
 
 ### Setup Sub Accounts
@@ -44,11 +45,24 @@ See [How do I create and activate a new Amazon Web Services account?](https://aw
 1. Repeat for each environments, operations, adn forensics accounts
 
 ### Setup Login Account
-// User logs in and setts up MFA and generated access keys
-1. TODO
+1. Go to [AWS Console Login](https://console.aws.amazon.com/iam/home/) (https://${alias}.signin.aws.amazon.com/console)
+1. Enter `Account ID or alias`, `IAM user name`, and `Passowrd` and press `Sign In`.
+1. Enter `Old Password`, `New password`, `Retype new password` and press `Confirm password change`.
+1. Got to [`IAM`](https://console.aws.amazon.com/iam/) if not already there.
+1. Setup MFA *
+1. Press `Create access key`.
+1. Replace `Access key ID` and `Secret access key` in `~/.aws/credentials` for `[username]` to new credentials.
+
+### Setup MFA
+1. Got to [`IAM`](https://console.aws.amazon.com/iam/home/) if not already there.
+1. Click `Users` -> `${username}` -> `Security credentials` -> `Manage` beside `Assigned MFA device:`. 
+1. Choose `Virtual device` and press `Continue`.
+1. Click `Show QR code` and scan QRCode into MFA device.
+1. Enter `MFA code 1`, wait ~30sec, enter `MFA code 2` and press `Assign MFA`.
+1. Press `Close`.
+
 
 ## TODO
-- how do users log in with/up pass
 - how do users assume roles in console
 - how do users assume roles in cli
 - how to run tf with assumed role

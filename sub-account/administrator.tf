@@ -1,24 +1,24 @@
 
 resource "aws_iam_role" "administrator" {
-    name = "account-administrator-role"
+    name = "account-admin-role"
     assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
     {
-      "Version": "2012-10-17",
-      "Statement": [
-        {
-          "Action": "sts:AssumeRole",
-          "Principal": {
-            "AWS": "arn:aws:iam::${var.master_account_id}:root"
-          },
-          "Effect": "Allow",
-          "Condition": {
-            "Bool": {
-              "aws:MultiFactorAuthPresent": "true"
-            }
-          }
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "AWS": "arn:aws:iam::${var.master_account_id}:root"
+      },
+      "Effect": "Allow",
+      "Condition": {
+        "Bool": {
+          "aws:MultiFactorAuthPresent": "true"
         }
-      ]
+      }
     }
+  ]
+}
 EOF
 }
 

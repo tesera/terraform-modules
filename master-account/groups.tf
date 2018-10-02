@@ -14,7 +14,7 @@ resource "aws_iam_group" "groups" {
   ))}"
 }
 
-# Update after v0.12.0
+//# Update after v0.12.0
 resource "aws_iam_policy" "groups" {
   count       = "${length(keys(local.groups))}"
   name        = "${local.groups[count.index]}-policy"
@@ -33,7 +33,7 @@ resource "aws_iam_policy" "groups" {
         }
       },
       "Resource": [
-        "arn:aws:iam::${aws_organizations_account.main.*.id[index(aws_organizations_account.main.*.id, element(split("-",local.groups[count.index]),0))]}]:role/${element(split("-",local.groups[count.index]),1)}"
+        "arn:aws:iam::${aws_organizations_account.main.*.id[index(aws_organizations_account.main.*.name, element(split("-",local.groups[count.index]),0))]}:role/${element(split("-",local.groups[count.index]),1)}"
       ]
     }
   ]
@@ -41,11 +41,11 @@ resource "aws_iam_policy" "groups" {
 POLICY
 }
 
-//resource "aws_iam_group_policy_attachment" "groups" {
-//  count      = "${length(keys(local.groups))}"
-//  group      = "${aws_iam_group.groups.*.name[count.index]}"
-//  policy_arn = "${aws_iam_policy.groups.*.arn[count.index]}"
-//}
+resource "aws_iam_group_policy_attachment" "groups" {
+  count      = "${length(keys(local.groups))}"
+  group      = "${aws_iam_group.groups.*.name[count.index]}"
+  policy_arn = "${aws_iam_policy.groups.*.arn[count.index]}"
+}
 
 # Master Account
 ## Admin
