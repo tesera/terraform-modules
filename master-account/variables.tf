@@ -10,14 +10,14 @@ variable "roles" {
 }
 
 // {username:[role,role]}
-variable "users" {
-  type = "map"
-  default = {}
-}
+//variable "users" {
+//  type = "map"
+//  default = {}
+//}
 
-variable "pgp_key_path" {
-  type = "string"
-}
+//variable "pgp_key_path" {
+//  type = "string"
+//}
 
 
 variable "account_email" {

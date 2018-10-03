@@ -1,6 +1,6 @@
 
 resource "aws_iam_role" "developer" {
-    name = "account-developer-role"
+    name = "developer"
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -24,7 +24,7 @@ EOF
 
 # TODO lock down to read only?
 resource "aws_iam_policy" "developer" {
-    name        = "account-developer-policy"
+    name        = "developer-policy"
     description = "A test policy"
     policy = <<POLICY
 {

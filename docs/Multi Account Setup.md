@@ -8,7 +8,8 @@
 1. Services activation can take up to 24h.
 1. `terraform apply` `./master/state`
 1. `terraform apply` `./master/account`
-1. You should of received an `AWS Organizations email verification request`, Click `Verify your email address` in the email. 
+1. You should of received an `AWS Organizations email verification request`, Click `Verify your email address` in the email
+1. `terraform apply` `./master/users`
 1. Setup Login Account *
 1. Delete `terraform` User from account
 1. Setup Sub Accounts *
@@ -34,6 +35,7 @@ See [How do I create and activate a new Amazon Web Services account?](https://aw
 1. Press `Attach existing policies directly`, check `AdministratorAccess` and press `Next Review`.
 1. Press `Create user`.
 1. Copy `Access key ID` and `Secret access key` to `~/.aws/credentials` into `[username]`.
+1. Press `Close`.
 
 
 ### Setup Sub Accounts
@@ -61,9 +63,29 @@ See [How do I create and activate a new Amazon Web Services account?](https://aw
 1. Enter `MFA code 1`, wait ~30sec, enter `MFA code 2` and press `Assign MFA`.
 1. Press `Close`.
 
+### Setup `Switch Role` in Console
+1. From account drop down choose `Switch Role`.
+1. Press `Switch Role`.
+1. Enter `Account` (ID), `Role`, `Display Name` and press `Switch Role`
 
-## TODO
-- how do users assume roles in console
-- how do users assume roles in cli
-- how to run tf with assumed role
-- what is tfe - management of it
+### Setup `Assume Role` in Cli
+`~/.aws/credentials`
+```bash
+[main]
+aws_access_key_id = userkey
+aws_secret_access_key = userkey
+
+```
+
+`~/.aws/config`
+```bash
+[profile main]
+output = json
+region = us-east-1
+
+[profile main-production]
+output = json
+region = us-east-1
+role_arn = arn:aws:iam:123456789:role/admin
+source_profile = main
+```

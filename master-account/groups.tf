@@ -68,12 +68,12 @@ resource "aws_iam_group_policy_attachment" "billing" {
   policy_arn = "arn:aws:iam::aws:policy/job-function/Billing"
 }
 
-## Users
-resource "aws_iam_group" "users" {
+## User
+resource "aws_iam_group" "user" {
   name = "User"
 }
 
-resource "aws_iam_policy" "users" {
+resource "aws_iam_policy" "user" {
   name        = "UserAccess"
   policy      = <<POLICY
 {
@@ -155,7 +155,40 @@ resource "aws_iam_policy" "users" {
 POLICY
 }
 
-resource "aws_iam_group_policy_attachment" "users" {
-  group      = "${aws_iam_group.users.name}"
-  policy_arn = "${aws_iam_policy.users.arn}"
+resource "aws_iam_group_policy_attachment" "user" {
+  group      = "${aws_iam_group.user.name}"
+  policy_arn = "${aws_iam_policy.user.arn}"
+}
+
+# Terraform
+
+resource "aws_iam_group" "terraform" {
+  name = "MasterTerraform"
+}
+
+# TODO update policy - s3 read/write, dynamodb read/write
+resource "aws_iam_policy" "terraform" {
+  name        = "TerraformAccess"
+  policy      = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowUsersAllActionsForTerraform",
+            "Effect": "Allow",
+            "Action": [
+                "*"
+            ],
+            "Resource": [
+                "arn:aws:iam::${local.account_id}:*"
+            ]
+        }
+    ]
+}
+POLICY
+}
+
+resource "aws_iam_group_policy_attachment" "terraform" {
+  group      = "${aws_iam_group.terraform.name}"
+  policy_arn = "${aws_iam_policy.terraform.arn}"
 }

@@ -19,7 +19,7 @@ function finish {
 trap finish EXIT
 
 ALIAS="$1"          # AWS Alias name
-ADMIN_EMAIL="$2"    # Admin Email addess
+ADMIN_EMAIL="$2"    # Admin Email address
 USER_EMAIL="$3"     # User Email address
 USERNAME="$4"       # Username
 ENC_PASSWORD="$5"   # PGP encrypted password
@@ -44,9 +44,9 @@ message_file=$(mktemp "message.${USERNAME}.html")
 
 # Replace username and passwords with correct values.
 cat "$DIR/send-email.html.tpl" > ${message_file}
-sed -i '' -e "s/__USERNAME__/${USERNAME}/g" ${message_file}
-sed -i '' -e "s/__PASSWORD__/${PASSWORD}/g" ${message_file}
-sed -i '' -e "s/__ALIAS__/${ALIAS}/g" ${message_file}
+sed -i -e "s/__USERNAME__/${USERNAME}/g" ${message_file}
+sed -i -e "s/__PASSWORD__/${PASSWORD}/g" ${message_file}
+sed -i -e "s/__ALIAS__/${ALIAS}/g" ${message_file}
 
 # Send the email
 #aws ses send-email --region us-east-1 \
@@ -59,8 +59,8 @@ rm "${message_file}"
 
 # OSX Only
 cat "$DIR/send-email.txt.tpl" > ${message_file}
-sed -i '' -e "s/__USERNAME__/${USERNAME}/g" ${message_file}
-sed -i '' -e "s/__PASSWORD__/${PASSWORD}/g" ${message_file}
-sed -i '' -e "s/__ALIAS__/${ALIAS}/g" ${message_file}
+sed -i -e "s/__USERNAME__/${USERNAME}/g" ${message_file}
+sed -i -e "s/__PASSWORD__/${PASSWORD}/g" ${message_file}
+sed -i -e "s/__ALIAS__/${ALIAS}/g" ${message_file}
 
 cat "${message_file}" | mail -s "[IMPORTANT] ${ALIAS} AWS Account Details" ${USER_EMAIL}

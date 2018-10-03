@@ -7,16 +7,16 @@ output "alias" {
 }
 
 output "groups" {
-  value = "${concat(list(aws_iam_group.admin.name, aws_iam_group.billing.name), aws_iam_group.groups.*.name, list(aws_iam_group.users.name))}"
+  value = "${concat(list(aws_iam_group.admin.name, aws_iam_group.billing.name, aws_iam_group.terraform.name), aws_iam_group.groups.*.name, list(aws_iam_group.user.name))}"
 }
 
-output "users" {
-  value = "${aws_iam_user.users.*.name}"
-}
-
-output "passwords" {
-  value = "${aws_iam_user_login_profile.users.*.encrypted_password}"
-}
+//output "users" {
+//  value = "${aws_iam_user.users.*.name}"
+//}
+//
+//output "passwords" {
+//  value = "${aws_iam_user_login_profile.users.*.encrypted_password}"
+//}
 
 //data "null_data_source" "users" {
 //  count = "${length(aws_iam_user.users.*.name)}"
