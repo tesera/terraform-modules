@@ -13,13 +13,14 @@ provider "aws" {
   profile = "${var.profile}"
 }
 
-module "account" {
-  source        = "../../../master-account"
-  account_alias = "${var.account_alias}"
-  roles         = [
-    "admin",
-    "developer"]
-  sub_accounts  = [
-    "production"]
+# Users
+module "user" {
+  source        = "../../../user"
   account_email = "${var.account_email}"
+  pgp_key_path  = "${path.module}/terraform.pub"
+  email         = "will.farrell@tesera.com"
+  groups        = [
+    "MasterTerraform",
+    "MasterAdmin",
+    "ProductionAdmin"]
 }

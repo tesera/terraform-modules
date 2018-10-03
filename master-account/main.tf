@@ -4,6 +4,7 @@ resource "aws_organizations_organization" "account" {
 }
 
 resource "aws_iam_account_alias" "alias" {
-  account_alias = "${local.name}"
+  count = "${var.account_alias == "" ? 0 : 1}"
+  account_alias = "${var.account_alias}"
 }
 

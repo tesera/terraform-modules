@@ -8,8 +8,8 @@ variable "profile" {
 
 variable "account_alias" {
   type = "string"
-  default = ""
 }
+
 variable "account_email" {
   type = "string"
 }

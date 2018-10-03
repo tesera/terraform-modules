@@ -19,7 +19,7 @@ resource "null_resource" "users" {
 
   provisioner "local-exec" {
     # $ alias admin_email user_email user_name encrypted_password
-    command = "${path.module}/send-email.sh '${local.name}' '${var.account_email}' '${var.email}' '${aws_iam_user.user.name}' '${aws_iam_user_login_profile.user.encrypted_password}'"
+    command = "${path.module}/send-email.sh '${local.account_alias}' '${var.account_email}' '${var.email}' '${aws_iam_user.user.name}' '${aws_iam_user_login_profile.user.encrypted_password}'"
   }
 }
 

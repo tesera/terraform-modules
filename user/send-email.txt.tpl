@@ -11,12 +11,15 @@ AccountID: __ALIAS__
 Username: __USERNAME__
 Password: __PASSWORD__
 
-## Setup MFA (Multi-Factor Authentication)
+## Multi-Factor Authentication (MFA)
 1. Go to https://console.aws.amazon.com/iam/home?region=us-east-1#/users/__USERNAME__?section=security_credentials
 2. Press `Manage` under `Assigned MFA device`.
 3. Choose `Virtual device` and press `Continue`.
 4. Scan QRCode into MFA device, enter two MFA codes and press `Assign MFA`.
 5. Press `Close`.
+
+## Switch Roles
+If you have access to deployed environments, see shared documentation.
 
 Thanks,
 The Wizard of Oz

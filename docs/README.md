@@ -17,8 +17,7 @@ $ brew install terraform
 
 ### Install node dependencies
 ```bash
-TODO - script to find all package.json and install deps
-# find . -type f -name "package.json" | grep -v node_modules | npm i
+$ npm run install:npm
 ```
 
 ## Project Structure

@@ -3,7 +3,7 @@ output "account_id" {
   value = "${module.account.id}"
 }
 
-output "alias" {
+output "account_alias" {
   value = "${module.account.alias}"
 }
 output "groups" {
