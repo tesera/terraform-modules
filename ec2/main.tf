@@ -1,5 +1,5 @@
 resource "aws_launch_configuration" "main" {
-  name_prefix                 = "${var.name}-"
+  name_prefix                 = "${local.name}-"
   image_id                    = "${local.image_id}"
   instance_type               = "${var.instance_type}"
   key_name                    = "${var.key_name}"
@@ -24,7 +24,7 @@ resource "aws_launch_configuration" "main" {
 }
 
 resource "aws_autoscaling_group" "main" {
-  name                      = "${var.name}-asg"
+  name                      = "${local.name}-asg"
   max_size                  = "${local.max_size}"
   min_size                  = "${local.min_size}"
   desired_capacity          = "${local.desired_capacity}"
@@ -33,15 +33,5 @@ resource "aws_autoscaling_group" "main" {
   vpc_zone_identifier       = [
     "${var.subnet_ids}"]
 
-  tag {
-    key                 = "Name"
-    value               = "${var.name}"
-    propagate_at_launch = "true"
-  }
-
-  tag {
-    key                 = "Terraform"
-    value               = "true"
-    propagate_at_launch = "true"
-  }
+  tags                      = "${module.defaults.tags_as_list_of_maps}"
 }

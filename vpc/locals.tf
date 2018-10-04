@@ -1,8 +1,11 @@
+data "aws_availability_zones" "available" {}
+
 data "external" "az_name" {
   program = [
     "node",
     "${path.module}/locals-az_name.js",
-    "${var.az_count}"]
+    "${local.az_count}",
+    "${data.aws_availability_zones.available.count}"]
 }
 
 data "external" "public_cidr" {
@@ -10,7 +13,8 @@ data "external" "public_cidr" {
     "node",
     "${path.module}/locals-public_cidr.js",
     "${var.cidr_block}",
-    "${var.az_count}"]
+    "${local.az_count}",
+    "${data.aws_availability_zones.available.count}"]
 }
 
 data "external" "private_cidr" {
@@ -18,7 +22,8 @@ data "external" "private_cidr" {
     "node",
     "${path.module}/locals-private_cidr.js",
     "${var.cidr_block}",
-    "${var.az_count}"]
+    "${local.az_count}",
+    "${data.aws_availability_zones.available.count}"]
 }
 
 module "defaults" {
@@ -33,6 +38,7 @@ locals {
   name         = "${module.defaults.name}"
   tags         = "${module.defaults.tags}"
   cidr_block   = "${var.cidr_block}"
+  az_max       = "${data.aws_availability_zones.available.count}"
   az_count     = "${var.az_count > 1 ? var.az_count : 1}"
   az_name      = "${data.external.az_name.result}"
   public_cidr  = "${data.external.public_cidr.result}"

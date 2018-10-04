@@ -1,5 +1,5 @@
 resource "aws_iam_role" "main" {
-  name               = "${var.name}-role"
+  name               = "${local.name}-role"
 
   assume_role_policy = <<EOF
 {
@@ -20,9 +20,9 @@ EOF
 }
 
 resource "aws_iam_policy" "main-iam" {
-  name        = "${var.name}-iam-policy"
+  name        = "${local.name}-iam-policy"
   path        = "/"
-  description = "${var.name} SSH IAM Policy"
+  description = "${local.name} SSH IAM Policy"
 
   policy      = <<EOF
 {
@@ -60,9 +60,9 @@ resource "aws_iam_role_policy_attachment" "main-iam" {
 }
 
 resource "aws_iam_policy" "main-logs" {
-  name        = "${var.name}-logs-policy"
+  name        = "${local.name}-logs-policy"
   path        = "/"
-  description = "${var.name} Logs Policy"
+  description = "${local.name} Logs Policy"
 
   policy      = <<EOF
 {
@@ -91,6 +91,6 @@ resource "aws_iam_role_policy_attachment" "main-logs" {
 }
 
 resource "aws_iam_instance_profile" "main" {
-  name = "${var.name}-instance-profile"
+  name = "${local.name}-instance-profile"
   role = "${aws_iam_role.main.name}"
 }

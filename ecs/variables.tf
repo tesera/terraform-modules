@@ -1,12 +1,14 @@
 variable "name" {}
-variable "account_id" {
-  default = ""
+variable "default_tags" {
+  type = "map"
+  default = {}
 }
 variable "vpc_id" {}
 variable "private_subnet_ids" {
   type = "list"
 }
 
+# EC2
 variable "image_id" {
   default = ""
 }
@@ -32,6 +34,7 @@ variable "desired_capacity" {
   default = "1"
 }
 
+# ssh
 variable "iam_user_groups" {
   default = ""
 }
@@ -44,7 +47,7 @@ variable "bastion_security_group_id" {
   default = ""
 }
 
-
+# Debug
 variable "key_name" {
   default = ""
 }
