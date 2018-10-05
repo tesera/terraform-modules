@@ -10,8 +10,8 @@ resource "aws_route_table" "private-gateway" {
   }
 
   route {
-    cidr_block     = "::/0"
-    nat_gateway_id = "${aws_nat_gateway.public.*.id[count.index]}"
+    ipv6_cidr_block     = "::/0"
+    egress_only_gateway_id = "${aws_egress_only_internet_gateway.main.id}"
   }
 
   tags = "${merge(local.tags, map(
