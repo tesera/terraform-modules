@@ -1,5 +1,5 @@
 locals {
-  aws_region = "ca-central-1"
+  aws_region = "us-east-1"
   profile    = "tesera"
   name       = "tesera-modules-test"
   key_name   = "${aws_key_pair.root_public_key.key_name}"
@@ -26,11 +26,11 @@ provider "aws" {
 module "vpc" {
   source       = "../../vpc"
   name         = "${local.name}"
-  az_count     = "1"
-  cidr_block   = "20.5.0.0/16"
-  nat_type     = "instance"
+  az_count     = "3"
+  cidr_block   = "10.5.0.0/16"
+  nat_type     = "gateway"
   default_tags = "${map(
-    "kubernetes.io/cluster/${module.eks.name}", "shared"
+    "kubernetes.io/cluster/${local.name}-eks", "shared"
   )}"
 }
 
@@ -38,6 +38,11 @@ module "eks" {
   source             = "../../eks"
   name               = "${local.name}"
   vpc_id             = "${module.vpc.id}"
-  private_subnet_ids = "${module.vpc.public_subnet_ids}"
+  private_subnet_ids = "${slice(module.vpc.private_subnet_ids, 1, length(module.vpc.private_subnet_ids))}"
   key_name           = "${local.key_name}"
 }
+
+output "cluster_name" {
+  value = "${module.eks.name}"
+}
+
