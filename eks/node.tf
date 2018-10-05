@@ -4,7 +4,7 @@ data "template_file" "worker" {
   vars {
     APISERVER_ENDPOINT = "${aws_eks_cluster.main.endpoint}"
     CLUSTER_CA         = "${aws_eks_cluster.main.certificate_authority.0.data}"
-    CLUSTER_NAME       = "${local.name}-eks"
+    CLUSTER_NAME       = "${local.cluster_name}"
     ROLE_ARN           = "${module.ec2.iam_role_arn}"
   }
 }
@@ -28,7 +28,7 @@ module "ec2" {
   bastion_security_group_id = "${var.bastion_security_group_id}"
 
   default_tags = "${merge(local.tags, map(
-    "kubernetes.io/cluster/${aws_eks_cluster.main.name}", "owned"
+    "kubernetes.io/cluster/${local.cluster_name}", "owned"
   ))}"
 }
 
@@ -49,7 +49,7 @@ resource "aws_iam_role_policy_attachment" "worker-AmazonEC2ContainerRegistryRead
 }
 
 resource "aws_iam_instance_profile" "worker" {
-  name = "t${local.name}-eks"
+  name = "t${local.cluster_name}"
   role = "${module.ec2.iam_role_name}"
 }
 

@@ -1,5 +1,5 @@
 resource "aws_eks_cluster" "main" {
-  name       = "${var.name}-eks"
+  name       = "${local.cluster_name}"
   role_arn   = "${aws_iam_role.cluster.arn}"
 
   vpc_config {
@@ -19,7 +19,7 @@ data "template_file" "kubeconfig" {
   template = "${path.module}/kubeconfig.yml.tpl"
 
   vars {
-    name                       = "${local.name}-eks"
+    name                       = "${local.cluster_name}"
     server                     = "${aws_eks_cluster.main.endpoint}"
     certificate-authority-data = "${aws_eks_cluster.main.certificate_authority.0.data}"
   }
@@ -38,7 +38,7 @@ resource "null_resource" "kubeconfig" {
 
 # IAM
 resource "aws_iam_role" "cluster" {
-  name               = "${local.name}-eks-cluster"
+  name               = "${local.cluster_name}-cluster"
 
   assume_role_policy = <<POLICY
 {
@@ -68,7 +68,7 @@ resource "aws_iam_role_policy_attachment" "cluster-AmazonEKSServicePolicy" {
 
 # SG
 resource "aws_security_group" "cluster" {
-  name   = "${local.name}-eks-cluster"
+  name   = "${local.cluster_name}-cluster"
   vpc_id = "${var.vpc_id}"
 
   egress {
@@ -79,9 +79,9 @@ resource "aws_security_group" "cluster" {
       "0.0.0.0/0"]
   }
 
-  tags {
-    Name = "${local.name}-eks"
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${local.cluster_name}"
+  ))}"
 }
 
 resource "aws_security_group_rule" "demo-cluster-ingress-node-https" {

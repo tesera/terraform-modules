@@ -33,5 +33,5 @@ resource "aws_autoscaling_group" "main" {
   vpc_zone_identifier       = [
     "${var.subnet_ids}"]
 
-  tags                      = "${module.defaults.tags_as_list_of_maps}"
+  tags                      = ["${module.defaults.tags_as_list_of_maps}"]
 }

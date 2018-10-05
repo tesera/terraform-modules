@@ -23,15 +23,15 @@ variable "volume_size" {
 }
 
 variable "min_size" {
-  default = "1"
+  default = "2"
 }
 
 variable "max_size" {
-  default = "1"
+  default = "2"
 }
 
 variable "desired_capacity" {
-  default = "1"
+  default = "2"
 }
 
 # ssh

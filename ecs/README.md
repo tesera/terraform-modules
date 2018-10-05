@@ -1,5 +1,5 @@
 # ECS
-Auto-scalling cluster of EC2 for ECS
+Auto-scaling cluster of EC2 for ECS
 
 ## Features
 - Auto-scaling across all private subnets
@@ -19,21 +19,6 @@ module "ecs" {
 }
 ```
 
-### Create global SSH key
-```hcl-terraform
-resource "aws_key_pair" "root_public_key" {
-  key_name   = "root_public_key"
-  public_key = "ssh-rsa ...== COMMENT"
-}
-```
-
-### Create user group
-```hcl-terraform
-resource "aws_iam_group" "developers" {
-  name = "developers"
-}
-```
-
 ## Input
 - **vpc_id:** vpc id
 - **private_subnet_ids:** array of private subnet ids
@@ -43,9 +28,9 @@ resource "aws_iam_group" "developers" {
 - **image_id:** override the base image, must be CentOS based (ie has yum, rpm, docker) [Default: AWS ECS-Optimized]
 - **instance_type:** override the instance type [Default: t2.micro]
 - **bastion_security_group_id:** bastion security group id [Default: none]
-- **min_size:** auto-scalling - min instance count [Default: 1]
-- **max_size:** auto-scalling - max instance count [Default: 1]
-- **desired_capacity:** auto-scalling - desired instance count [Default: 1]
+- **min_size:** auto-scaling - min instance count [Default: 2]
+- **max_size:** auto-scaling - max instance count [Default: 2]
+- **desired_capacity:** auto-scaling - desired instance count [Default: 2]
 
 ## Output
 - **name:** ecs cluster name

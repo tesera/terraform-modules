@@ -92,14 +92,15 @@ resource "aws_iam_group" "developers" {
 - **instance_type:** override the instance type [Default: t2.micro]
 - **bastion_security_group_id:** bastion security group id [Default: none]
 - **user_data:** contents of user data to apply to ec2
-- **min_size:** auto-scalling - min instance count [Default: 1]
-- **max_size:** auto-scalling - max instance count [Default: 1]
-- **desired_capacity:** auto-scalling - desired instance count [Default: 1]
+- **min_size:** auto-scaling - min instance count [Default: 1]
+- **max_size:** auto-scaling - max instance count [Default: 1]
+- **desired_capacity:** auto-scaling - desired instance count [Default: 1]
 - **key_name:** name of root ssh key, for testing only [Default: none]
 
 ## Output
 - **security_group_id:** security group applied, add to ingress on private instance security group
 - **iam_role_name:** IAM role name to allow extending of the role
+- **iam_role_arn:** IAM role arn to allow extending of the role
 - **billing_suggestion:** comments to improve billing cost
 
 
