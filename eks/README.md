@@ -67,7 +67,5 @@ Cannot create cluster 'example-cluster' because us-east-1d, the targeted availab
 ```
 Removing that az from the private_subnet_ids will be required. Checkout the [`slice`](https://www.terraform.io/docs/configuration/interpolation.html#slice-list-from-to-) interpolation.
 
-
-     
-
+## References
 - [Getting Started with AWS EKS](https://www.terraform.io/docs/providers/aws/guides/eks-getting-started.html)

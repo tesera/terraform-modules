@@ -7,6 +7,7 @@
 package-lock.json
 
 public-api-gateway/routes.tf
+eks/kubeconfig.yml
 
 # Logs
 logs
