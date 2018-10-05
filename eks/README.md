@@ -1,6 +1,8 @@
 # Elastic Kubernetes Service (EKS)
 Auto-scaling cluster of EC2 for EKS
 
+** NOT READY FOR PRIME TIME **
+
 ## Features
 - Auto-scaling across all private subnets
 - `authorized_keys` generated from users in an IAM group
