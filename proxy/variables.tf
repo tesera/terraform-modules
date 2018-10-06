@@ -1,8 +1,9 @@
 variable "name" {}
-variable "account_id" {
-  default = ""
-}
 variable "vpc_id" {}
+variable "network_acl_id" {}
+variable "acl_rule_number" {
+  default = 998
+}
 variable "public_subnet_ids" {
   type = "list"
 }

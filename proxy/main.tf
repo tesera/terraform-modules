@@ -66,3 +66,26 @@ resource "aws_iam_role_policy_attachment" "main-ip" {
   role       = "${module.ec2.iam_role_name}"
   policy_arn = "${aws_iam_policy.main-ip.arn}"
 }
+
+# ACL
+resource "aws_network_acl_rule" "ingress_http" {
+  network_acl_id = "${var.network_acl_id}"
+  rule_number    = "${var.acl_rule_number}"
+  egress         = false
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = "${var.proxy_port}"
+  to_port        = "${var.proxy_port}"
+}
+
+resource "aws_network_acl_rule" "egress_http" {
+  network_acl_id = "${var.network_acl_id}"
+  rule_number    = "${var.acl_rule_number}"
+  egress         = true
+  protocol       = "tcp"
+  rule_action    = "allow"
+  cidr_block     = "0.0.0.0/0"
+  from_port      = "${var.proxy_port}"
+  to_port        = "${var.proxy_port}"
+}

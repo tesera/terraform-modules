@@ -43,6 +43,7 @@ resource "aws_iam_group" "developers" {
 
 ## Input
 - **vpc_id:** vpc id
+- **network_acl_id:** VPC ACL id to allow port 22 (ingress/egress)
 - **public_subnet_ids:** array of public subnet ids
 - **key_name:** name of root ssh key
 - **iam_user_groups:** name of iam group that should have ssh access, comma separated list

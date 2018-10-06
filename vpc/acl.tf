@@ -6,7 +6,7 @@ resource "aws_network_acl" "main" {
   ))}"
 }
 
-# HTTP
+# HTTP - TODO move to ELB module
 resource "aws_network_acl_rule" "ingress_http" {
   network_acl_id = "${aws_network_acl.main.id}"
   rule_number    = 100
@@ -73,30 +73,6 @@ resource "aws_network_acl_rule" "egress_icmp" {
   cidr_block     = "0.0.0.0/0"
   icmp_type      = -1
   icmp_code      = -1
-}
-
-# SSH
-# TODO consider adding in `count` to allow env to remove this
-resource "aws_network_acl_rule" "ingress_ssh" {
-  network_acl_id = "${aws_network_acl.main.id}"
-  rule_number    = 122
-  egress         = false
-  protocol       = "tcp"
-  rule_action    = "allow"
-  cidr_block     = "0.0.0.0/0"
-  from_port      = 22
-  to_port        = 22
-}
-
-resource "aws_network_acl_rule" "egress_ssh" {
-  network_acl_id = "${aws_network_acl.main.id}"
-  rule_number    = 122
-  egress         = true
-  protocol       = "tcp"
-  rule_action    = "allow"
-  cidr_block     = "0.0.0.0/0"
-  from_port      = 22
-  to_port        = 22
 }
 
 # DNS via UDP

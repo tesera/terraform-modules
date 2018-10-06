@@ -1,4 +1,4 @@
-# rds proxy
+# RDS Proxy
 Allow direct connection to private subnet rds instances. This should only be used if 3rd party cannot use ssh keys, ie FMECloud.
 
 ## Features
@@ -46,6 +46,7 @@ resource "aws_security_group_rule" "proxy" {
 
 ## Input
 - **vpc_id:** vpc id
+- **network_acl_id:** VPC ACL id to allow port ${proxy_port} (ingress/egress)
 - **public_subnet_ids:** array of public subnet ids
 - **key_name:** name of root ssh key [Default: none]
 - **iam_user_groups:** name of iam group that should have ssh access, comma separated list [Default: none]
