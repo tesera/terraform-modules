@@ -1,5 +1,14 @@
+resource "aws_default_network_acl" "main" {
+  default_network_acl_id = "${aws_vpc.main.default_network_acl_id}"
+
+  tags = "${merge(local.tags, map(
+    "Name", "${local.name}-default"
+  ))}"
+}
+
 resource "aws_network_acl" "main" {
   vpc_id = "${aws_vpc.main.id}"
+  subnet_ids = ["${concat(list(aws_subnet.public.id),aws_subnet.private.*.id)}"]
 
   tags = "${merge(local.tags, map(
     "Name", "${local.name}"
