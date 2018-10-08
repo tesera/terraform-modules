@@ -1,23 +1,29 @@
 resource "aws_default_network_acl" "main" {
   default_network_acl_id = "${aws_vpc.main.default_network_acl_id}"
 
-  tags = "${merge(local.tags, map(
-    "Name", "${local.name}-default"
-  ))}"
-}
-
-resource "aws_network_acl" "main" {
-  vpc_id = "${aws_vpc.main.id}"
-  subnet_ids = ["${concat(list(aws_subnet.public.id),aws_subnet.private.*.id)}"]
-
-  tags = "${merge(local.tags, map(
+  tags                   = "${merge(local.tags, map(
     "Name", "${local.name}"
   ))}"
 }
 
+// Has dep issue
+//resource "aws_network_acl" "main" {
+//  depends_on = [
+//    "aws_subnet.public",
+//    "aws_subnet.private"]
+//
+//  vpc_id     = "${aws_vpc.main.id}"
+//  subnet_ids = [
+//    "${concat(list(aws_subnet.public.id),aws_subnet.private.*.id)}"]
+//
+//  tags       = "${merge(local.tags, map(
+//    "Name", "${local.name}"
+//  ))}"
+//}
+
 # HTTP - TODO move to ELB module
 resource "aws_network_acl_rule" "ingress_http" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${aws_default_network_acl.main.id}"
   rule_number    = 100
   egress         = false
   protocol       = "tcp"
@@ -28,7 +34,7 @@ resource "aws_network_acl_rule" "ingress_http" {
 }
 
 resource "aws_network_acl_rule" "egress_http" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${aws_default_network_acl.main.id}"
   rule_number    = 100
   egress         = true
   protocol       = "tcp"
@@ -40,7 +46,7 @@ resource "aws_network_acl_rule" "egress_http" {
 
 # HTTPS
 resource "aws_network_acl_rule" "ingress_https" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${aws_default_network_acl.main.id}"
   rule_number    = 101
   egress         = false
   protocol       = "tcp"
@@ -51,7 +57,7 @@ resource "aws_network_acl_rule" "ingress_https" {
 }
 
 resource "aws_network_acl_rule" "egress_https" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${aws_default_network_acl.main.id}"
   rule_number    = 101
   egress         = true
   protocol       = "tcp"
@@ -63,7 +69,7 @@ resource "aws_network_acl_rule" "egress_https" {
 
 # ICMP
 resource "aws_network_acl_rule" "ingress_icmp" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${aws_default_network_acl.main.id}"
   rule_number    = 103
   egress         = false
   protocol       = "icmp"
@@ -74,7 +80,7 @@ resource "aws_network_acl_rule" "ingress_icmp" {
 }
 
 resource "aws_network_acl_rule" "egress_icmp" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${aws_default_network_acl.main.id}"
   rule_number    = 103
   egress         = true
   protocol       = "icmp"
@@ -87,7 +93,7 @@ resource "aws_network_acl_rule" "egress_icmp" {
 # DNS via UDP
 # TODO remove when DNS via DoH or DNS over TLS is support accross internal application
 resource "aws_network_acl_rule" "ingress_dns" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${aws_default_network_acl.main.id}"
   rule_number    = 153
   egress         = false
   protocol       = "udp"
@@ -98,7 +104,7 @@ resource "aws_network_acl_rule" "ingress_dns" {
 }
 
 resource "aws_network_acl_rule" "egress_dns" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${aws_default_network_acl.main.id}"
   rule_number    = 153
   egress         = true
   protocol       = "udp"
@@ -109,7 +115,7 @@ resource "aws_network_acl_rule" "egress_dns" {
 }
 
 resource "aws_network_acl_rule" "ingress_dns_tls" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${aws_default_network_acl.main.id}"
   rule_number    = 853
   egress         = false
   protocol       = "tcp"
@@ -120,7 +126,7 @@ resource "aws_network_acl_rule" "ingress_dns_tls" {
 }
 
 resource "aws_network_acl_rule" "egress_dns_tls" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${aws_default_network_acl.main.id}"
   rule_number    = 853
   egress         = true
   protocol       = "tcp"
@@ -132,7 +138,7 @@ resource "aws_network_acl_rule" "egress_dns_tls" {
 
 # Ephemeral Ports
 resource "aws_network_acl_rule" "ingress_ephemeral" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${aws_default_network_acl.main.id}"
   rule_number    = 888
   egress         = false
   protocol       = "tcp"
@@ -143,7 +149,7 @@ resource "aws_network_acl_rule" "ingress_ephemeral" {
 }
 
 resource "aws_network_acl_rule" "egress_ephemeral" {
-  network_acl_id = "${aws_network_acl.main.id}"
+  network_acl_id = "${aws_default_network_acl.main.id}"
   rule_number    = 888
   egress         = true
   protocol       = "tcp"

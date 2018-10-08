@@ -1,5 +1,6 @@
 variable "name" {
   type = "string"
+  default = ""
 }
 
 variable "default_tags" {
@@ -12,6 +13,7 @@ variable "default_tags" {
 //}
 
 variable "az_count" {
+  type = "string"
   default = 2
 }
 

@@ -4,8 +4,8 @@ resource "aws_route_table" "private-instance" {
   count  = "${var.nat_type == "instance" ? local.az_count : 0}"
   vpc_id = "${aws_vpc.main.id}"
 
-  tags = "${merge(local.tags, map(
-    "Name", "private-${local.name}-az-${local.az_name[count.index]}"
+  tags   = "${merge(local.tags, map(
+    "Name", "private-${local.name}-${local.az_name[count.index]}"
   ))}"
 }
 
@@ -53,14 +53,14 @@ data "aws_ami" "main" {
 }
 
 resource "aws_launch_configuration" "main" {
+  depends_on                  = ["data.template_file.userdata"] # doesn't work when changing az_count
   count                       = "${var.nat_type == "instance" ? local.az_count : 0}"
   name_prefix                 = "${var.name}-nat-${local.az_name[count.index]}-"
   image_id                    = "${data.aws_ami.main.image_id}"
   key_name                    = "${var.key_name}"
   instance_type               = "${var.instance_type}"
   iam_instance_profile        = "${aws_iam_instance_profile.main.*.name[count.index]}"
-  security_groups             = [
-    "${aws_security_group.main.*.id[count.index]}"]
+  security_groups             = ["${aws_security_group.main.*.id[count.index]}"]
   user_data                   = "${data.template_file.userdata.*.rendered[count.index]}"
   ebs_optimized               = "false"
   enable_monitoring           = "true"
@@ -89,7 +89,8 @@ resource "aws_autoscaling_group" "main" {
   vpc_zone_identifier       = [
     "${aws_subnet.public.*.id[count.index]}"]
 
-  tags = ["${module.defaults.tags_as_list_of_maps}"]
+  tags                      = [
+    "${module.defaults.tags_as_list_of_maps}"]
 }
 
 ## SG

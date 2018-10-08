@@ -15,7 +15,7 @@ resource "aws_route_table" "private-gateway" {
   }
 
   tags = "${merge(local.tags, map(
-    "Name", "private-${local.name}-az-${local.az_name[count.index]}"
+    "Name", "private-${local.name}-${local.az_name[count.index]}"
   ))}"
 }
 
@@ -32,6 +32,6 @@ resource "aws_nat_gateway" "public" {
   subnet_id     = "${aws_subnet.public.*.id[count.index]}"
 
   tags = "${merge(local.tags, map(
-    "Name", "${local.name}-az-${local.az_name[count.index]}"
+    "Name", "${local.name}-nat-${local.az_name[count.index]}"
   ))}"
 }

@@ -7,7 +7,7 @@ resource "aws_route_table" "public" {
   }
 
   tags   = "${merge(local.tags, map(
-    "Name", "public-${local.name}"
+    "Name", "${local.name}-public"
   ))}"
 }
 
@@ -15,10 +15,10 @@ resource "aws_subnet" "public" {
   count             = "${local.az_count}"
   vpc_id            = "${aws_vpc.main.id}"
   cidr_block        = "${local.public_cidr[count.index]}"
-  availability_zone = "${local.aws_region}${local.az_name[count.index]}"
+  availability_zone = "${local.az_name[count.index]}"
 
   tags              = "${merge(local.tags, map(
-    "Name", "public-${local.name}-az-${local.az_name[count.index]}"
+    "Name", "${local.name}-${local.az_name[count.index]}-public"
   ))}"
 }
 

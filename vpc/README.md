@@ -68,17 +68,21 @@ resource "aws_network_acl_rule" "egress_postgres" {
 ```
 
 ## Input
-- **name:** application name
-- **cidr_block:** Custom CIDR block, must end with `.0.0/16` [Default: `10.0.0.0/16`]
-- **az_count:** Number on AZ to initialize [Default: 2, Max: 15]. Note: RDS requires min of 2. See [Map](https://aws.amazon.com/about-aws/global-infrastructure/) for AZ count for each region.
-- **nat_type:** Type of NAT to use `gateway` or `instance` [Default: `gateway`]. See [Comparison](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-comparison.html)
+Name | Description | Type | Default | Required
+-----|-------------|------|---------|----------
+name | Application Name | string | `` | No
+cidr_block | Custom CIDR block, must end with `.0.0/16` | string | `10.0.0.0/16` | No
+az_count | Number on AZs to initialize. Note: RDS/EKS requires min of 2. See [Map](https://aws.amazon.com/about-aws/global-infrastructure/) for AZ count for each region. | string | `2` | No
+nat_type | Type of NAT to use `gateway` or `instance`. See [Comparison](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-comparison.html). | string | `gateway` | No
 
-### Input for NAT instance
-- **key_name:** name of root ssh key [Default: none]
-- **iam_user_groups:** name of iam group that should have ssh access, comma separated list [Default: none]
-- **iam_sudo_groups:** name of iam group that should have ssh sudo access, comma separated list [Default: none]
-- **instance_type:** override the instance type [Default: t2.micro]
-- **bastion_security_group_id:** bastion security group id [Default: none]
+### Input for EC2 instance
+Name | Description | Type | Default | Required
+-----|-------------|------|---------|----------
+key_name                  | name of root ssh key, should be used for debug only | string | `` | No
+bastion_security_group_id | bastion security group id | string | `` | No
+iam_user_groups           | name of iam group that should have ssh access, comma separated list | string | `` | No
+iam_sudo_groups           | name of iam group that should have ssh sudo access, comma separated list | string | `` | No
+instance_type             | override the instance type | string | `t2.micro` | No
 
 ## Output
 - **id:** vpc id
@@ -88,12 +92,19 @@ resource "aws_network_acl_rule" "egress_postgres" {
 - **private_route_table_ids:** array of private route tables for aws_vpc_endpoints
 - **network_acl_id:** ACL id so additional rules can be added
 
+
+## Configurations
+
+Name       | `development` | `production`
+-----------|---------------|------------
+`az_count` | 2             | \>=2
+`nat_type` | `instance`    | `gateway`
+
 ## Known Issues:
-`Error deleting Lambda Function: InvalidParameterValueException: Lambda was unable to delete * because it is a replicated function.` See https://github.com/terraform-providers/terraform-provider-aws/issues/1721 for ongoing support.
+- Unable to increase `az_count` when using a NAT instance
+
+## Related
+- https://github.com/terraform-aws-modules/terraform-aws-vpc
 
 ## TODO
-- [ ] Add IPv6 - https://www.terraform.io/docs/providers/aws/r/vpc.html#assign_generated_ipv6_cidr_block
-- [ ] Option to modify CIDR if VPC peering ever happen
-- [ ] Main route table created without name - make public? or name?
-- [ ] "" same for Network ACLs
 

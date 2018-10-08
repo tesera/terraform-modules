@@ -24,5 +24,5 @@ output "public_ips" {
 
 # Used to add additional rules
 output "network_acl_id" {
-  value = "${aws_network_acl.main.id}"
+  value = "${aws_default_network_acl.main.id}"
 }

@@ -4,6 +4,6 @@ resource "aws_eip" "nat" {
   vpc   = true
 
   tags  = "${merge(local.tags, map(
-    "Name", "${local.name}-az-${local.az_name[count.index]}"
+    "Name", "${local.name}-${local.az_name[count.index]}"
   ))}"
 }
