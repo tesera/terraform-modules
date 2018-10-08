@@ -9,9 +9,9 @@ data "archive_file" "response_headers" {
 }
 
 resource "aws_lambda_function" "response_headers" {
-  provider         = "aws.edge"
-  function_name    = "${local.name}-edge-response"
-  filename         = "${data.archive_file.response_headers.output_path}"
+  provider      = "aws.edge"
+  function_name = "${local.name}-edge-response"
+  filename      = "${data.archive_file.response_headers.output_path}"
 
   source_code_hash = "${data.archive_file.response_headers.output_base64sha256}"
   role             = "${aws_iam_role.lambda.arn}"
@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "lambda" {
     ]
 
     principals {
-      type        = "Service"
+      type = "Service"
 
       identifiers = [
         "lambda.amazonaws.com",

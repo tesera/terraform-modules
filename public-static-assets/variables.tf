@@ -1,4 +1,3 @@
-
 // Suggested:
 // ${env}-${subdomain}-${domain}-${tld}
 variable "name" {

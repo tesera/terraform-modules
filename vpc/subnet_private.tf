@@ -10,3 +10,4 @@ resource "aws_subnet" "private" {
 }
 
 # route_table is handled by the NAT
+

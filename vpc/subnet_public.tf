@@ -6,7 +6,7 @@ resource "aws_route_table" "public" {
     gateway_id = "${aws_internet_gateway.main.id}"
   }
 
-  tags   = "${merge(local.tags, map(
+  tags = "${merge(local.tags, map(
     "Name", "${local.name}-public"
   ))}"
 }
@@ -17,7 +17,7 @@ resource "aws_subnet" "public" {
   cidr_block        = "${local.public_cidr[count.index]}"
   availability_zone = "${local.az_name[count.index]}"
 
-  tags              = "${merge(local.tags, map(
+  tags = "${merge(local.tags, map(
     "Name", "${local.name}-${local.az_name[count.index]}-public"
   ))}"
 }

@@ -5,8 +5,9 @@ locals {
   account_id        = "${data.aws_caller_identity.current.account_id}"
   aws_region        = "${data.aws_region.current.name}"
   name              = "${replace(var.name, "/[^a-zA-Z0-9-]/", "-")}"
-  name_alphanumeric = "${replace(var.name, "/[^a-zA-Z0-9]/", "")}" # Sanitize name, waf labels follow different rules
-  tags              = "${merge(map(
+  name_alphanumeric = "${replace(var.name, "/[^a-zA-Z0-9]/", "")}"     # Sanitize name, waf labels follow different rules
+
+  tags = "${merge(map(
     "Terraform", "true",
     "Environment", "unknown",
     "Name","${replace(var.name, "/[^a-zA-Z0-9-]/", "-")}",

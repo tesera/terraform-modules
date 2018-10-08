@@ -1,11 +1,10 @@
-
-
 resource "aws_network_acl" "public" {
-  vpc_id     = "${aws_vpc.main.id}"
+  vpc_id = "${aws_vpc.main.id}"
+
   #subnet_ids = ["${aws_subnet.public.*.id}"]
   subnet_ids = ["${concat(aws_subnet.public.*.id, aws_subnet.private.*.id)}"]
 
-  tags       = "${merge(local.tags, map(
+  tags = "${merge(local.tags, map(
     "Name", "${local.name}-public"
   ))}"
 }
@@ -14,7 +13,7 @@ resource "aws_network_acl" "public" {
 # HTTP External Requests
 resource "aws_network_acl_rule" "ingress_http_public_ipv4" {
   network_acl_id = "${aws_network_acl.public.id}"
-  rule_number    = 100
+  rule_number    = 4080
   egress         = false
   protocol       = "tcp"
   rule_action    = "allow"
@@ -25,7 +24,7 @@ resource "aws_network_acl_rule" "ingress_http_public_ipv4" {
 
 resource "aws_network_acl_rule" "ingress_http_public_ipv6" {
   network_acl_id  = "${aws_network_acl.public.id}"
-  rule_number     = 101
+  rule_number     = 6080
   egress          = false
   protocol        = "tcp"
   rule_action     = "allow"
@@ -37,7 +36,7 @@ resource "aws_network_acl_rule" "ingress_http_public_ipv6" {
 # HTTPS External Requests
 resource "aws_network_acl_rule" "ingress_https_public_ipv4" {
   network_acl_id = "${aws_network_acl.public.id}"
-  rule_number    = 103
+  rule_number    = 4443
   egress         = false
   protocol       = "tcp"
   rule_action    = "allow"
@@ -48,7 +47,7 @@ resource "aws_network_acl_rule" "ingress_https_public_ipv4" {
 
 resource "aws_network_acl_rule" "ingress_https_public_ipv6" {
   network_acl_id  = "${aws_network_acl.public.id}"
-  rule_number     = 104
+  rule_number     = 6443
   egress          = false
   protocol        = "tcp"
   rule_action     = "allow"
@@ -60,7 +59,7 @@ resource "aws_network_acl_rule" "ingress_https_public_ipv6" {
 # Ephemeral Ports for External Requests
 resource "aws_network_acl_rule" "egress_ephemeral_public_ipv4" {
   network_acl_id = "${aws_network_acl.public.id}"
-  rule_number    = 888
+  rule_number    = 4999
   egress         = true
   protocol       = "tcp"
   rule_action    = "allow"
@@ -71,7 +70,7 @@ resource "aws_network_acl_rule" "egress_ephemeral_public_ipv4" {
 
 resource "aws_network_acl_rule" "egress_ephemeral_public_ipv6" {
   network_acl_id  = "${aws_network_acl.public.id}"
-  rule_number     = 889
+  rule_number     = 6999
   egress          = true
   protocol        = "tcp"
   rule_action     = "allow"
@@ -83,7 +82,7 @@ resource "aws_network_acl_rule" "egress_ephemeral_public_ipv6" {
 # HTTP Internal Requests
 resource "aws_network_acl_rule" "egress_http_public_ipv4" {
   network_acl_id = "${aws_network_acl.public.id}"
-  rule_number    = 100
+  rule_number    = 4080
   egress         = true
   protocol       = "tcp"
   rule_action    = "allow"
@@ -94,7 +93,7 @@ resource "aws_network_acl_rule" "egress_http_public_ipv4" {
 
 resource "aws_network_acl_rule" "egress_http_public_ipv6" {
   network_acl_id  = "${aws_network_acl.public.id}"
-  rule_number     = 101
+  rule_number     = 6080
   egress          = true
   protocol        = "tcp"
   rule_action     = "allow"
@@ -106,7 +105,7 @@ resource "aws_network_acl_rule" "egress_http_public_ipv6" {
 # HTTPS Internal Requests
 resource "aws_network_acl_rule" "egress_https_public_ipv4" {
   network_acl_id = "${aws_network_acl.public.id}"
-  rule_number    = 103
+  rule_number    = 4443
   egress         = true
   protocol       = "tcp"
   rule_action    = "allow"
@@ -117,7 +116,7 @@ resource "aws_network_acl_rule" "egress_https_public_ipv4" {
 
 resource "aws_network_acl_rule" "egress_https_public_ipv6" {
   network_acl_id  = "${aws_network_acl.public.id}"
-  rule_number     = 104
+  rule_number     = 6443
   egress          = true
   protocol        = "tcp"
   rule_action     = "allow"
@@ -129,7 +128,7 @@ resource "aws_network_acl_rule" "egress_https_public_ipv6" {
 # Ephemeral Ports for Internal Requests
 resource "aws_network_acl_rule" "ingress_ephemeral_public_ipv4" {
   network_acl_id = "${aws_network_acl.public.id}"
-  rule_number    = 888
+  rule_number    = 4999
   egress         = false
   protocol       = "tcp"
   rule_action    = "allow"
@@ -140,7 +139,7 @@ resource "aws_network_acl_rule" "ingress_ephemeral_public_ipv4" {
 
 resource "aws_network_acl_rule" "ingress_ephemeral_public_ipv6" {
   network_acl_id  = "${aws_network_acl.public.id}"
-  rule_number     = 889
+  rule_number     = 6999
   egress          = false
   protocol        = "tcp"
   rule_action     = "allow"
@@ -148,8 +147,6 @@ resource "aws_network_acl_rule" "ingress_ephemeral_public_ipv6" {
   from_port       = 1024
   to_port         = 65535
 }
-
-
 
 # ICMP
 //resource "aws_network_acl_rule" "ingress_icmp" {
@@ -173,7 +170,4 @@ resource "aws_network_acl_rule" "ingress_ephemeral_public_ipv6" {
 //  icmp_type      = -1
 //  icmp_code      = -1
 //}
-
-
-
 

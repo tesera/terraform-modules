@@ -11,7 +11,7 @@ data "template_file" "userdata" {
   template = "${file("${path.module}/user_data.sh")}"
 
   vars {
-    EIP_ID          = "${aws_eip.main.id}"
+    EIP_ID = "${aws_eip.main.id}"
   }
 }
 
@@ -21,7 +21,7 @@ module "ec2" {
   account_id       = "${local.account_id}"
   vpc_id           = "${var.vpc_id}"
   subnet_ids       = "${var.public_subnet_ids}"
-  subnet_public     = "true"
+  subnet_public    = "true"
   image_id         = "${local.image_id}"
   banner           = "Bastion"
   user_data        = "${data.template_file.userdata.rendered}"
@@ -38,10 +38,13 @@ resource "aws_security_group_rule" "pubic-ssh" {
   from_port         = 22
   protocol          = "tcp"
   security_group_id = "${module.ec2.security_group_id}"
-  cidr_blocks       = [
-    "0.0.0.0/0"]
-  to_port           = 22
-  type              = "ingress"
+
+  cidr_blocks = [
+    "0.0.0.0/0",
+  ]
+
+  to_port = 22
+  type    = "ingress"
 }
 
 # extend role
@@ -50,7 +53,7 @@ resource "aws_iam_policy" "main-ip" {
   path        = "/"
   description = "${var.name}-bastion-ip Policy"
 
-  policy      = <<EOF
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -73,7 +76,6 @@ resource "aws_iam_role_policy_attachment" "main-ip" {
   policy_arn = "${aws_iam_policy.main-ip.arn}"
 }
 
-
 # ACL
 resource "aws_network_acl_rule" "ingress_ssh_public_ipv4" {
   network_acl_id = "${var.network_acl_id}"
@@ -87,14 +89,14 @@ resource "aws_network_acl_rule" "ingress_ssh_public_ipv4" {
 }
 
 resource "aws_network_acl_rule" "ingress_ssh_public_ipv6" {
-  network_acl_id = "${var.network_acl_id}"
-  rule_number    = "${var.acl_rule_number+1}"
-  egress         = false
-  protocol       = "tcp"
-  rule_action    = "allow"
+  network_acl_id  = "${var.network_acl_id}"
+  rule_number     = "${var.acl_rule_number+1}"
+  egress          = false
+  protocol        = "tcp"
+  rule_action     = "allow"
   ipv6_cidr_block = "::/0"
-  from_port      = 22
-  to_port        = 22
+  from_port       = 22
+  to_port         = 22
 }
 
 resource "aws_network_acl_rule" "egress_ssh_public_ipv4" {
@@ -109,12 +111,12 @@ resource "aws_network_acl_rule" "egress_ssh_public_ipv4" {
 }
 
 resource "aws_network_acl_rule" "egress_ssh_public_ipv6" {
-  network_acl_id = "${var.network_acl_id}"
-  rule_number    = "${var.acl_rule_number+1}"
-  egress         = true
-  protocol       = "tcp"
-  rule_action    = "allow"
+  network_acl_id  = "${var.network_acl_id}"
+  rule_number     = "${var.acl_rule_number+1}"
+  egress          = true
+  protocol        = "tcp"
+  rule_action     = "allow"
   ipv6_cidr_block = "::/0"
-  from_port      = 22
-  to_port        = 22
+  from_port       = 22
+  to_port         = 22
 }

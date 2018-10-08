@@ -1,42 +1,46 @@
 variable "name" {
-    type        = "string"
-    description = "AWS S3 Bucket. {env}-{name}"
+  type        = "string"
+  description = "AWS S3 Bucket. {env}-{name}"
 }
 
 variable "aliases" {
-    type        = "list"
-    description = "Cloudfront Aliases"
+  type        = "list"
+  description = "Cloudfront Aliases"
 }
 
 variable "acm_certificate_arn" {
-    "type" = "string"
+  "type" = "string"
 }
 
 variable "web_acl_id" {
-    type        = "string"
-    default     = ""
-    description = "WAF ACL ID"
+  type        = "string"
+  default     = ""
+  description = "WAF ACL ID"
 }
 
 variable "authorizer_dir" {
-    default = ""
+  default = ""
 }
 
 variable "lambda_dir" {}
 variable "lambda_config_path" {}
 
 variable "handler" {
-    default = "index.handler"
+  default = "index.handler"
 }
+
 variable "runtime" {
-    default = "nodejs8.10"
+  default = "nodejs8.10"
 }
+
 variable "memory_size" {
-    default = 128
+  default = 128
 }
+
 variable "timeout" {
-    default = 30
+  default = 30
 }
 
 //variable "authorizer_client_id" {}
 //variable "authorizer_client_secret" {}
+

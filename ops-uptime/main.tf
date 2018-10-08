@@ -1,6 +1,5 @@
-
 resource "aws_sns_topic" "main" {
-  name = "${var.name}-uptime-alarm"
+  name     = "${var.name}-uptime-alarm"
   provider = "aws.edge"
 
   provisioner "local-exec" {
@@ -16,13 +15,14 @@ resource "aws_route53_health_check" "main" {
   failure_threshold = "${failure_threshold}"
   request_interval  = "${request_interval}"
   measure_latency   = true
-  regions = [   // restrict to min allowed due to WAF ip limit
-    "us-east-1",
+
+  regions = [
+    "us-east-1", // restrict to min allowed due to WAF ip limit
     "us-west-1",
-    "us-west-2"
+    "us-west-2",
   ]
 
-  tags              = {
+  tags = {
     Name = "${var.name}-health-check"
   }
 }
@@ -38,10 +38,11 @@ resource "aws_cloudwatch_metric_alarm" "main" {
   statistic           = "Minimum"
   threshold           = "1"
   unit                = "None"
-  dimensions = {
-    HealthCheckId     = "${aws_route53_health_check.main.id}"
-  }
-  alarm_actions       = ["${aws_sns_topic.main.arn}"]
-  ok_actions          = ["${aws_sns_topic.main.arn}"]
-}
 
+  dimensions = {
+    HealthCheckId = "${aws_route53_health_check.main.id}"
+  }
+
+  alarm_actions = ["${aws_sns_topic.main.arn}"]
+  ok_actions    = ["${aws_sns_topic.main.arn}"]
+}

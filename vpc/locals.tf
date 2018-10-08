@@ -5,7 +5,8 @@ data "external" "public_cidr" {
     "node",
     "${path.module}/locals-public_cidr.js",
     "${var.cidr_block}",
-    "${local.az_count}"]
+    "${local.az_count}",
+  ]
 }
 
 data "external" "private_cidr" {
@@ -13,7 +14,8 @@ data "external" "private_cidr" {
     "node",
     "${path.module}/locals-private_cidr.js",
     "${var.cidr_block}",
-    "${local.az_count}"]
+    "${local.az_count}",
+  ]
 }
 
 module "defaults" {

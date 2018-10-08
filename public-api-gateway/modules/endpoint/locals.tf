@@ -14,10 +14,14 @@ locals {
 # Defaults
 data "aws_iam_policy_document" "default" {
   statement {
-    effect    = "Deny"
-    actions   = [
-      "*"]
+    effect = "Deny"
+
+    actions = [
+      "*",
+    ]
+
     resources = [
-      "*"]
+      "*",
+    ]
   }
 }

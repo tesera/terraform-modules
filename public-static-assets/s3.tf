@@ -7,7 +7,8 @@ resource "aws_s3_bucket" "main-s3-logs" {
     id      = "log"
     enabled = true
 
-    prefix  = "log/"
+    prefix = "log/"
+
     tags {
       "rule"      = "log"
       "autoclean" = "true"
@@ -29,7 +30,7 @@ resource "aws_s3_bucket" "main-s3-logs" {
   }
 
   tags {
-    Name = "${local.name} Static Assets Access Logs"
+    Name      = "${local.name} Static Assets Access Logs"
     Terraform = "true"
   }
 }
@@ -49,14 +50,14 @@ resource "aws_s3_bucket" "main" {
     target_prefix = "log/"
   }
 
-// CloudFront unable to reach `aws:kms` - not supported yet (2018-07-10)
-//  server_side_encryption_configuration {
-//    rule {
-//      apply_server_side_encryption_by_default {
-//        sse_algorithm = "aws:kms"
-//      }
-//    }
-//  }
+  // CloudFront unable to reach `aws:kms` - not supported yet (2018-07-10)
+  //  server_side_encryption_configuration {
+  //    rule {
+  //      apply_server_side_encryption_by_default {
+  //        sse_algorithm = "aws:kms"
+  //      }
+  //    }
+  //  }
 
   server_side_encryption_configuration {
     rule {
@@ -65,7 +66,6 @@ resource "aws_s3_bucket" "main" {
       }
     }
   }
-
   tags {
     Name      = "${local.name} Static Assets"
     Terraform = "true"
@@ -74,20 +74,22 @@ resource "aws_s3_bucket" "main" {
 
 data "aws_iam_policy_document" "s3" {
   statement {
-    actions    = [
+    actions = [
       "s3:ListBucket",
       "s3:GetObject",
     ]
 
-    resources  = [
+    resources = [
       "${aws_s3_bucket.main.arn}",
       "${aws_s3_bucket.main.arn}/*",
     ]
 
     principals = {
-      type        = "AWS"
+      type = "AWS"
+
       identifiers = [
-        "${aws_cloudfront_origin_access_identity.main.iam_arn}"]
+        "${aws_cloudfront_origin_access_identity.main.iam_arn}",
+      ]
     }
   }
 }

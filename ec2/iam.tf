@@ -1,5 +1,5 @@
 resource "aws_iam_role" "main" {
-  name               = "${local.name}-role"
+  name = "${local.name}-role"
 
   assume_role_policy = <<EOF
 {
@@ -24,7 +24,7 @@ resource "aws_iam_policy" "main-iam" {
   path        = "/"
   description = "${local.name} SSH IAM Policy"
 
-  policy      = <<EOF
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -64,7 +64,7 @@ resource "aws_iam_policy" "main-logs" {
   path        = "/"
   description = "${local.name} Logs Policy"
 
-  policy      = <<EOF
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [

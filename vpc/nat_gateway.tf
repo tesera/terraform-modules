@@ -1,4 +1,3 @@
-
 # gateway
 resource "aws_route_table" "private-gateway" {
   count  = "${var.nat_type == "gateway" ? local.az_count : 0}"
@@ -10,7 +9,7 @@ resource "aws_route_table" "private-gateway" {
   }
 
   route {
-    ipv6_cidr_block     = "::/0"
+    ipv6_cidr_block        = "::/0"
     egress_only_gateway_id = "${aws_egress_only_internet_gateway.main.id}"
   }
 

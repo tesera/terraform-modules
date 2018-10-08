@@ -1,13 +1,16 @@
 variable "name" {}
+
 variable "default_tags" {
-  type = "map"
+  type    = "map"
   default = {}
 }
 
 variable "account_id" {
   default = ""
 }
+
 variable "vpc_id" {}
+
 variable "subnet_ids" {
   type = "list"
 }
@@ -19,21 +22,27 @@ variable "subnet_public" {
 variable "image_id" {
   default = ""
 }
+
 variable "instance_type" {
   default = "t2.micro"
 }
+
 variable "key_name" {
   default = ""
 }
+
 variable "banner" {
   default = "AWS EC2"
 }
+
 variable "user_data" {
   default = ""
 }
+
 variable "volume_type" {
   default = "gp2"
 }
+
 variable "volume_size" {
   default = "8"
 }
@@ -65,4 +74,3 @@ variable "iam_local_groups" {
 variable "bastion_security_group_id" {
   default = ""
 }
-

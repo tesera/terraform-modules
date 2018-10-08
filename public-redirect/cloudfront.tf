@@ -3,8 +3,8 @@ resource "aws_cloudfront_origin_access_identity" "main" {
 }
 
 resource "aws_cloudfront_distribution" "main" {
-  enabled      = true
-  http_version = "http2"
+  enabled         = true
+  http_version    = "http2"
   is_ipv6_enabled = true
 
   aliases = "${var.aliases}"

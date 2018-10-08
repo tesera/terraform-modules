@@ -76,20 +76,19 @@ resource "aws_lambda_function" "authorizer" {
   runtime          = "${var.runtime}"
   memory_size      = "${var.memory_size}"
   timeout          = "${var.timeout}"
-  publish          = true,
+  publish          = true
 
   // Has no need to be in a VPC
 
   // TODO pass in var
   environment {
     variables {
-      CLIENT_ID = ""
+      CLIENT_ID     = ""
       CLIENT_SECRET = ""
     }
   }
-
   tags {
-    Name = "Authorizer for API Gateway"
+    Name      = "Authorizer for API Gateway"
     Terraform = true
   }
 }

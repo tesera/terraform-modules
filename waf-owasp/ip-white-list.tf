@@ -1,4 +1,3 @@
-
 resource "aws_waf_rule" "wafgIpWhiteListRule" {
   name        = "${local.name}wafgIpWhiteListRule"
   metric_name = "${local.name}wafgIpWhiteListRule"
@@ -9,4 +8,3 @@ resource "aws_waf_rule" "wafgIpWhiteListRule" {
     type    = "IPMatch"
   }
 }
-

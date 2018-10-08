@@ -29,13 +29,12 @@ module "ec2" {
   bastion_security_group_id = "${var.bastion_security_group_id}"
 }
 
-
 resource "aws_iam_policy" "main-ecs" {
   name        = "${var.name}-ecs-policy"
   path        = "/"
   description = "${var.name} ECS Policy"
 
-  policy      = <<EOF
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [

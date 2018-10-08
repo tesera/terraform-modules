@@ -3,8 +3,8 @@ resource "aws_cloudfront_origin_access_identity" "main" {
 }
 
 resource "aws_cloudfront_distribution" "main" {
-  enabled      = true
-  http_version = "http2"
+  enabled         = true
+  http_version    = "http2"
   is_ipv6_enabled = true
 
   aliases = "${var.aliases}"
@@ -25,8 +25,8 @@ resource "aws_cloudfront_distribution" "main" {
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
-    default_ttl            = 86400    # 1d
-    max_ttl                = 31536000 # 1y
+    default_ttl            = 86400               # 1d
+    max_ttl                = 31536000            # 1y
     compress               = true
 
     forwarded_values {
@@ -65,21 +65,19 @@ resource "aws_cloudfront_distribution" "main" {
   // TODO - https://stackoverflow.com/questions/46262030/single-page-application-with-lambdaedge
   // 404 pages don't run through lambda@edge response
   // https://aws.amazon.com/about-aws/whats-new/2017/12/lambda-at-edge-now-allows-you-to-customize-error-responses-from-your-origin/
-//  custom_error_response {
-//    error_code            = 404
-//    error_caching_min_ttl = 5
-//    response_page_path    = "/index.html"
-//    response_code         = 200
-//  }
+  //  custom_error_response {
+  //    error_code            = 404
+  //    error_caching_min_ttl = 5
+  //    response_page_path    = "/index.html"
+  //    response_code         = 200
+  //  }
 
   web_acl_id = "${var.web_acl_id}"
-
   tags {
     Name      = "${local.name} Static Assets"
     Terraform = "true"
   }
 }
-
 
 resource "aws_s3_bucket" "main-cdn-logs" {
   bucket = "${local.name}-cdn-access-logs"

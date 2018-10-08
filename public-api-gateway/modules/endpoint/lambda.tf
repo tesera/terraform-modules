@@ -16,10 +16,10 @@ resource "aws_lambda_function" "lambda" {
   publish          = true
 
   # Even though empty list are used, still throws error. Docs incorrect
-//  vpc_config {
-//    subnet_ids = ["${var.private_subnet_ids}"]
-//    security_group_ids = ["${var.security_group_ids}"]
-//  }
+  //  vpc_config {
+  //    subnet_ids = ["${var.private_subnet_ids}"]
+  //    security_group_ids = ["${var.security_group_ids}"]
+  //  }
 }
 
 resource "aws_lambda_permission" "main" {
@@ -27,12 +27,13 @@ resource "aws_lambda_permission" "main" {
   action        = "lambda:InvokeFunction"
   function_name = "${aws_lambda_function.lambda.function_name}"
   principal     = "apigateway.amazonaws.com"
+
   # "${aws_api_gateway_deployment.example.execution_arn}/*/${var.http_method}${var.resource_path}"
-  source_arn    = "arn:aws:execute-api:${local.aws_region}:${local.account_id}:${var.rest_api_id}/*/${var.http_method}${var.resource_path}"
+  source_arn = "arn:aws:execute-api:${local.aws_region}:${local.account_id}:${var.rest_api_id}/*/${var.http_method}${var.resource_path}"
 }
 
 resource "aws_iam_role" "lambda" {
-  name               = "${local.name}-api-${local.http_method}${local.path_name}-role"
+  name = "${local.name}-api-${local.http_method}${local.path_name}-role"
 
   assume_role_policy = <<POLICY
 {

@@ -5,15 +5,19 @@ data "aws_ami" "main" {
   most_recent = true
 
   filter {
-    name   = "name"
+    name = "name"
+
     values = [
-      "amzn-ami-hvm-*-x86_64-gp2"]
+      "amzn-ami-hvm-*-x86_64-gp2",
+    ]
   }
 
   filter {
-    name   = "virtualization-type"
+    name = "virtualization-type"
+
     values = [
-      "hvm"]
+      "hvm",
+    ]
   }
 }
 

@@ -11,9 +11,11 @@ variable "defaultAction" {
 variable "ipWhiteListId" {
   default = ""
 }
+
 variable "ipAdminListId" {
   default = ""
 }
+
 variable "ipBlackListId" {
   default = ""
 }

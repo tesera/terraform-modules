@@ -1,10 +1,10 @@
 variable "name" {
-  type = "string"
+  type    = "string"
   default = ""
 }
 
 variable "default_tags" {
-  type = "map"
+  type    = "map"
   default = {}
 }
 
@@ -13,7 +13,7 @@ variable "default_tags" {
 //}
 
 variable "az_count" {
-  type = "string"
+  type    = "string"
   default = 2
 }
 
@@ -41,13 +41,14 @@ variable "bastion_security_group_id" {
 variable "instance_type" {
   default = "t2.micro"
 }
+
 variable "volume_type" {
   default = "gp2"
 }
+
 variable "volume_size" {
   default = "8"
 }
-
 
 variable "key_name" {
   default = ""

@@ -4,7 +4,7 @@ resource "aws_route_table" "private-instance" {
   count  = "${var.nat_type == "instance" ? local.az_count : 0}"
   vpc_id = "${aws_vpc.main.id}"
 
-  tags   = "${merge(local.tags, map(
+  tags = "${merge(local.tags, map(
     "Name", "private-${local.name}-${local.az_name[count.index]}"
   ))}"
 }
@@ -40,30 +40,34 @@ data "aws_ami" "main" {
   most_recent = true
 
   filter {
-    name   = "name"
+    name = "name"
+
     values = [
-      "amzn-ami-vpc-nat-hvm-*-x86_64-ebs"]
+      "amzn-ami-vpc-nat-hvm-*-x86_64-ebs",
+    ]
   }
 
   filter {
-    name   = "virtualization-type"
+    name = "virtualization-type"
+
     values = [
-      "hvm"]
+      "hvm",
+    ]
   }
 }
 
 resource "aws_launch_configuration" "main" {
-  depends_on                  = ["data.template_file.userdata"] # doesn't work when changing az_count
-  count                       = "${var.nat_type == "instance" ? local.az_count : 0}"
-  name_prefix                 = "${var.name}-nat-${local.az_name[count.index]}-"
-  image_id                    = "${data.aws_ami.main.image_id}"
-  key_name                    = "${var.key_name}"
-  instance_type               = "${var.instance_type}"
-  iam_instance_profile        = "${aws_iam_instance_profile.main.*.name[count.index]}"
-  security_groups             = ["${aws_security_group.main.*.id[count.index]}"]
-  user_data                   = "${data.template_file.userdata.*.rendered[count.index]}"
-  ebs_optimized               = "false"
-  enable_monitoring           = "true"
+  depends_on           = ["data.template_file.userdata"]                          # doesn't work when changing az_count
+  count                = "${var.nat_type == "instance" ? local.az_count : 0}"
+  name_prefix          = "${var.name}-nat-${local.az_name[count.index]}-"
+  image_id             = "${data.aws_ami.main.image_id}"
+  key_name             = "${var.key_name}"
+  instance_type        = "${var.instance_type}"
+  iam_instance_profile = "${aws_iam_instance_profile.main.*.name[count.index]}"
+  security_groups      = ["${aws_security_group.main.*.id[count.index]}"]
+  user_data            = "${data.template_file.userdata.*.rendered[count.index]}"
+  ebs_optimized        = "false"
+  enable_monitoring    = "true"
 
   # Must be true in public subnets if assigning EIP in userdata
   associate_public_ip_address = "true"
@@ -86,11 +90,14 @@ resource "aws_autoscaling_group" "main" {
   desired_capacity          = "1"
   health_check_grace_period = 30
   launch_configuration      = "${aws_launch_configuration.main.*.name[count.index]}"
-  vpc_zone_identifier       = [
-    "${aws_subnet.public.*.id[count.index]}"]
 
-  tags                      = [
-    "${module.defaults.tags_as_list_of_maps}"]
+  vpc_zone_identifier = [
+    "${aws_subnet.public.*.id[count.index]}",
+  ]
+
+  tags = [
+    "${module.defaults.tags_as_list_of_maps}",
+  ]
 }
 
 ## SG
@@ -100,35 +107,43 @@ resource "aws_security_group" "main" {
   vpc_id = "${aws_vpc.main.id}"
 
   ingress {
-    protocol    = "tcp"
-    from_port   = 80
-    to_port     = 80
+    protocol  = "tcp"
+    from_port = 80
+    to_port   = 80
+
     cidr_blocks = [
-      "${aws_subnet.private.*.cidr_block[count.index]}"]
+      "${aws_subnet.private.*.cidr_block[count.index]}",
+    ]
   }
 
   ingress {
-    protocol    = "tcp"
-    from_port   = 443
-    to_port     = 443
+    protocol  = "tcp"
+    from_port = 443
+    to_port   = 443
+
     cidr_blocks = [
-      "${aws_subnet.private.*.cidr_block[count.index]}"]
+      "${aws_subnet.private.*.cidr_block[count.index]}",
+    ]
   }
 
   egress {
-    protocol    = "tcp"
-    from_port   = 80
-    to_port     = 80
+    protocol  = "tcp"
+    from_port = 80
+    to_port   = 80
+
     cidr_blocks = [
-      "0.0.0.0/0"]
+      "0.0.0.0/0",
+    ]
   }
 
   egress {
-    protocol    = "tcp"
-    from_port   = 443
-    to_port     = 443
+    protocol  = "tcp"
+    from_port = 443
+    to_port   = 443
+
     cidr_blocks = [
-      "0.0.0.0/0"]
+      "0.0.0.0/0",
+    ]
   }
 }
 
@@ -142,7 +157,6 @@ resource "aws_security_group_rule" "ssh" {
   source_security_group_id = "${var.bastion_security_group_id}"
 }
 
-
 ## IAM
 resource "aws_iam_instance_profile" "main" {
   count = "${var.nat_type == "instance" ? local.az_count : 0}"
@@ -151,8 +165,8 @@ resource "aws_iam_instance_profile" "main" {
 }
 
 resource "aws_iam_role" "main" {
-  count              = "${var.nat_type == "instance" ? local.az_count : 0}"
-  name               = "${var.name}-nat-${local.az_name[count.index]}-role"
+  count = "${var.nat_type == "instance" ? local.az_count : 0}"
+  name  = "${var.name}-nat-${local.az_name[count.index]}-role"
 
   assume_role_policy = <<EOF
 {
@@ -178,7 +192,8 @@ resource "aws_iam_policy" "main-nat" {
   name        = "${var.name}-nat-${local.az_name[count.index]}-route-policy"
   path        = "/"
   description = "${var.name} NAT Route Tables Policy"
-  policy      = <<EOF
+
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -212,7 +227,7 @@ resource "aws_iam_policy" "main-iam" {
   path        = "/"
   description = "${var.name} NAT SSH IAM Policy"
 
-  policy      = <<EOF
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -254,7 +269,7 @@ resource "aws_iam_policy" "main-logs" {
   path        = "/"
   description = "${var.name} NAT Logs Policy"
 
-  policy      = <<EOF
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -280,7 +295,6 @@ resource "aws_iam_role_policy_attachment" "main-logs" {
   role       = "${aws_iam_role.main.*.name[count.index]}"
   policy_arn = "${aws_iam_policy.main-logs.*.arn[count.index]}"
 }
-
 
 # EC2 Output
 output "iam_role_name" {

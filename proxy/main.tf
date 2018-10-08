@@ -11,12 +11,13 @@ data "template_file" "main-userdata" {
   template = "${file("${path.module}/user_data.sh")}"
 
   vars {
-    EIP_ID          = "${aws_eip.main.id}"
+    EIP_ID = "${aws_eip.main.id}"
 
-    PROXY_NAME      = "${var.proxy_name}"
-    PROXY_PORT      = "${var.proxy_port}"
+    PROXY_NAME = "${var.proxy_name}"
+    PROXY_PORT = "${var.proxy_port}"
+
     #PROXY_HEALTH_PORT = "${local.proxy_health_port}"
-    PROXY_ENDPOINT  = "${var.proxy_endpoint}"
+    PROXY_ENDPOINT = "${var.proxy_endpoint}"
   }
 }
 
@@ -44,7 +45,7 @@ resource "aws_iam_policy" "main-ip" {
   path        = "/"
   description = "${var.name}-proxy-ip Policy"
 
-  policy      = <<EOF
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [

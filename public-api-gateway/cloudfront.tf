@@ -1,6 +1,6 @@
 resource "aws_cloudfront_distribution" "main" {
-  enabled      = true
-  http_version = "http2"
+  enabled         = true
+  http_version    = "http2"
   is_ipv6_enabled = true
 
   aliases = "${var.aliases}"
@@ -11,30 +11,35 @@ resource "aws_cloudfront_distribution" "main" {
     origin_path = "/${aws_api_gateway_deployment.main.stage_name}"
 
     custom_origin_config {
-      http_port = 80
-      https_port = 443
+      http_port              = 80
+      https_port             = 443
       origin_protocol_policy = "https-only"
+
       origin_ssl_protocols = [
-        "TLSv1.2"]
+        "TLSv1.2",
+      ]
     }
   }
 
   default_cache_behavior {
     target_origin_id = "${local.name}-apig"
-    allowed_methods  = [
+
+    allowed_methods = [
       "DELETE",
       "GET",
       "HEAD",
       "OPTIONS",
       "PATCH",
       "POST",
-      "PUT"]
-    cached_methods   = ["GET", "HEAD"]
+      "PUT",
+    ]
+
+    cached_methods = ["GET", "HEAD"]
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
-    default_ttl            = 0 # 1d
-    max_ttl                = 0 # 1y
+    default_ttl            = 0                   # 1d
+    max_ttl                = 0                   # 1y
     compress               = true
 
     forwarded_values {
@@ -60,7 +65,7 @@ resource "aws_cloudfront_distribution" "main" {
 
   logging_config {
     include_cookies = false
-    bucket = "${aws_s3_bucket.main-logs.bucket_domain_name}"
+    bucket          = "${aws_s3_bucket.main-logs.bucket_domain_name}"
   }
 
   web_acl_id = "${var.web_acl_id}"
@@ -74,7 +79,7 @@ resource "aws_cloudfront_distribution" "main" {
 // TODO update archive policy
 resource "aws_s3_bucket" "main-logs" {
   bucket = "${local.name}-api-access-logs"
-  acl = "private"
+  acl    = "private"
 
   lifecycle_rule {
     enabled = true
