@@ -68,7 +68,7 @@ resource "aws_iam_role_policy_attachment" "main-ip" {
 }
 
 # ACL
-resource "aws_network_acl_rule" "ingress_http" {
+resource "aws_network_acl_rule" "ingress_http_ipv4" {
   network_acl_id = "${var.network_acl_id}"
   rule_number    = "${var.acl_rule_number}"
   egress         = false
@@ -79,7 +79,7 @@ resource "aws_network_acl_rule" "ingress_http" {
   to_port        = "${var.proxy_port}"
 }
 
-resource "aws_network_acl_rule" "egress_http" {
+resource "aws_network_acl_rule" "egress_http_ipv4" {
   network_acl_id = "${var.network_acl_id}"
   rule_number    = "${var.acl_rule_number}"
   egress         = true

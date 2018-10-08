@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 
 echo "***** Instance ENV *****"
-REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document | grep region | awk -F\" '{print $4}')
 INSTANCE_ID=$(curl -s -m 60 http://169.254.169.254/latest/meta-data/instance-id)
+INSTANCE_TYPE=$(curl -s http://169.254.169.254/latest/meta-data/instance-type)
+IP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
+AVAILABILITY_ZONE=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
+REGION=$(echo $AVAILABILITY_ZONE | sed 's/.$//')
 
 echo "***** Update *****"
 yum update -y
@@ -15,6 +18,10 @@ BANNER=$(figlet "${BANNER}" | sed "s/\`/\'/")
 cat << EOF > /etc/update-motd.d/30-banner
 cat << MOTD
 $BANNER
+Private IP:        $IP
+Availability Zone: $AVAILABILITY_ZONE
+Instance Type:     $INSTANCE_TYPE
+
 MOTD
 EOF
 /usr/sbin/update-motd

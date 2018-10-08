@@ -5,14 +5,14 @@ module "eks" {
     "${var.private_subnet_ids}"]
   tags            = "${local.tags}"
   vpc_id          = "${var.vpc_id}"
-  manage_aws_auth = true
+  manage_aws_auth = false
   map_accounts = ["${local.account_id}"]
-  map_users       = [
-    {
-      user_arn = "arn:aws:iam::${local.account_id}:user/will.farrell"
-      username = "will.farrell"
-      group    = "system:masters"
-    }]
+//  map_users       = [
+//    {
+//      user_arn = "arn:aws:iam::${local.account_id}:user/will.farrell"
+//      username = "will.farrell"
+//      group    = "system:masters"
+//    }]
 //  map_roles       = [
 //    {
 //      user_arn = "arn:aws:iam::${local.account_id}:user/will.farrell"
