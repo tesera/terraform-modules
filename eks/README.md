@@ -9,6 +9,9 @@ Auto-scaling cluster of EC2 for EKS
 - CloudWatch logging enabled
 
 ## Setup
+`brew insttall kubectrl`
+https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html
+`$ aws --version` must be greater than 1.16
 
 ## Restriction/Requirements
 - Only certain regions supported (us-east-1, us-west-2, eu-west-1)
@@ -71,3 +74,6 @@ Removing that az from the private_subnet_ids will be required. Checkout the [`sl
 
 ## References
 - [Getting Started with AWS EKS](https://www.terraform.io/docs/providers/aws/guides/eks-getting-started.html)
+
+## TODO
+- multi-account: https://github.com/terraform-aws-modules/terraform-aws-eks/issues/101

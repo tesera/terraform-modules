@@ -11,6 +11,18 @@ data "aws_ami" "main" {
   }
 }
 
+data "template_file" "userdata" {
+  template = "${file("${path.module}/user_data.sh")}"
+
+  vars {
+    BANNER                = "AWS EKS"
+    IAM_AUTHORIZED_GROUPS = "${var.iam_user_groups}"
+    SUDOERS_GROUPS        = "${var.iam_sudo_groups}"
+    LOCAL_GROUPS          = ""
+    USER_DATA             = ""
+  }
+}
+
 module "defaults" {
   source = "../defaults"
   name   = "${var.name}"
