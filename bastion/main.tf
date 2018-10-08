@@ -75,7 +75,7 @@ resource "aws_iam_role_policy_attachment" "main-ip" {
 
 
 # ACL
-resource "aws_network_acl_rule" "ingress_ssh_ipv4" {
+resource "aws_network_acl_rule" "ingress_ssh_public_ipv4" {
   network_acl_id = "${var.network_acl_id}"
   rule_number    = "${var.acl_rule_number}"
   egress         = false
@@ -86,18 +86,18 @@ resource "aws_network_acl_rule" "ingress_ssh_ipv4" {
   to_port        = 22
 }
 
-//resource "aws_network_acl_rule" "ingress_ssh_ipv6" {
-//  network_acl_id = "${var.network_acl_id}"
-//  rule_number    = "${var.acl_rule_number}"
-//  egress         = false
-//  protocol       = "tcp"
-//  rule_action    = "allow"
-//  cidr_block     = "::/0"
-//  from_port      = 22
-//  to_port        = 22
-//}
+resource "aws_network_acl_rule" "ingress_ssh_public_ipv6" {
+  network_acl_id = "${var.network_acl_id}"
+  rule_number    = "${var.acl_rule_number+1}"
+  egress         = false
+  protocol       = "tcp"
+  rule_action    = "allow"
+  ipv6_cidr_block = "::/0"
+  from_port      = 22
+  to_port        = 22
+}
 
-resource "aws_network_acl_rule" "egress_ssh_ipv4" {
+resource "aws_network_acl_rule" "egress_ssh_public_ipv4" {
   network_acl_id = "${var.network_acl_id}"
   rule_number    = "${var.acl_rule_number}"
   egress         = true
@@ -108,13 +108,13 @@ resource "aws_network_acl_rule" "egress_ssh_ipv4" {
   to_port        = 22
 }
 
-//resource "aws_network_acl_rule" "egress_ssh_ipv6" {
-//  network_acl_id = "${var.network_acl_id}"
-//  rule_number    = "${var.acl_rule_number}"
-//  egress         = true
-//  protocol       = "tcp"
-//  rule_action    = "allow"
-//  cidr_block     = "::/0"
-//  from_port      = 22
-//  to_port        = 22
-//}
+resource "aws_network_acl_rule" "egress_ssh_public_ipv6" {
+  network_acl_id = "${var.network_acl_id}"
+  rule_number    = "${var.acl_rule_number+1}"
+  egress         = true
+  protocol       = "tcp"
+  rule_action    = "allow"
+  ipv6_cidr_block = "::/0"
+  from_port      = 22
+  to_port        = 22
+}

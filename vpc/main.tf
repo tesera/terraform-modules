@@ -1,9 +1,9 @@
 resource "aws_vpc" "main" {
-  cidr_block           = "${local.cidr_block}"
-  enable_dns_hostnames = true
+  cidr_block                       = "${local.cidr_block}"
+  enable_dns_hostnames             = true
   assign_generated_ipv6_cidr_block = true
 
-  tags = "${merge(local.tags, map(
+  tags                             = "${merge(local.tags, map(
     "Name", "${local.name}"
   ))}"
 }
@@ -12,7 +12,7 @@ resource "aws_vpc" "main" {
 resource "aws_internet_gateway" "main" {
   vpc_id = "${aws_vpc.main.id}"
 
-  tags = "${merge(local.tags, map(
+  tags   = "${merge(local.tags, map(
     "Name", "${local.name}"
   ))}"
 }
@@ -26,13 +26,24 @@ resource "aws_egress_only_internet_gateway" "main" {
 resource "aws_default_route_table" "default" {
   default_route_table_id = "${aws_vpc.main.default_route_table_id}"
 
-  tags = "${merge(local.tags, map(
-    "Name", "default-${local.name}"
+  tags                   = "${merge(local.tags, map(
+    "Name", "${local.name}-default"
+  ))}"
+}
+
+resource "aws_default_network_acl" "default" {
+  default_network_acl_id = "${aws_vpc.main.default_network_acl_id}"
+
+  tags                   = "${merge(local.tags, map(
+    "Name", "${local.name}-default"
   ))}"
 }
 
 resource "aws_default_security_group" "default" {
   vpc_id = "${aws_vpc.main.id}"
+  tags   = "${merge(local.tags, map(
+    "Name", "${local.name}-default"
+  ))}"
 }
 
 # Logs
@@ -48,7 +59,7 @@ resource "aws_cloudwatch_log_group" "logs" {
 }
 
 resource "aws_iam_role" "logs" {
-  name = "${local.name}-vpc-logs-role"
+  name               = "${local.name}-vpc-logs-role"
 
   assume_role_policy = <<EOF
 {
@@ -68,8 +79,8 @@ EOF
 }
 
 resource "aws_iam_role_policy" "logs" {
-  name = "${local.name}-vpc-logs-policy"
-  role = "${aws_iam_role.logs.id}"
+  name   = "${local.name}-vpc-logs-policy"
+  role   = "${aws_iam_role.logs.id}"
 
   policy = <<EOF
 {
