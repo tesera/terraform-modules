@@ -44,7 +44,8 @@ resource "aws_route53_record" "main" {
   zone_id = "${data.aws_route53_zone.main.zone_id}"
   name    = "${local.domain}"
   type    = "A"
-  alias   = {
+
+  alias = {
     name                   = "${module.app.domain_name}"
     zone_id                = "${module.app.hosted_zone_id}"
     evaluate_target_health = true
@@ -55,19 +56,24 @@ resource "aws_route53_record" "main" {
 data "aws_acm_certificate" "main" {
   provider = "aws.edge"
   domain   = "${local.domain}"
+
   statuses = [
-    "ISSUED"]
+    "ISSUED",
+  ]
 }
 
 ## CDN
 module "app" {
-  source              = "../../public-static-assets"
-  name                = "${local.name}"
+  source = "../../public-static-assets"
+  name   = "${local.name}"
 
-  aliases             = [
-    "${local.domain}"]
+  aliases = [
+    "${local.domain}",
+  ]
+
   acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
- // web_acl_id          = "${module.waf.id}"
+
+  // web_acl_id          = "${module.waf.id}"
   #lambda_edge_content = "${replace(file("${path.module}/edge.js"), "{pkphash}", "${var.pkphash}")}"
 }
 
@@ -86,4 +92,3 @@ resource "aws_s3_bucket_object" "404" {
   content_type           = "text/html"
   server_side_encryption = "${module.app.server_side_encryption}"
 }
-

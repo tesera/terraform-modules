@@ -1,9 +1,12 @@
 variable "name" {}
+
 variable "default_tags" {
-  type = "map"
+  type    = "map"
   default = {}
 }
+
 variable "vpc_id" {}
+
 variable "private_subnet_ids" {
   type = "list"
 }
@@ -12,12 +15,15 @@ variable "private_subnet_ids" {
 variable "image_id" {
   default = ""
 }
+
 variable "instance_type" {
   default = "t2.micro"
 }
+
 variable "volume_type" {
   default = "gp2"
 }
+
 variable "volume_size" {
   default = "8"
 }

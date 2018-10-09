@@ -39,8 +39,10 @@ provider "aws" {
 data "aws_acm_certificate" "main" {
   provider = "aws.edge"
   domain   = "${local.domain}"
+
   statuses = [
-    "ISSUED"]
+    "ISSUED",
+  ]
 }
 
 ## DNS
@@ -52,7 +54,8 @@ resource "aws_route53_record" "main" {
   zone_id = "${data.aws_route53_zone.main.zone_id}"
   name    = "${local.domain}"
   type    = "A"
-  alias   = {
+
+  alias = {
     name                   = "${module.api.domain_name}"
     zone_id                = "${module.api.hosted_zone_id}"
     evaluate_target_health = true
@@ -62,15 +65,17 @@ resource "aws_route53_record" "main" {
 ## APIG
 module "api" {
   #source              = "git@github.com:tesera/terraform-modules//public-api-gateway?ref=feature/apig2"
-  source              = "../../public-api-gateway"
-  name                = "${local.name}"
+  source = "../../public-api-gateway"
+  name   = "${local.name}"
 
-  aliases             = [
-    "${local.domain}"]
+  aliases = [
+    "${local.domain}",
+  ]
+
   acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
-  //web_acl_id          = "${module.waf.id}"
-  authorizer_path     = "${path.module}/authorizer"
-  lambda_dir          = "${path.module}"
-  lambda_config_path  = "${path.module}/routes.json"
-}
 
+  //web_acl_id          = "${module.waf.id}"
+  authorizer_path    = "${path.module}/authorizer"
+  lambda_dir         = "${path.module}"
+  lambda_config_path = "${path.module}/routes.json"
+}

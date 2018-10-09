@@ -1,25 +1,29 @@
 module "eks" {
-  source          = "terraform-aws-modules/eks/aws"
-  cluster_name    = "${local.cluster_name}"
-  subnets         = [
-    "${var.private_subnet_ids}"]
+  source       = "terraform-aws-modules/eks/aws"
+  cluster_name = "${local.cluster_name}"
+
+  subnets = [
+    "${var.private_subnet_ids}",
+  ]
+
   tags            = "${local.tags}"
   vpc_id          = "${var.vpc_id}"
   manage_aws_auth = false
-  map_accounts = ["${local.account_id}"]
-//  map_users       = [
-//    {
-//      user_arn = "arn:aws:iam::${local.account_id}:user/will.farrell"
-//      username = "will.farrell"
-//      group    = "system:masters"
-//    }]
-//  map_roles       = [
-//    {
-//      user_arn = "arn:aws:iam::${local.account_id}:user/will.farrell"
-//      username = "will.farrell"
-//      group    = "system:masters"
-//    }]
-  worker_groups   = [
+  map_accounts    = ["${local.account_id}"]
+
+  //  map_users       = [
+  //    {
+  //      user_arn = "arn:aws:iam::${local.account_id}:user/will.farrell"
+  //      username = "will.farrell"
+  //      group    = "system:masters"
+  //    }]
+  //  map_roles       = [
+  //    {
+  //      user_arn = "arn:aws:iam::${local.account_id}:user/will.farrell"
+  //      username = "will.farrell"
+  //      group    = "system:masters"
+  //    }]
+  worker_groups = [
     "${list(map(
         "asg_desired_capacity","${local.desired_capacity}",
         "asg_maz_size","${local.max_size}",
@@ -29,7 +33,8 @@ module "eks" {
         "root_volume_type","gp2",
         "key_name","${var.key_name}",
         "pre_userdata", "${data.template_file.userdata.rendered}"
-      ))}"]
+      ))}",
+  ]
 }
 
 resource "aws_security_group_rule" "ssh" {
