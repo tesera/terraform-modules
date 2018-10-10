@@ -37,7 +37,7 @@ variable "engine_mode" {
 }
 
 variable "instance_class" {
-  default = "db.t2.small"
+  default = "db.t2.micro"
 }
 
 variable "backup_window" {
