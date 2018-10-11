@@ -1,0 +1,14 @@
+{
+  "name": "terraform",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "install:npm": "find . -name package.json -not -path \"*/node_modules/*\" -exec bash -c \"npm --prefix \\$(dirname {}) install --production --no-audit\" \\;",
+    "build:apig":"echo 'make apig routes'",
+    "build:docker": "find . -name Dockerfile -exec bash -c \"echo $(dirname {})\"",
+    "lint": "terraform fmt",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {}
+}

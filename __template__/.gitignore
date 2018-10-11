@@ -1,0 +1,11 @@
+# Terraform
+.terraform
+*.tfstate
+*.tfstate.lock.info
+*.tfstate.backup
+*.zip
+package-lock.json
+
+# Preserve `state` creation
+!master/state/terraform.tfstate
+

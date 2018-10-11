@@ -17,8 +17,7 @@ $ brew install terraform
 
 ### Install node dependencies
 ```bash
-TODO - script to find all package.json and install deps
-# find . -type f -name "package.json" | grep -v node_modules | npm i
+$ npm run install:npm
 ```
 
 ## Project Structure
@@ -88,6 +87,42 @@ $ terraform apply -var-file=env.${environment}.${region}.tfvars
 # review changes
 $ yes
 ```
+
+## Roadmap
+
+### Phase I (Single Region Environment)
+- VPC (bastion, proxy, nat w/ Multi-AZ)
+- EC2 (ECS, EKS) w/ Multi-AZ 
+- DB (RDS, ES, DynamoDB) w/ Multi-AZ & Read Replicas
+- Cache (redis) w/ Multi-AZ & Read Replicas
+- Static Assets
+- APIG
+- WAF
+- EKS
+
+### Phase II (Multi-Account)
+- User Account Auth
+- Cognito
+
+### Phase III (Operation Account)
+- CI/CD
+- DNS
+- VPN w/ Peering?
+
+### Phase IV (Multi-Region)
+- VPC w/ Peering
+- DB
+- S3
+- DNS
+
+### Phase V (Compliance)
+- Audit Logging
+- Monitoring
+
+### Phase X (Multi Cloud Provider)
+- Google
+- MS Azure
+- OpenStack
 
 ## Built With
 - [Terraform](https://www.terraform.io/)

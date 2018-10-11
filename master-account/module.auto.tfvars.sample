@@ -1,4 +1,0 @@
-aws_account_id = ""
-aws_profile = "default"
-aws_default_region = "us-west-2"
-

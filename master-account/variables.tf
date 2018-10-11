@@ -1,43 +1,38 @@
-//variable "aws_account_name" {
-//  type = "string"
-//  description = "name of the account. ie root, operations, production"
-//}
 
-//variable "aws_parent_account_id" {
-//  type = "string"
-//  default = ""
-//  description = "For provider has allowed_account_ids"
-//}
-
-variable "aws_account_id" {
+variable "account_alias" {
   type = "string"
-  description = "For provider has allowed_account_ids"
+  default = ""
 }
 
-variable "aws_profile" {
-  default = "default"
-}
-
-variable "aws_default_region" {
-  default = "us-east-1"
-}
-
-variable "account_email_local_part" {
-  description = "Organization account email local-part"
-}
-
-variable "account_email_domain" {
-  description = "Organization account email domain"
-}
-
-//variable "administrator_default_arn" {
-//  default = "arn:aws:iam::aws:policy/AdministratorAccess"
-//}
 //
-//variable "developer_default_arn" {
-//  default = "arn:aws:iam::aws:policy/PowerUserAccess"
+variable "roles" {
+  type = "list"
+  default = ["admin","developer"]
+}
+
+// {username:[role,role]}
+//variable "users" {
+//  type = "map"
+//  default = {}
 //}
-//
-//variable "billing_default_arn" {
-//  default = "arn:aws:iam::aws:policy/job-function/Billing"
+
+//variable "pgp_key_path" {
+//  type = "string"
 //}
+
+
+variable "account_email" {
+  description = "Organization account email"
+}
+
+variable "sub_accounts" {
+  type = "list"
+  default = [
+    "operations",
+    "production",
+    "staging",
+    "testing",
+    "development",
+    "forensics"
+  ]
+}

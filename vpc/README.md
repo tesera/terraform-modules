@@ -23,21 +23,42 @@ module "vpc" {
 }
 ```
 
-### Add S3 Endpoints
+### Add Gateway Endpoints
 ```hcl-terraform
 resource "aws_vpc_endpoint" "s3" {
   vpc_id            = "${module.vpc.id}"
   service_name      = "com.amazonaws.${var.aws_region}.s3"
   route_table_ids   = ["${module.vpc.private_route_table_ids}"]
+  policy            = <<POLICY
+{
+  "Statement": [
+      {
+          "Action": "*",
+          "Effect": "Allow",
+          "Resource": "*",
+          "Principal": "*"
+      }
+  ]
 }
-```
+POLICY
+}
 
-### Add DynamoDB Endpoints
-```hcl-terraform
 resource "aws_vpc_endpoint" "dynamodb" {
   vpc_id          = "${module.vpc.id}"
   service_name    = "com.amazonaws.${var.region}.dynamodb"
   route_table_ids = ["${module.vpc.private_route_table_ids}"]
+  policy          = <<POLICY
+{
+    "Statement": [
+        {
+            "Action": "*",
+            "Effect": "Allow",
+            "Resource": "*",
+            "Principal": "*"
+        }
+    ]
+}
+POLICY
 }
 ```
 
