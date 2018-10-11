@@ -1,6 +1,5 @@
 # Master Account Setup
 
-// Testing: will.farrell+master@tetsera.com
 ## Manual Steps
 1. Create Master Account *
 1. Must request from support to up the limit for Organizations / Number of Accounts to 6+ from 2
