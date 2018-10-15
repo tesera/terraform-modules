@@ -26,7 +26,7 @@ variable "instance_type" {
 }
 
 variable "instance_count" {
-  default = 1
+  default = 2
 }
 
 variable "dedicated_master_enabled" {
@@ -42,7 +42,7 @@ variable "dedicated_master_count" {
 }
 
 variable "multi_az" {
-  default = "false"
+  default = "true"
 }
 
 variable "automated_snapshot_start_hour" {
@@ -50,15 +50,15 @@ variable "automated_snapshot_start_hour" {
 }
 
 variable "ebs_volume_type" {
-  default = "gp2"
+  default = "io1"
 }
 
 variable "ebs_volume_size" {
-  default = 10
+  default = 35
 }
 
 variable "ebs_iops" {
-  default = 0
+  default = 1000
 }
 
 variable "log_publishing_options" {
