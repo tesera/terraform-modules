@@ -55,4 +55,56 @@ EOF
 
 /usr/bin/import_users.sh
 
+cat << EOF > /etc/cloudwatch-agent.conf
+{
+  "metrics": {
+    "append_dimensions": {
+      "AutoScalingGroupName": "\$${aws:AutoScalingGroupName}",
+      "ImageId": "\$${aws:ImageId}",
+      "InstanceId": "\$${aws:InstanceId}",
+      "InstanceType": "\$${aws:InstanceType}"
+    },
+    "metrics_collected": {
+      "mem": {
+        "measurement": [
+          "mem_used",
+          "mem_cached",
+          "mem_total"
+        ],
+        "metrics_collection_interval": 10
+      },
+      "swap": {
+        "measurement": [
+          "swap_used",
+          "swap_free",
+          "swap_used_percent"
+        ],
+        "metrics_collection_interval": 10
+      },
+      "disk": {
+        "resources": [
+          "/",
+          "/tmp"
+        ],
+        "measurement": [
+          "free",
+          "total",
+          "used"
+        ],
+        "ignore_file_system_types": [
+          "sysfs",
+          "devtmpfs",
+          "tmpfs"
+        ],
+        "metrics_collection_interval": 60
+      }
+    }
+  }
+}
+EOF
+
+rpm -i https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
+
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/etc/cloudwatch-agent.conf -s
+
 echo "***** Clean Up *****"

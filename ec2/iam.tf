@@ -94,3 +94,8 @@ resource "aws_iam_instance_profile" "main" {
   name = "${local.name}-instance-profile"
   role = "${aws_iam_role.main.name}"
 }
+
+resource "aws_iam_role_policy_attachment" "main-clowdwatch-agent-server" {
+  role       = "${aws_iam_role.main.name}"
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
