@@ -107,4 +107,8 @@ rpm -i https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest
 
 /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/etc/cloudwatch-agent.conf -s
 
+echo "***** Setup Inspector Agent *****"
+wget https://inspector-agent.amazonaws.com/linux/latest/install
+bash install
+
 echo "***** Clean Up *****"
