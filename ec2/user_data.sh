@@ -111,4 +111,7 @@ echo "***** Setup Inspector Agent *****"
 wget https://inspector-agent.amazonaws.com/linux/latest/install
 bash install
 
+echo "***** Setup SSM Agent *****"
+yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+
 echo "***** Clean Up *****"

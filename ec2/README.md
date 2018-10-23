@@ -5,6 +5,9 @@ Auto-scalling cluster of EC2
 - Auto-scaling across defined subnets
 - `authorized_keys` generated from users in an IAM group
 - CloudWatch logging enabled
+- CloudWatch agent for collecting additional metrics
+- Inspector agent for allowing running of security assessments in Amazon Inspector
+- SSM Agent for allowing shell access from Session AWS Systems Manager
 
 ## Setup
 ### Module
@@ -80,6 +83,10 @@ resource "aws_iam_group" "developers" {
   name = "developers"
 }
 ```
+
+### Start new shell session from aws cli
+aws ssm start-session --target i-00000000000000000
+
 
 ## Input
 - **vpc_id:** vpc id
