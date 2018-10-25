@@ -14,7 +14,7 @@ pip install --upgrade awscli
 
 echo "***** Setup Banner *****"
 yum install figlet -y
-BANNER=$(figlet "${BANNER}" | sed "s/\`/\'/")
+BANNER=$(figlet "${BANNER}" | sed "s/\`/\'/g")
 cat << EOF > /etc/update-motd.d/30-banner
 cat << MOTD
 $BANNER
