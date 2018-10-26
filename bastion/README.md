@@ -7,6 +7,9 @@ Allow ssh to private subnet services.
 - `authorized_keys` generated from users in an IAM group
 - `fail2ban` enabled
 - CloudWatch logging enabled
+- CloudWatch agent for collecting additional metrics
+- Inspector agent for allowing running of security assessments in Amazon Inspector
+- SSM Agent for allowing shell access from Session AWS Systems Manager
 
 ## Test
 ```bash
@@ -14,6 +17,10 @@ ssh -i ~/.ssh/id_rsa username@{bastion_ip}
 ```
 
 ## Setup
+
+### Prerequisites
+Before using this terraform module, the "bastion" and "ec2" AMIs need to be created in all required regions with Packer - https://github.com/tesera/terraform-modules/blob/master/packer/README.md. 
+
 ### Module
 ```hcl-terraform
 module "bastion" {

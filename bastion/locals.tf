@@ -6,13 +6,15 @@ data "aws_ami" "main" {
 
   filter {
     name   = "name"
-    values = ["amzn-ami-hvm-*-x86_64-gp2"]
+    values = ["amzn2-ami-hvm-*-x86_64-gp2-ssh"]
   }
 
   filter {
     name   = "virtualization-type"
     values = ["hvm"]
   }
+
+  owners = ["self"]
 }
 
 locals {

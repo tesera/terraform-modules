@@ -2,3 +2,6 @@
 
 echo "***** Connect to Cluster *****"
 echo ECS_CLUSTER=${ECS_CLUSTER} >> /etc/ecs/ecs.config
+
+echo "***** CloudWatch Logging *****"
+service awslogs start

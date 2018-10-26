@@ -8,7 +8,7 @@ data "aws_ami" "main" {
     name = "name"
 
     values = [
-      "amzn-ami-hvm-*-x86_64-gp2",
+      "amzn2-ami-hvm-*-x86_64-gp2",
     ]
   }
 
@@ -19,17 +19,15 @@ data "aws_ami" "main" {
       "hvm",
     ]
   }
+
+  owners = ["self"]
 }
 
 data "template_file" "userdata" {
   template = "${file("${path.module}/user_data.sh")}"
 
   vars {
-    BANNER                = "${var.banner}"
-    IAM_AUTHORIZED_GROUPS = "${var.iam_user_groups}"
-    SUDOERS_GROUPS        = "${var.iam_sudo_groups}"
-    LOCAL_GROUPS          = "${var.iam_local_groups}"
-    USER_DATA             = "${var.user_data}"
+    USER_DATA = "${var.user_data}"
   }
 }
 
