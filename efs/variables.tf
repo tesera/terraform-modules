@@ -5,8 +5,6 @@ variable "default_tags" {
   default = {}
 }
 
-variable "subnet_id" {}
-
 variable "kms_key_id" {
   default = ""
 }
@@ -21,8 +19,4 @@ variable "provisioned_throughput_in_mibps" {
 
 variable "throughput_mode" {
   default = "bursting"
-}
-
-variable "ip_address" {
-  default = ""
 }
