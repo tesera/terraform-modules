@@ -11,5 +11,5 @@ resource "aws_efs_mount_target" "main" {
   file_system_id  = "${aws_efs_file_system.main.id}"
   subnet_id       = "${var.subnet_id}"
   ip_address      = "${var.ip_address}"
-  security_groups = "${var.security_groups}"
+  security_groups = ["${aws_security_group.main.id}"]
 }

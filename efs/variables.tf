@@ -26,8 +26,3 @@ variable "throughput_mode" {
 variable "ip_address" {
   default = ""
 }
-
-variable "security_groups" {
-  type    = "list"
-  default = []
-}
