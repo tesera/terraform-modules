@@ -69,3 +69,5 @@ echo "***** Setup Inspector Agent *****"
 wget https://inspector-agent.amazonaws.com/linux/latest/install
 sudo bash install
 
+echo "***** Setup the EFS mount helper *****"
+sudo yum install -y amazon-efs-utils

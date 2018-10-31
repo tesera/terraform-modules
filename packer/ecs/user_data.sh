@@ -71,3 +71,6 @@ sudo bash install
 
 echo "***** Setup SSM Agent *****"
 sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+
+echo "***** Setup the EFS mount helper *****"
+sudo yum install -y amazon-efs-utils
