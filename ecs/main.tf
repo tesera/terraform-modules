@@ -11,16 +11,18 @@ data "template_file" "userdata" {
 }
 
 module "ec2" {
-  source           = "../ec2"
-  name             = "${var.name}-ecs"
-  account_id       = "${local.account_id}"
-  vpc_id           = "${var.vpc_id}"
-  subnet_ids       = "${var.private_subnet_ids}"
-  image_id         = "${local.image_id}"
-  user_data        = "${data.template_file.userdata.rendered}"
-  min_size         = "${local.min_size}"
-  max_size         = "${local.max_size}"
-  desired_capacity = "${local.desired_capacity}"
+  source                 = "../ec2"
+  name                   = "${var.name}-ecs"
+  account_id             = "${local.account_id}"
+  vpc_id                 = "${var.vpc_id}"
+  subnet_ids             = "${var.private_subnet_ids}"
+  image_id               = "${local.image_id}"
+  user_data              = "${data.template_file.userdata.rendered}"
+  min_size               = "${local.min_size}"
+  max_size               = "${local.max_size}"
+  desired_capacity       = "${local.desired_capacity}"
+  efs_ids                = "${var.efs_ids}"
+  efs_security_group_ids = "${var.efs_security_group_ids}"
 }
 
 resource "aws_iam_policy" "main-ecs" {

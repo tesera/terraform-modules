@@ -39,3 +39,13 @@ variable "max_size" {
 variable "desired_capacity" {
   default = "2"
 }
+
+variable "efs_ids" {
+  type    = "list"
+  default = []
+}
+
+variable "efs_security_group_ids" {
+  type    = "list"
+  default = []
+}
