@@ -5,6 +5,10 @@ variable "default_tags" {
   default = {}
 }
 
+variable "subnet_ids" {
+  type = "list"
+}
+
 variable "kms_key_id" {
   default = ""
 }
