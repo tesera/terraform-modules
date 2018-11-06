@@ -17,14 +17,50 @@ resource "aws_iam_service_linked_role" "main" {
 ```
 
 ### Module
+Connect directly to execute the indices creation script (without bastion host)
 ```hcl-terraform
 module "elasticache" {
-  source             = "git@github.com:tesera/terraform-modules/elasticsearch"
-  name               = "elastic-search-name"
-  private_subnet_ids = ["subnet-00000000000000000", "subnet-00000000000000001"]
-  vpc_id             = "vpc-00000000"
-  security_group_ids = ["${module.bastion.security_group_id}"]
+  source              = "git@github.com:tesera/terraform-modules/elasticsearch"
+  name                = "elastic-search-name"
+  private_subnet_ids  = ["subnet-00000000000000000", "subnet-00000000000000001"]
+  vpc_id              = "vpc-00000000"
+  indices_config_file = "mappings.json"
+  security_group_ids  = ["sg-00000000000000000"]
 }
+```
+
+Connect through bastion host to execute the indices creation script
+```hcl-terraform
+module "elasticache" {
+  source              = "git@github.com:tesera/terraform-modules/elasticsearch"
+  name                = "elastic-search-name"
+  private_subnet_ids  = ["subnet-00000000000000000", "subnet-00000000000000001"]
+  vpc_id              = "vpc-00000000"
+  indices_config_file = "mappings.json"
+  security_group_ids  = ["${module.bastion.security_group_id}","sg-00000000000000000"]
+  ssh_identity_file   = "key.pem"
+  bastion_ip          = "${module.bastion.public_ip}"
+}
+```
+
+Sample index/mapping json - mapping.json:
+```json
+[
+  {
+    "index": "index1",
+    "body": {
+      "mappings": {
+        "_doc": {
+          "properties": {
+            "field1": {
+              "type": "text"
+            }
+          }
+        }
+      }
+    }
+  }
+]
 ```
 
 ## Input
@@ -46,6 +82,9 @@ module "elasticache" {
 - **log_publishing_options:** log publishing options - https://www.terraform.io/docs/providers/aws/r/elasticsearch_domain.html#log_type.
 - **cognito_options:** options for Amazon Cognito authentication with Kibana - https://www.terraform.io/docs/providers/aws/r/elasticsearch_domain.html#enabled-3
 - **security_group_ids:** list of security group ids which are going to be granted access to the ElasticSearch domain.
+- **ssh_identity_file:** SSH key filename for connecting to the bastion host
+- **ssh_username:** username for connecting to the bastion host
+- **bastion_ip:** IP of the bastion host. If it is not provided the creation of the indices will run directly against the Elasticsearch endpoint without SSH tunneling.
 
 ## Output
 
@@ -58,4 +97,7 @@ module "elasticache" {
 - **vpc_id:** the ID of the VPC.
 - **security_group_id:** the security group that was created and associated with this ElasticSearch domain.
 
-
+## Index migration/update
+The new index needs to be created first, and then the alias to be redirected to the new index, by calling client.indices.updateAlias with two actions:
+ - "remove" - removing the existing alias and;
+ - "add" - creating an alias with the same name pointing to the new index.

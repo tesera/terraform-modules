@@ -70,3 +70,19 @@ variable "cognito_options" {
   type    = "list"
   default = []
 }
+
+variable "indices_config_file" {
+  default = ""
+}
+
+variable "ssh_identity_file" {
+  default = ""
+}
+
+variable "ssh_username" {
+  default = "ec2-user"
+}
+
+variable "bastion_ip" {
+  default = ""
+}
