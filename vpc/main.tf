@@ -49,14 +49,14 @@ resource "aws_default_security_group" "default" {
 
 # Logs
 resource "aws_flow_log" "logs" {
-  log_group_name = "${aws_cloudwatch_log_group.logs.name}"
-  iam_role_arn   = "${aws_iam_role.logs.arn}"
-  vpc_id         = "${aws_vpc.main.id}"
-  traffic_type   = "ALL"
+  log_destination = "${aws_cloudwatch_log_group.logs.arn}"
+  iam_role_arn    = "${aws_iam_role.logs.arn}"
+  vpc_id          = "${aws_vpc.main.id}"
+  traffic_type    = "ALL"
 }
 
 resource "aws_cloudwatch_log_group" "logs" {
-  name = "/vpc"
+  name = "/${aws_vpc.main.id}"
 }
 
 resource "aws_iam_role" "logs" {

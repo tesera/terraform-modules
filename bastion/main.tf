@@ -12,7 +12,6 @@ data "template_file" "userdata" {
 
   vars {
     EIP_ID                = "${aws_eip.main.id}"
-    BANNER                = "Bastion"
     IAM_AUTHORIZED_GROUPS = "${var.iam_user_groups}"
     SUDOERS_GROUPS        = "${var.iam_sudo_groups}"
   }
