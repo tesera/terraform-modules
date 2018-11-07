@@ -19,7 +19,7 @@ resource "aws_iam_service_linked_role" "main" {
 ### Module
 Connect directly to execute the indices creation script (without bastion host)
 ```hcl-terraform
-module "elasticache" {
+module "elasticsearch" {
   source              = "git@github.com:tesera/terraform-modules/elasticsearch"
   name                = "elastic-search-name"
   private_subnet_ids  = ["subnet-00000000000000000", "subnet-00000000000000001"]
@@ -31,7 +31,7 @@ module "elasticache" {
 
 Connect through bastion host to execute the indices creation script
 ```hcl-terraform
-module "elasticache" {
+module "elasticsearch" {
   source              = "git@github.com:tesera/terraform-modules/elasticsearch"
   name                = "elastic-search-name"
   private_subnet_ids  = ["subnet-00000000000000000", "subnet-00000000000000001"]
