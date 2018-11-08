@@ -27,6 +27,7 @@ data "template_file" "userdata" {
   template = "${file("${path.module}/user_data.sh")}"
 
   vars {
+    EFS_IDS   = "${join(",", var.efs_ids)}"
     USER_DATA = "${var.user_data}"
   }
 }

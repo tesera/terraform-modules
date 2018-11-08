@@ -12,3 +12,13 @@ resource "aws_security_group" "main" {
     ]
   }
 }
+
+resource "aws_security_group_rule" "efs_access" {
+  count                    = "${length(var.efs_security_group_ids)}"
+  security_group_id        = "${(var.efs_security_group_ids[count.index])}"
+  type                     = "ingress"
+  from_port                = "2049"
+  to_port                  = "2049"
+  protocol                 = "tcp"
+  source_security_group_id = "${aws_security_group.main.id}"
+}
