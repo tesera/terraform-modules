@@ -29,7 +29,8 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "user_data.sh"
+      "script": "user_data.sh",
+      "execute_command": "sudo -S env {{ .Vars }} {{ .Path }}"
     }
   ]
 }
