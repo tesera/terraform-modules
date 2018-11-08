@@ -24,7 +24,7 @@ module "ecs" {
   source            = "git@github.com:tesera/terraform-modules//ecs"
   name              = "${local.name}"
   vpc_id            = "${module.vpc.id}"
-  private_subnet_ids = "${module.vpc.private_subnet_ids}"
+  private_subnet_ids = ["${module.vpc.private_subnet_ids}"]
 }
 ```
 
@@ -42,10 +42,3 @@ module "ecs" {
 - **security_group_id:** security group applied, add to ingress on private instance security group
 - **iam_role_name:** IAM role name to allow extending of the role
 - **billing_suggestion:** comments to improve billing cost
-
-
-## TODO
-- [ ] test CloudWatch Logging
-- [ ] OS hardening
-  - CIS
-  - ClamAV
