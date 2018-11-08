@@ -13,8 +13,10 @@ Creating the AMI in all required regions is a prerequisite for using the ec2, ba
 - bastion AMI only - `authorized_keys` generated from users in an IAM group
 
 ## Setup
-To create the AMIs, go to the respective subfolder, edit the variables.json, and run:
+To create the AMIs, go to the respective subfolder, edit the `variables.json`, and run:
+```bash
 packer build -var-file=variables.json module-name.json
+```
 
 ## Input - these are located in variables.json
 - **profile** the profile to use in the shared credentials file for AWS. 
