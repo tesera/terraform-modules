@@ -31,10 +31,6 @@ variable "key_name" {
   default = ""
 }
 
-variable "banner" {
-  default = "AWS EC2"
-}
-
 variable "user_data" {
   default = ""
 }
@@ -57,20 +53,4 @@ variable "max_size" {
 
 variable "desired_capacity" {
   default = "1"
-}
-
-variable "iam_user_groups" {
-  default = ""
-}
-
-variable "iam_sudo_groups" {
-  default = ""
-}
-
-variable "iam_local_groups" {
-  default = ""
-}
-
-variable "bastion_security_group_id" {
-  default = ""
 }

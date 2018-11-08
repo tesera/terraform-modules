@@ -11,7 +11,9 @@ data "template_file" "userdata" {
   template = "${file("${path.module}/user_data.sh")}"
 
   vars {
-    EIP_ID = "${aws_eip.main.id}"
+    EIP_ID                = "${aws_eip.main.id}"
+    IAM_AUTHORIZED_GROUPS = "${var.iam_user_groups}"
+    SUDOERS_GROUPS        = "${var.iam_sudo_groups}"
   }
 }
 
@@ -23,11 +25,8 @@ module "ec2" {
   subnet_ids       = "${var.public_subnet_ids}"
   subnet_public    = "true"
   image_id         = "${local.image_id}"
-  banner           = "Bastion"
   user_data        = "${data.template_file.userdata.rendered}"
   key_name         = "${var.key_name}"
-  iam_user_groups  = "${var.iam_user_groups}"
-  iam_sudo_groups  = "${var.iam_sudo_groups}"
   min_size         = "${local.min_size}"
   max_size         = "${local.max_size}"
   desired_capacity = "${local.desired_capacity}"

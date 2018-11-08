@@ -3,13 +3,16 @@ Auto-scalling cluster of EC2
 
 ## Features
 - Auto-scaling across defined subnets
-- `authorized_keys` generated from users in an IAM group
 - CloudWatch logging enabled
 - CloudWatch agent for collecting additional metrics
 - Inspector agent for allowing running of security assessments in Amazon Inspector
 - SSM Agent for allowing shell access from Session AWS Systems Manager
 
 ## Setup
+
+### Prerequisites
+Before using this terraform module, the "ec2" AMIs need to be created in all required regions with Packer - https://github.com/tesera/terraform-modules/blob/master/packer/README.md. 
+
 ### Module
 ```hcl-terraform
 module "ec2" {
@@ -17,8 +20,6 @@ module "ec2" {
   name              = "${local.name}-usecase"
   vpc_id            = "${module.vpc.id}"
   subnet_ids        = "${module.vpc.private_subnet_ids}"
-  iam_user_groups   = "Developers"
-  iam_sudo_groups   = "Admin"
   image_id          = "${local.image_id}"
   user_data          = "${data.template_file.main-userdata.rendered}"
 }
@@ -31,8 +32,6 @@ data "template_file" "main-userdata" {
 
   vars {
     REGION          = "${local.aws_region}"
-    IAM_USER_GROUPS = "${var.iam_user_groups}"
-    IAM_SUDO_GROUPS = "${var.iam_sudo_groups}"
   }
 }
 ```
@@ -84,20 +83,16 @@ resource "aws_iam_group" "developers" {
 }
 ```
 
-### Start new shell session from aws cli
-aws ssm start-session --target i-00000000000000000
-
+## Connectivity
+To start new shell session from aws cli
+aws ssm start-session --target i-00000000000000000 --profile default
 
 ## Input
 - **vpc_id:** vpc id
 - **subnet_ids:** array of public subnet ids
 - **subnet_public:** is the subnet public? [Default: false]
-- **iam_user_groups:** name of iam group that should have ssh access, comma separated list
-- **iam_sudo_groups:** name of iam group that should have ssh sudo access (must also be in user_groups), comma separated list
-- **iam_local_groups:** name of groups on the iam that users should be in
 - **image_id:** override the base image, must be CentOS based (ie has yum, rpm, docker) [Default: AWS ECS-Optimized]
 - **instance_type:** override the instance type [Default: t2.micro]
-- **bastion_security_group_id:** bastion security group id [Default: none]
 - **user_data:** contents of user data to apply to ec2
 - **min_size:** auto-scaling - min instance count [Default: 1]
 - **max_size:** auto-scaling - max instance count [Default: 1]

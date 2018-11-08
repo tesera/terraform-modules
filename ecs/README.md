@@ -3,10 +3,21 @@ Auto-scaling cluster of EC2 for ECS
 
 ## Features
 - Auto-scaling across all private subnets
-- `authorized_keys` generated from users in an IAM group
 - CloudWatch logging enabled
+- CloudWatch agent for collecting additional metrics
+- Inspector agent for allowing running of security assessments in Amazon Inspector
+- SSM Agent for allowing shell access from Session AWS Systems Manager
+
+## Connectivity
+To start new shell session from aws cli
+aws ssm start-session --target i-00000000000000000 --profile default
+
 
 ## Setup
+
+### Prerequisites
+Before using this terraform module, the "ec2" and "ecs" AMIs need to be created in all required regions with Packer - https://github.com/tesera/terraform-modules/blob/master/packer/README.md. 
+
 ### Module
 ```hcl-terraform
 module "ecs" {
@@ -14,20 +25,14 @@ module "ecs" {
   name              = "${local.name}"
   vpc_id            = "${module.vpc.id}"
   private_subnet_ids = "${module.vpc.private_subnet_ids}"
-  iam_user_groups   = "Developers"
-  iam_sudo_groups   = "Admin"
 }
 ```
 
 ## Input
 - **vpc_id:** vpc id
 - **private_subnet_ids:** array of private subnet ids
-- **key_name:** name of root ssh key [Default: none]
-- **iam_user_groups:** name of iam group that should have ssh access, comma separated list
-- **iam_sudo_groups:** name of iam group that should have ssh sudo access, comma separated list
 - **image_id:** override the base image, must be CentOS based (ie has yum, rpm, docker) [Default: AWS ECS-Optimized]
 - **instance_type:** override the instance type [Default: t2.micro]
-- **bastion_security_group_id:** bastion security group id [Default: none]
 - **min_size:** auto-scaling - min instance count [Default: 2]
 - **max_size:** auto-scaling - max instance count [Default: 2]
 - **desired_capacity:** auto-scaling - desired instance count [Default: 2]

@@ -39,21 +39,3 @@ variable "max_size" {
 variable "desired_capacity" {
   default = "2"
 }
-
-# ssh
-variable "iam_user_groups" {
-  default = ""
-}
-
-variable "iam_sudo_groups" {
-  default = ""
-}
-
-variable "bastion_security_group_id" {
-  default = ""
-}
-
-# Debug
-variable "key_name" {
-  default = ""
-}

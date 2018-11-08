@@ -54,6 +54,8 @@ data "aws_ami" "main" {
       "hvm",
     ]
   }
+
+  owners = ["self"]
 }
 
 resource "aws_launch_configuration" "main" {
@@ -294,6 +296,18 @@ resource "aws_iam_role_policy_attachment" "main-logs" {
   count      = "${var.nat_type == "instance" ? local.az_count : 0}"
   role       = "${aws_iam_role.main.*.name[count.index]}"
   policy_arn = "${aws_iam_policy.main-logs.*.arn[count.index]}"
+}
+
+resource "aws_iam_role_policy_attachment" "main-clowdwatch-agent-server" {
+  count      = "${var.nat_type == "instance" ? local.az_count : 0}"
+  role       = "${aws_iam_role.main.*.name[count.index]}"
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchAgentServerPolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "main-ssm-agent" {
+  count      = "${var.nat_type == "instance" ? local.az_count : 0}"
+  role       = "${aws_iam_role.main.*.name[count.index]}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
 
 # EC2 Output

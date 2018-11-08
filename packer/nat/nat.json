@@ -1,0 +1,36 @@
+{
+  "variables": {
+    "profile": "",
+    "region": "",
+    "ami_regions": ""
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "profile": "{{user `profile`}}",
+      "region": "{{user `region`}}",
+      "ami_regions": "{{user `ami_regions`}}",
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "amzn-ami-vpc-nat-hvm-*-x86_64-ebs",
+          "root-device-type": "ebs"
+        },
+        "owners": [
+          "137112412989"
+        ],
+        "most_recent": true
+      },
+      "instance_type": "t2.micro",
+      "ssh_username": "ec2-user",
+      "ami_name": "amzn-ami-vpc-nat-hvm-{{isotime \"20060102030405\"}}-x86_64-ebs"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "user_data.sh",
+      "execute_command": "sudo -S env {{ .Vars }} {{ .Path }}"
+    }
+  ]
+}
