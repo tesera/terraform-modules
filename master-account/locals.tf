@@ -8,7 +8,6 @@ data "external" "groups" {
 
 module "defaults" {
   source = "../defaults"
-  name   = "${var.name}"
 }
 
 locals {
