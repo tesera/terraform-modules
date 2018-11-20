@@ -73,16 +73,17 @@ EOF
 rpm -i https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest/amazon-cloudwatch-agent.rpm
 /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/etc/cloudwatch-agent.conf -s
 
+echo "***** Setup X-Ray Service"
+curl https://s3.dualstack.us-east-2.amazonaws.com/aws-xray-assets.us-east-2/xray-daemon/aws-xray-daemon-3.x.rpm -o /home/ec2-user/xray.rpm
+yum install -y /home/ec2-user/xray.rpm
+systemctl enable xray
+
 echo "***** Setup Inspector Agent *****"
 wget https://inspector-agent.amazonaws.com/linux/latest/install
 bash install
 
 echo "***** Setup the EFS mount helper *****"
 yum install -y amazon-efs-utils
-
-curl https://s3.dualstack.us-east-2.amazonaws.com/aws-xray-assets.us-east-2/xray-daemon/aws-xray-daemon-3.x.rpm -o /home/ec2-user/xray.rpm
-yum install -y /home/ec2-user/xray.rpm
-systemctl enable xray
 
 # TODO apply other CIS changes
 # or swap out base image for https://aws.amazon.com/marketplace/pp/B078TPXMH2?qid=1530714745994&sr=0-1&ref_=srh_res_product_title
