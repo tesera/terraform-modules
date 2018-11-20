@@ -12,6 +12,11 @@ Creating the AMI in all required regions is a prerequisite for using the ec2, ba
 - SSM Agent for allowing shell access from Session AWS Systems Manager
 - bastion AMI only - `authorized_keys` generated from users in an IAM group
 
+## Requirements
+```bash
+$ brew install packer
+```
+
 ## Setup
 To create the AMIs, go to the respective subfolder, edit the `variables.json`, and run:
 ```bash
