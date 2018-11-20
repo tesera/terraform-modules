@@ -10,8 +10,9 @@ Auto-scaling cluster of EC2 for ECS
 
 ## Connectivity
 To start new shell session from aws cli
+```bash
 aws ssm start-session --target i-00000000000000000 --profile default
-
+```
 
 ## Setup
 
