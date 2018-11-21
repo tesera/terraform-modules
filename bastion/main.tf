@@ -18,7 +18,7 @@ data "template_file" "userdata" {
 }
 
 module "ec2" {
-  source           = "../ec2"
+  source           = "../ec2-base"
   name             = "${var.name}-bastion"
   account_id       = "${local.account_id}"
   vpc_id           = "${var.vpc_id}"
