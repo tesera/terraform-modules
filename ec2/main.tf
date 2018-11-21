@@ -1,42 +1,20 @@
-resource "aws_launch_configuration" "main" {
-  name_prefix          = "${local.name}-"
-  image_id             = "${local.image_id}"
-  instance_type        = "${var.instance_type}"
-  key_name             = "${var.key_name}"
-  iam_instance_profile = "${aws_iam_instance_profile.main.name}"
-
-  security_groups = [
-    "${aws_security_group.main.id}",
-  ]
-
-  user_data         = "${local.user_data}"
-  ebs_optimized     = "false"
-  enable_monitoring = "true"
-
-  # Must be true in public subnets if assigning EIP in userdata
-  associate_public_ip_address = "${var.subnet_public}"
-
-  root_block_device {
-    volume_type = "${var.volume_type}"
-    volume_size = "${var.volume_size}"
-  }
-
-  lifecycle {
-    create_before_destroy = "true"
-  }
-}
-
-resource "aws_autoscaling_group" "main" {
-  name                      = "${local.name}-asg"
-  max_size                  = "${local.max_size}"
-  min_size                  = "${local.min_size}"
-  desired_capacity          = "${local.desired_capacity}"
-  health_check_grace_period = 30
-  launch_configuration      = "${aws_launch_configuration.main.name}"
-
-  vpc_zone_identifier = [
-    "${var.subnet_ids}",
-  ]
-
-  tags = ["${module.defaults.tags_as_list_of_maps}"]
+module "ec2-base" {
+  source                 = "../ec2-base"
+  name                   = "${var.name}"
+  default_tags           = "${var.default_tags}"
+  account_id             = "${var.account_id}"
+  vpc_id                 = "${var.vpc_id}"
+  subnet_ids             = "${var.subnet_ids}"
+  subnet_public          = "${var.subnet_public}"
+  image_id               = "${var.image_id != "" ? var.image_id : data.aws_ami.main.image_id}"
+  instance_type          = "${var.instance_type}"
+  key_name               = "${var.key_name}"
+  user_data              = "${var.user_data}"
+  volume_type            = "${var.volume_type}"
+  volume_size            = "${var.volume_size}"
+  min_size               = "${var.min_size}"
+  max_size               = "${var.max_size}"
+  desired_capacity       = "${var.desired_capacity}"
+  efs_ids                = "${var.efs_ids}"
+  efs_security_group_ids = "${var.efs_security_group_ids}"
 }
