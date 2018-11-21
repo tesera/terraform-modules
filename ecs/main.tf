@@ -17,6 +17,7 @@ module "ec2" {
   vpc_id                 = "${var.vpc_id}"
   subnet_ids             = "${var.private_subnet_ids}"
   image_id               = "${local.image_id}"
+  instance_type          = "${local.instance_type}"
   user_data              = "${data.template_file.userdata.rendered}"
   min_size               = "${local.min_size}"
   max_size               = "${local.max_size}"
