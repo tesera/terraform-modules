@@ -2,10 +2,14 @@ data "aws_ami" "main" {
   most_recent = true
 
   filter {
-    name   = "name"
+    name = "name"
+
     values = [
-      "amzn-ami-*-amazon-ecs-optimized"]
+      "amzn-ami-*-amazon-ecs-optimized",
+    ]
   }
+
+  owners = ["self"]
 }
 
 module "defaults" {
