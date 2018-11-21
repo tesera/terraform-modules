@@ -82,7 +82,9 @@ resource "aws_iam_group" "developers" {
 
 ## Connectivity
 To start new shell session from aws cli
-aws ssm start-session --target i-00000000000000000 --profile default
+```bash
+$ aws ssm start-session --target i-00000000000000000 --region ca-central-1 --profile default
+```
 
 ## Input
 - **vpc_id:** vpc id
@@ -104,7 +106,6 @@ aws ssm start-session --target i-00000000000000000 --profile default
 
 
 ## TODO
-- [ ] test CloudWatch Logging
 - [ ] OS hardening
   - CIS
   - ClamAV
