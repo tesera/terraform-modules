@@ -25,31 +25,7 @@ module "ec2" {
   efs_security_group_ids = "${var.efs_security_group_ids}"
 }
 
-resource "aws_iam_policy" "main-ecs" {
-  name        = "${var.name}-ecs-policy"
-  path        = "/"
-  description = "${var.name} ECS Policy"
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ecs:RegisterContainerInstance",
-        "ecs:DeregisterContainerInstance",
-        "ecs:DiscoverPollEndpoint",
-        "ecs:Poll"
-      ],
-      "Resource": ["${aws_ecs_cluster.main.arn}"]
-    }
-  ]
-}
-EOF
-}
-
 resource "aws_iam_role_policy_attachment" "main-ecs" {
   role       = "${module.ec2.iam_role_name}"
-  policy_arn = "${aws_iam_policy.main-ecs.arn}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
