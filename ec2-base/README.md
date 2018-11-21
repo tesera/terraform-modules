@@ -12,8 +12,8 @@ Auto-scalling cluster of EC2
 
 ### Module
 ```hcl-terraform
-module "ec2" {
-  source            = "git@github.com:tesera/terraform-modules//ec2"
+module "ec2-base" {
+  source            = "git@github.com:tesera/terraform-modules//ec2-base"
   name              = "${local.name}-usecase"
   vpc_id            = "${module.vpc.id}"
   subnet_ids        = "${module.vpc.private_subnet_ids}"
@@ -60,7 +60,7 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "main-usecase" {
-  role       = "${module.ec2.iam_role_name}"
+  role       = "${module.ec2-base.iam_role_name}"
   policy_arn = "${aws_iam_policy.main-ecs.arn}"
 }
 ```
@@ -90,7 +90,7 @@ aws ssm start-session --target i-00000000000000000 --profile default
 - **subnet_public:** is the subnet public? [Default: false]
 - **image_id:** override the base image, must be CentOS based (ie has yum, rpm, docker) [Default: AWS ECS-Optimized]
 - **instance_type:** override the instance type [Default: t2.micro]
-- **user_data:** contents of user data to apply to ec2
+- **user_data:** contents of user data to apply to the ec2 instance
 - **min_size:** auto-scaling - min instance count [Default: 1]
 - **max_size:** auto-scaling - max instance count [Default: 1]
 - **desired_capacity:** auto-scaling - desired instance count [Default: 1]
