@@ -48,9 +48,9 @@ resource "aws_security_group_rule" "pubic-ssh" {
 
 # extend role
 resource "aws_iam_policy" "main-ip" {
-  name        = "${var.name}-bastion-ip-policy"
+  name        = "${local.name}-bastion-ip-policy"
   path        = "/"
-  description = "${var.name}-bastion-ip Policy"
+  description = "${local.name}-bastion-ip Policy"
 
   policy = <<EOF
 {
@@ -73,6 +73,48 @@ EOF
 resource "aws_iam_role_policy_attachment" "main-ip" {
   role       = "${module.ec2.iam_role_name}"
   policy_arn = "${aws_iam_policy.main-ip.arn}"
+}
+
+
+# TODO make contitional
+resource "aws_iam_policy" "main-iam" {
+  name        = "${local.name}-bastion-iam-policy"
+  path        = "/"
+  description = "${local.name} SSH IAM Policy"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "iam:ListUsers",
+        "iam:GetGroup"
+      ],
+      "Resource": "*"
+    }, {
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetSSHPublicKey",
+        "iam:ListSSHPublicKeys"
+      ],
+      "Resource": [
+        "arn:aws:iam::${local.account_id}:user/*"
+      ]
+    }, {
+      "Effect": "Allow",
+      "Action": "ec2:DescribeTags",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "main-iam" {
+  role       = "${module.ec2.iam_role_name}"
+  policy_arn = "${aws_iam_policy.main-iam.arn}"
 }
 
 # ACL
