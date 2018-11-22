@@ -9,6 +9,7 @@ Auto-scaling cluster of EC2 for ECS
 - SSM Agent for allowing shell access from Session AWS Systems Manager
 
 ## Connectivity
+Install the Session Manager Plugin for the AWS CLI - https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html
 To start new shell session from aws cli
 ```bash
 aws ssm start-session --target i-00000000000000000 --profile default
