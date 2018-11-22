@@ -81,6 +81,7 @@ resource "aws_iam_group" "developers" {
 ```
 
 ## Connectivity
+Install the Session Manager Plugin for the AWS CLI - https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html
 To start new shell session from aws cli
 ```bash
 $ aws ssm start-session --target i-00000000000000000 --region ca-central-1 --profile default
