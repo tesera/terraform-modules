@@ -161,4 +161,4 @@ resource "aws_api_gateway_method" "get" {
 }
 ```
 
-To fully cognito in real world application the callback_urls should be pointing to web application that is going to receive the JWT and then forward it to the API Gateway through the Authorization header.
+To fully utilize cognito in real world application the callback_urls should be pointing to web application that is going to receive the JWT and then forward it to the API Gateway through the Authorization header.
