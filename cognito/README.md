@@ -69,6 +69,11 @@ resource "aws_cognito_identity_provider" "facebook" {
     authorize_scopes = "public_profile,email"
     client_id        = "122556421922030"
     client_secret    = "c1a18abaf23897228f27211910562cf4"
+    attributes_url                = "https://graph.facebook.com/me?fields="
+    attributes_url_add_attributes = "true"
+    authorize_url                 = "https://www.facebook.com/v2.9/dialog/oauth"
+    token_request_method          = "GET"
+    token_url                     = "https://graph.facebook.com/v2.9/oauth/access_token"
   }
 
   attribute_mapping {
@@ -90,6 +95,12 @@ resource "aws_cognito_identity_provider" "google" {
     authorize_scopes = "profile email openid"
     client_id        = "672811282909-mhm6fi1av04jmrlo62tuabt8ll0k7cn4.apps.googleusercontent.com"
     client_secret    = "lx-5cCN5zCjll4tfJt2cPv_G"
+    attributes_url                = "https://people.googleapis.com/v1/people/me?personFields="
+    attributes_url_add_attributes = "true"
+    authorize_url                 = "https://accounts.google.com/o/oauth2/v2/auth"
+    oidc_issuer                   = "https://accounts.google.com"
+    token_request_method          = "POST"
+    token_url                     = "https://www.googleapis.com/oauth2/v4/token"
   }
 
   attribute_mapping {
