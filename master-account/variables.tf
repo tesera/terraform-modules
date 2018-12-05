@@ -1,13 +1,14 @@
+variable "name" {}
 
 variable "account_alias" {
-  type = "string"
+  type    = "string"
   default = ""
 }
 
 //
 variable "roles" {
-  type = "list"
-  default = ["admin","developer"]
+  type    = "list"
+  default = ["admin", "developer"]
 }
 
 // {username:[role,role]}
@@ -20,19 +21,19 @@ variable "roles" {
 //  type = "string"
 //}
 
-
 variable "account_email" {
   description = "Organization account email"
 }
 
 variable "sub_accounts" {
   type = "list"
+
   default = [
     "operations",
     "production",
     "staging",
     "testing",
     "development",
-    "forensics"
+    "forensics",
   ]
 }

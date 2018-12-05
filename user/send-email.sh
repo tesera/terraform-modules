@@ -27,8 +27,9 @@ ENC_PASSWORD="$5"   # PGP encrypted password
 # Uncomment following if using keybase
 # PASSWORD=$(base64 --decode | keybase pgp decrypt)
 
-# Create a temporary file to store the encrypted binary data.
-password_file=$(mktemp "password.${USERNAME}.gpg")
+# Create a temporary file to store the encrypted binary data. 
+#.XXXXX is needed due to a an error on ubuntu - "mktemp: too few X's in template" - rtomayko/shocco#5
+password_file=$(mktemp "password.${USERNAME}.gpg.XXXXX")
 
 # Decode the Base64 password and store it in password file.
 echo "$ENC_PASSWORD" | base64 --decode > "$password_file"
@@ -40,7 +41,8 @@ PASSWORD=$(gpg -q --decrypt "$password_file")
 rm "$password_file"
 
 # Create a temporary file to store the HTML email body.
-message_file=$(mktemp "message.${USERNAME}.html")
+#.XXXXX is needed due to a an error on ubuntu - "mktemp: too few X's in template" - rtomayko/shocco#5
+message_file=$(mktemp "message.${USERNAME}.html.XXXXX")
 
 # Replace username and passwords with correct values.
 cat "$DIR/send-email.html.tpl" > ${message_file}
