@@ -1,6 +1,7 @@
 # Cognito
 This is a template only for configuring Cognito User Pool, Cognito User Pool Client and Cognito User Identity Providers.
 Due to limitation of the current version of terraform and circular dependencies, this can not be defined as terraform module at this point.
+Recommended way for setting up cognito and api gateway - https://serverless-stack.com
 
 The first step is to create the user pool with the user pool client.
 ```hcl-terraform
@@ -169,6 +170,27 @@ resource "aws_api_gateway_method" "get" {
   http_method = "GET"
   authorization = "COGNITO_USER_POOLS"
   authorizer_id = "${aws_api_gateway_authorizer.cognito.id}"
+}
+```
+
+```hcl-terraform
+resource "aws_cognito_identity_pool" "main" {
+  identity_pool_name               = "IdentityPool"
+  allow_unauthenticated_identities = true
+
+  cognito_identity_providers {
+    client_id               = "4bvmqmvc878gucnvaca0h5m29n"
+    provider_name           = "cognito-idp.us-west-2.amazonaws.com/us-west-2_C4Hlmj3zz"
+    server_side_token_check = false
+  }
+
+  supported_login_providers {
+    "graph.facebook.com"  = "122556421965030"
+    "accounts.google.com" = "1234672811282909-mhm6fi1av04jmrlo62tuabt8j70k7cn456789012.apps.googleusercontent.com"
+  }
+
+  #saml_provider_arns           = ["${aws_iam_saml_provider.default.arn}"]
+  #openid_connect_provider_arns = ["${aws_cognito_identity_provider.oidc.arn}"]
 }
 ```
 
