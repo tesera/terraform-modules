@@ -1,16 +1,17 @@
 resource "aws_db_instance" "main" {
-  count                       = "${var.type == "cluster" ? 0 : 1}"
-  auto_minor_version_upgrade  = true
-  allow_major_version_upgrade = false
-  allocated_storage           = "${var.allocated_storage}"
-  identifier                  = "${var.name}-${var.engine}"
-  storage_type                = "${var.storage_type}"
-  engine                      = "${var.engine}"
-  engine_version              = "${var.engine_version}"
-  instance_class              = "${var.instance_class}"
-  name                        = "${local.db_name}"
-  parameter_group_name        = "${var.parameter_group_name}"
-  apply_immediately           = "${var.apply_immediately}"
+  count                               = "${var.type == "cluster" ? 0 : 1}"
+  auto_minor_version_upgrade          = true
+  allow_major_version_upgrade         = false
+  allocated_storage                   = "${var.allocated_storage}"
+  identifier                          = "${var.name}-${var.engine}"
+  storage_type                        = "${var.storage_type}"
+  engine                              = "${var.engine}"
+  engine_version                      = "${var.engine_version}"
+  instance_class                      = "${var.instance_class}"
+  name                                = "${local.db_name}"
+  parameter_group_name                = "${var.parameter_group_name}"
+  apply_immediately                   = "${var.apply_immediately}"
+  iam_database_authentication_enabled = "${var.iam_database_authentication_enabled}"
 
   # Confidentiality
   username             = "${var.username}"

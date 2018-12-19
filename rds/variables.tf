@@ -132,3 +132,7 @@ variable "instance_count" {
 variable "cluster_engine" {
   default = "aurora-postgresql"
 }
+
+variable "iam_database_authentication_enabled" {
+  default = "false"
+}

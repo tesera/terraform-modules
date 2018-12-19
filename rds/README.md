@@ -44,6 +44,57 @@ module "rds" {
 }
 ```
 
+### Using SSL to Encrypt a Connection to RDB
+Force use of SSL needs to be set through DB Parameters groups. Example of creating such param group:
+```hcl-terraform
+resource "aws_db_parameter_group" "postgres10" {
+  name   = "${var.name}-postgres10"
+  family = "postgres10"
+
+  parameter {
+    name  = "rds.force_ssl"
+    value = "1"
+  }
+}
+```
+https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/UsingWithRDS.SSL.html
+
+
+### IAM authentication
+Knowledge centre video for setting this up with mysql - https://aws.amazon.com/premiumsupport/knowledge-center/users-connect-rds-iam/
+
+After setting iam_database_authentication_enabled = true, the steps for connecting with IAM credentials are:
+
+ - create IAM Policy for IAM Database Access - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.IAMDBAuth.IAMPolicy.html :
+ ```json
+ {
+   "Version": "2012-10-17",
+   "Statement": [
+      {
+         "Effect": "Allow",
+         "Action": [
+             "rds-db:connect"
+         ],
+         "Resource": [
+             "arn:aws:rds-db:${region}:${account-id}:dbuser:${dbi-resource-id}/${db-user-name}"
+         ]
+      }
+   ]
+}
+```
+
+ - create Database Account Using IAM Authentication:
+ ``` PL/pgSQL
+  CREATE USER db_userx WITH LOGIN; 
+  GRANT rds_iam TO db_userx;
+```
+
+ - connect to RDS from the Command Line: AWS CLI and psql Client - https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/UsingWithRDS.IAMDBAuth.Connecting.AWSCLI.PostgreSQL.html
+Currently there is a known issue with generating (Postgres and Aurora/Postgres) RDS credentials ("aws rds generate-db-auth-token") with implicitly assumed EC2 role (e.g. role attached to EC2) - you will get an error "PAM Authentication failed":
+ https://forums.aws.amazon.com/thread.jspa?threadID=291106
+ https://github.com/aws/amazon-ecs-agent/issues/1604
+The workaround is either assume the role as an IAM user, or attach the rdb-connect policy to the IAM user directly.
+
 ## Input
 - **type:** type of RDS. [Default: `service`]. Valid values: service, cluster.
 - **name:** name of the RDS instance
@@ -70,6 +121,7 @@ module "rds" {
 All scripts are going to be executed in a single transaction against the database specified in db_name. 
 - **ssh_username:** username for connecting to the bastion host
 - **apply_immediately:** specifies whether any database modifications are applied immediately, or during the next maintenance window. [Default: false]. 
+- **iam_database_authentication_enabled:** specifies whether or mappings of AWS Identity and Access Management (IAM) accounts to database accounts is enabled. [Default: false].
 - **skip_final_snapshot:**  determines whether a final DB snapshot is created before the DB cluster is deleted. If true is specified, no DB snapshot is created. If false is specified, a DB snapshot is created before the DB cluster is deleted, using the value from final_snapshot_identifier. [Default: false].
 - **instance_count:** count of aurora instances to be created in the aurora cluster. Used only with type = cluster. [Default: 1].
 - **cluster_engine:** database engine for the aurora cluster. Used only with type = cluster. [Default: aurora-postgresql]
