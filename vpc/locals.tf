@@ -24,6 +24,12 @@ module "defaults" {
   tags   = "${var.default_tags}"
 }
 
+module "defaults_nat" {
+  source = "../defaults"
+  name   = "${var.name}-nat"
+  tags   = "${var.default_tags}"
+}
+
 locals {
   account_id   = "${module.defaults.account_id}"
   aws_region   = "${module.defaults.aws_region}"

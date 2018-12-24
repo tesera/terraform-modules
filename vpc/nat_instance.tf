@@ -98,7 +98,7 @@ resource "aws_autoscaling_group" "main" {
   ]
 
   tags = [
-    "${module.defaults.tags_as_list_of_maps}",
+    "${module.defaults_nat.tags_as_list_of_maps}",
   ]
 }
 
