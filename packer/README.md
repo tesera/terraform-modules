@@ -20,7 +20,7 @@ $ brew install packer
 ## Setup
 To create the AMIs, go to the respective subfolder, edit the `variables.json`, and run:
 ```bash
-packer build -var-file=variables.json module-name.json
+packer build -var-file=variables.json ami.json
 ```
 
 ## Input - these are located in variables.json
