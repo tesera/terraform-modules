@@ -1,7 +1,7 @@
 # Packer
 Packer scripts for creating up to date AMIs for faster initial boot time.
-The subfolders are named as their respective terraform modules e.g. the scripts 
-for creating AMI for the bastion modules are in "bastion" subfolder.
+The sub-folders are named as their respective terraform modules e.g. the scripts 
+for creating AMI for the bastion modules are in "bastion" sub-folder.
 Creating the AMI in all required regions is a prerequisite for using the ec2, bastion and ecs terraform modules.
 
 ## Features
@@ -18,7 +18,7 @@ $ brew install packer
 ```
 
 ## Setup
-To create the AMIs, go to the respective subfolder, edit the `variables.json`, and run:
+To create the AMIs, go to the respective sub-folder, edit the `variables.json`, and run:
 ```bash
 packer build -var-file=variables.json ami.json
 ```
@@ -30,6 +30,6 @@ packer build -var-file=variables.json ami.json
 - **user_data.sh:** - this file contain the provisioning shell script.
 
 ## Output 
-Along with the entire output from running the provisioning commands at the end of successfull execution the AMI ids in all regions are displayed.
+Along with the entire output from running the provisioning commands at the end of successful execution the AMI ids in all regions are displayed.
 
 
