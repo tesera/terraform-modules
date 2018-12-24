@@ -18,7 +18,7 @@ Creates a VPC over two AZ w/ NAT.
 
 ```hcl-terraform
 module "vpc" {
-  source = "git@github.com:tesera/terraform-modules//vpc"
+  source = "git@github.com:tesera/terraform-modules//vpc?ref=v0.1.0"
   name   = "${env}-myapp"
 }
 ```
