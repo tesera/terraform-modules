@@ -9,7 +9,7 @@ locals {
 
   tags = "${merge(map(
     "Terraform", "true",
-    "Environment", "unknown",
+    "Environment", "${terraform.workspace}",
     "Name","${replace(var.name, "/[^a-zA-Z0-9-]/", "-")}",
     "Description",""
   ), var.tags)}"
