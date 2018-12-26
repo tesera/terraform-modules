@@ -13,5 +13,5 @@ module "defaults" {
 locals {
   account_id = "${module.defaults.account_id}"
   groups     = "${data.external.groups.result}"
-  role_mfa = "${var.role_mfa}"
+  sub_accounts = "${var.sub_accounts}"
 }

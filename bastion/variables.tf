@@ -43,6 +43,4 @@ variable "iam_sudo_groups" {
   default = ""
 }
 
-variable "key_name" {
-  default = ""
-}
+variable "assume_role_arn" {}

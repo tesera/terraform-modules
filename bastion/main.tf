@@ -26,7 +26,6 @@ module "ec2" {
   subnet_public    = "true"
   image_id         = "${local.image_id}"
   user_data        = "${data.template_file.userdata.rendered}"
-  key_name         = "${var.key_name}"
   min_size         = "${local.min_size}"
   max_size         = "${local.max_size}"
   desired_capacity = "${local.desired_capacity}"
@@ -38,12 +37,12 @@ resource "aws_security_group_rule" "pubic-ssh" {
   protocol          = "tcp"
   security_group_id = "${module.ec2.security_group_id}"
 
-  cidr_blocks = [
+  cidr_blocks       = [
     "0.0.0.0/0",
   ]
 
-  to_port = 22
-  type    = "ingress"
+  to_port           = 22
+  type              = "ingress"
 }
 
 # extend role
@@ -52,7 +51,7 @@ resource "aws_iam_policy" "main-ip" {
   path        = "/"
   description = "${local.name}-bastion-ip Policy"
 
-  policy = <<EOF
+  policy      = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -75,32 +74,20 @@ resource "aws_iam_role_policy_attachment" "main-ip" {
   policy_arn = "${aws_iam_policy.main-ip.arn}"
 }
 
-
-# TODO make contitional
 resource "aws_iam_policy" "main-iam" {
   name        = "${local.name}-bastion-iam-policy"
   path        = "/"
   description = "${local.name} SSH IAM Policy"
 
-  policy = <<EOF
+  policy      = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "iam:ListUsers",
-        "iam:GetGroup"
-      ],
-      "Resource": "*"
-    }, {
-      "Effect": "Allow",
-      "Action": [
-        "iam:GetSSHPublicKey",
-        "iam:ListSSHPublicKeys"
-      ],
+      "Action": "sts:AssumeRole",
       "Resource": [
-        "arn:aws:iam::${local.account_id}:user/*"
+        "${var.assume_role_arn}"
       ]
     }, {
       "Effect": "Allow",
