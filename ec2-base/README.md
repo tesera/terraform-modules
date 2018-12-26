@@ -85,6 +85,10 @@ Install the Session Manager Plugin for the AWS CLI - https://docs.aws.amazon.com
 To start new shell session from aws cli
 ```bash
 $ aws ssm start-session --target i-00000000000000000 --region ca-central-1 --profile default
+
+# ~/.aws/credentials
+[profile ${name}-${workspace}]
+role_arn = arn:aws:iam::__SUB_ACCOUNT_ID:role/admin
 ```
 
 ## Input
