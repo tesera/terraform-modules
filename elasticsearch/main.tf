@@ -19,7 +19,7 @@ resource "aws_elasticsearch_domain" "main" {
 
   vpc_options {
     security_group_ids = ["${aws_security_group.main.id}"]
-    subnet_ids         = "${var.private_subnet_ids}"
+    subnet_ids         = ["${var.private_subnet_ids}"]
   }
 
   node_to_node_encryption {
