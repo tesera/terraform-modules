@@ -123,7 +123,7 @@ All scripts are going to be executed in a single transaction against the databas
 - **apply_immediately:** specifies whether any database modifications are applied immediately, or during the next maintenance window. [Default: false]. 
 - **iam_database_authentication_enabled:** specifies whether or mappings of AWS Identity and Access Management (IAM) accounts to database accounts is enabled. [Default: false].
 - **skip_final_snapshot:**  determines whether a final DB snapshot is created before the DB cluster is deleted. If true is specified, no DB snapshot is created. If false is specified, a DB snapshot is created before the DB cluster is deleted, using the value from final_snapshot_identifier. [Default: false].
-- **instance_count:** count of aurora instances to be created in the aurora cluster. Used only with type = cluster. [Default: 1].
+- **node_count:** count of aurora instances to be created in the aurora cluster. Used only with type = cluster. [Default: 1].
 
 ## Output
 

@@ -49,7 +49,7 @@ module "elasticache" {
 - **apply_immediately:** specifies whether any modifications are applied immediately, or during the next maintenance window. [Default: false].
 - **replica_count:** specify the number of replica nodes. [Default: 0]. Valid values are 0 to 5. Changing this number when cluster_mode_enabled = true will force a new resource.
 - **multi_az:** specifies whether a read-only replica will be automatically promoted to read/write primary if the existing primary fails. If true, Multi-AZ is enabled for this replication group. If false, Multi-AZ is disabled for this replication group. Must be enabled for Redis (cluster mode enabled) replication groups. [Default: true].
-- **num_node_groups:** - specify the number of node groups (shards) for cluster mode enabled replication groups. Changing this number will trigger an online resizing operation before other settings modifications.
+- **node_count:** - specify the number of node groups (shards) for cluster mode enabled replication groups. Changing this number will trigger an online resizing operation before other settings modifications.
 - **security_group_ids:** list of security group ids which are going to be granted access to the replication group.
 
 ## Output

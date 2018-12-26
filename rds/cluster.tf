@@ -25,7 +25,7 @@ resource "aws_rds_cluster" "main" {
 }
 
 resource "aws_rds_cluster_instance" "main" {
-  count                   = "${var.type == "cluster" ? var.instance_count : 0}"
+  count                   = "${var.type == "cluster" ? var.node_count : 0}"
   identifier              = "${local.identifier}-instance-${count.index}"
   cluster_identifier      = "${aws_rds_cluster.main.0.id}"
   instance_class          = "${var.instance_type}"

@@ -44,7 +44,7 @@ resource "aws_elasticache_replication_group" "cluster" {
 
   cluster_mode {
     replicas_per_node_group = "${var.replica_count}"
-    num_node_groups         = "${var.num_node_groups}"
+    num_node_groups         = "${var.node_count}"
   }
 
   tags = "${merge(local.tags, map(

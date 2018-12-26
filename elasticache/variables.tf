@@ -47,7 +47,7 @@ variable "multi_az" {
   default = true
 }
 
-variable "num_node_groups" {
+variable "node_count" {
   default = 1
 }
 

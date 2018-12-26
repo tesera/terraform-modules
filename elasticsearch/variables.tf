@@ -5,6 +5,11 @@ variable "default_tags" {
   default = {}
 }
 
+variable "engine" {
+  description = "this is a dummy placeholder. is not used"
+  default = "elasticsearch"
+}
+
 variable "engine_version" {
   default = "6.3"
 }
@@ -18,6 +23,11 @@ variable "security_group_ids" {
 
 variable "private_subnet_ids" {
   type = "list"
+}
+
+variable "type" {
+  description = "this is dummy placeholder. is not used"
+  default = "service"
 }
 
 #r4.large is required since not all instance types support encrypt_at_rest
@@ -71,7 +81,7 @@ variable "cognito_options" {
   default = []
 }
 
-variable "indices_config_file" {
+variable "bootstrap_file" {
   default = ""
 }
 

@@ -125,7 +125,7 @@ variable "skip_final_snapshot" {
   default = "false"
 }
 
-variable "instance_count" {
+variable "node_count" {
   default = "2"
 }
 

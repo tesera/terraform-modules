@@ -1,5 +1,5 @@
 data "template_file" "indices_script" {
-  count    = "${var.indices_config_file == "" ? 0 : 1}"
+  count    = "${var.bootstrap_file == "" ? 0 : 1}"
   template = "${file("${path.module}/create_indices_template.sh")}"
 
   vars {
@@ -7,20 +7,20 @@ data "template_file" "indices_script" {
     SSH_USERNAME           = "${var.ssh_username}"
     BASTION_IP             = "${var.bastion_ip}"
     ELASTICSEARCH_ENDPOINT = "${aws_elasticsearch_domain.main.endpoint}"
-    INDICES_CONFIG_FILE    = "${var.indices_config_file}"
+    INDICES_CONFIG_FILE    = "${var.bootstrap_file}"
   }
 }
 
 resource "local_file" "indices_script" {
-  count      = "${var.indices_config_file == "" ? 0 : 1}"
+  count      = "${var.bootstrap_file == "" ? 0 : 1}"
   content    = "${data.template_file.indices_script.rendered}"
   filename   = "${path.cwd}/create_indices.sh"
   depends_on = ["aws_elasticsearch_domain.main"]
 }
 
 data "local_file" "indices_config" {
-  count    = "${var.indices_config_file == "" ? 0 : 1}"
-  filename = "${path.cwd}/${var.indices_config_file}"
+  count    = "${var.bootstrap_file == "" ? 0 : 1}"
+  filename = "${path.cwd}/${var.bootstrap_file}"
 }
 
 data "local_file" "init_script" {
@@ -28,7 +28,7 @@ data "local_file" "init_script" {
 }
 
 resource "null_resource" "init" {
-  count      = "${var.indices_config_file == "" ? 0 : 1}"
+  count      = "${var.bootstrap_file == "" ? 0 : 1}"
   depends_on = ["local_file.indices_script"]
 
   triggers {
