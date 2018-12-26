@@ -24,14 +24,6 @@ Before using this terraform module, the "bastion" and "ec2" AMIs need to be crea
 ### Module
 ```hcl-terraform
 module "bastion" {
-  source            = "git@github.com:tesera/terraform-modules//bastion"
-  name              = "${local.name}"
-  vpc_id            = "${module.vpc.id}"
-  public_subnet_ids = "${module.vpc.public_subnet_ids}"
-  iam_user_groups   = "Developer,Admin"
-  iam_sudo_groups   = "Admin"
-}
-module "bastion" {
   source            = "git@github.com:tesera/terraform-modules//bastion?ref=v0.1.3"
   name              = "${local.workspace["name"]}"
   instance_type     = "${local.workspace["bastion_instance_type"]}"
