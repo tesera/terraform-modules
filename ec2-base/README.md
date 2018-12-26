@@ -87,8 +87,13 @@ To start new shell session from aws cli
 $ aws ssm start-session --target i-00000000000000000 --region ca-central-1 --profile default
 
 # ~/.aws/credentials
-[profile ${name}-${workspace}]
-role_arn = arn:aws:iam::__SUB_ACCOUNT_ID:role/admin
+[${name}]
+aws_access_key_id = 
+aws_secret_access_key = 
+
+[${name}-${workspace}]
+source_profile = ${name}
+role_arn = arn:aws:iam::${SUB_ACCOUNT_ID}:role/admin
 ```
 
 ## Input
@@ -109,8 +114,3 @@ role_arn = arn:aws:iam::__SUB_ACCOUNT_ID:role/admin
 - **iam_role_arn:** IAM role arn to allow extending of the role
 - **billing_suggestion:** comments to improve billing cost
 
-
-## TODO
-- [ ] OS hardening
-  - CIS
-  - ClamAV
