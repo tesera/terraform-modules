@@ -66,7 +66,7 @@ Sample index/mapping json - mapping.json:
 ## Input
 - **name:** name of the ElasticSearch domain.
 - **default_tags:** default tags.
-- **version:** the version of Elasticsearch to deploy. [Default: 6.3].
+- **engine_version:** the version of Elasticsearch to deploy. [Default: 6.3].
 - **vpc_id:** VPC id.
 - **private_subnet_ids:** list of VPC subnet IDs. if multi_az = false exactly one subnet needs to be specified.
 - **instance_type:** instance type of data nodes in the cluster. [Default: r4.large.elasticsearch]. 

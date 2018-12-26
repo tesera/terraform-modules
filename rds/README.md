@@ -112,7 +112,7 @@ The workaround is either assume the role as an IAM user, or attach the rdb-conne
 - **parameter_group_name:** name of the DB parameter group to associate - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithParamGroups.html. If we haven't created a custom group we should use the default group matching the engine version
 - **allocated_storage:** amount of allocated storage in GB
 - **backup_retention_period:** backup retention period
-- **multi_az:** if the RDS instance is multi AZ enabled
+- **multi_az:** if the RDS instance is multi AZ enabled [Default: true]
 - **replica_count:** number of read replicas to deploy
 - **security_group_ids:** list of security group ids which are going to be granted access to the DB. [Default: []]
 - **ssh_identity_file:** SSH key filename for connecting to the bastion host

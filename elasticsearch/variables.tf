@@ -5,7 +5,7 @@ variable "default_tags" {
   default = {}
 }
 
-variable "version" {
+variable "engine_version" {
   default = "6.3"
 }
 
@@ -42,7 +42,7 @@ variable "dedicated_master_count" {
 }
 
 variable "multi_az" {
-  default = "true"
+  default = true
 }
 
 variable "automated_snapshot_start_hour" {

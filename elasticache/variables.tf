@@ -44,7 +44,7 @@ variable "replica_count" {
 }
 
 variable "multi_az" {
-  default = "true"
+  default = true
 }
 
 variable "num_node_groups" {

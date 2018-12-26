@@ -48,7 +48,7 @@ module "elasticache" {
 - **maintenance_window:** specifies the weekly time range for when maintenance on the cache cluster is performed. The format is ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. [Default: sun:05:00-sun:09:00].
 - **apply_immediately:** specifies whether any modifications are applied immediately, or during the next maintenance window. [Default: false].
 - **replica_count:** specify the number of replica nodes. [Default: 0]. Valid values are 0 to 5. Changing this number when cluster_mode_enabled = true will force a new resource.
-- **multi_az:** specifies whether a read-only replica will be automatically promoted to read/write primary if the existing primary fails. If true, Multi-AZ is enabled for this replication group. If false, Multi-AZ is disabled for this replication group. Must be enabled for Redis (cluster mode enabled) replication groups. [Default: false].
+- **multi_az:** specifies whether a read-only replica will be automatically promoted to read/write primary if the existing primary fails. If true, Multi-AZ is enabled for this replication group. If false, Multi-AZ is disabled for this replication group. Must be enabled for Redis (cluster mode enabled) replication groups. [Default: true].
 - **num_node_groups:** - specify the number of node groups (shards) for cluster mode enabled replication groups. Changing this number will trigger an online resizing operation before other settings modifications.
 - **security_group_ids:** list of security group ids which are going to be granted access to the replication group.
 
