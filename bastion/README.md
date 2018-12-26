@@ -30,8 +30,8 @@ module "bastion" {
   vpc_id            = "${module.vpc.id}"
   network_acl_id    = "${module.vpc.network_acl_id}"
   public_subnet_ids = "${module.vpc.public_subnet_ids}"
-  iam_user_groups   = "${join(",",local.workspace["bastion_user_group"])}"
-  iam_sudo_groups   = "${join(",",local.workspace["bastion_sudo_group"])}"
+  iam_user_groups   = "${local.workspace["bastion_user_group"]}"
+  iam_sudo_groups   = "${local.workspace["bastion_sudo_group"]}"
 }
 ```
 
