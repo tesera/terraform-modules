@@ -14,6 +14,7 @@ data "template_file" "userdata" {
     EIP_ID                = "${aws_eip.main.id}"
     IAM_AUTHORIZED_GROUPS = "${var.iam_user_groups}"
     SUDOERS_GROUPS        = "${var.iam_sudo_groups}"
+    ASSUMEROLE            = "${var.assume_role_arn}"
   }
 }
 
