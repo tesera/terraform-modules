@@ -4,7 +4,7 @@ Allow ssh to private subnet services.
 ## Features
 - static ip address
 - Auto-scaling across all public subnets
-- `authorized_keys` generated from users in an IAM group (from master account)
+- `authorized_keys` generated from users in an IAM group
 - `fail2ban` enabled
 - CloudWatch logging enabled
 - CloudWatch agent for collecting additional metrics
@@ -32,14 +32,7 @@ module "bastion" {
   public_subnet_ids = "${module.vpc.public_subnet_ids}"
   iam_user_groups   = "${local.workspace["bastion_user_group"]}"
   iam_sudo_groups   = "${local.workspace["bastion_sudo_group"]}"
-}
-```
-
-### Create global SSH key
-```hcl-terraform
-resource "aws_key_pair" "root_public_key" {
-  key_name   = "root_public_key"
-  public_key = "ssh-rsa ...== COMMENT"
+  assume_role_arn   = "${element(matchkeys(data.terraform_remote_state.master.bastion_role_arns, keys(data.terraform_remote_state.master.sub_accounts), list(terraform.workspace)),0)}"
 }
 ```
 
@@ -54,9 +47,9 @@ resource "aws_iam_group" "developers" {
 - **vpc_id:** vpc id
 - **network_acl_id:** VPC ACL id to allow port 22 (ingress/egress)
 - **public_subnet_ids:** array of public subnet ids
+- **key_name:** name of root ssh key
 - **iam_user_groups:** name of iam group that should have ssh access, comma separated list
 - **iam_sudo_groups:** name of iam group that should have ssh sudo access, comma separated list
-- **assume_role_arn:** the master account role arn
 - **image_id:** override the base image, must be CentOS based (ie has yum and rpm) [Default: AWS Linux]
 - **instance_type:** override the instance type [Default: t2.micro]
 
