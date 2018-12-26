@@ -7,7 +7,7 @@ resource "aws_db_instance" "main" {
   storage_type                        = "${var.storage_type}"
   engine                              = "${var.engine}"
   engine_version                      = "${var.engine_version}"
-  instance_class                      = "${var.instance_class}"
+  instance_class                      = "${var.instance_type}"
   name                                = "${local.db_name}"
   parameter_group_name                = "${var.parameter_group_name}"
   apply_immediately                   = "${var.apply_immediately}"
@@ -26,7 +26,7 @@ resource "aws_db_instance" "main" {
   # TODO test out `iam_database_authentication_enabled` for db user access
   # TODO research and apply `kms_key_id`
 
-  storage_encrypted = "${replace(var.instance_class, "micro", "") == var.instance_class}"
+  storage_encrypted = "${replace(var.instance_type, "micro", "") == var.instance_type}"
   # Integrity
   # TODO add back in
   #enabled_cloudwatch_logs_exports = [ "audit" ]
@@ -53,7 +53,7 @@ resource "aws_db_instance" "replica" {
   storage_type                = "${var.storage_type}"
   engine                      = "${var.engine}"
   engine_version              = "${var.engine_version}"
-  instance_class              = "${var.instance_class}"
+  instance_class              = "${var.instance_type}"
   name                        = "${local.db_name}"
   parameter_group_name        = "${var.parameter_group_name}"
   apply_immediately           = true
@@ -67,7 +67,7 @@ resource "aws_db_instance" "replica" {
   # TODO test out `iam_database_authentication_enabled` for db user access
   # TODO research and apply `kms_key_id`
 
-  storage_encrypted = "${replace(var.instance_class, "micro", "") == var.instance_class}"
+  storage_encrypted = "${replace(var.instance_type, "micro", "") == var.instance_type}"
   # Integrity
   # TODO add back in
   # enabled_cloudwatch_logs_exports = [ "audit" ]

@@ -14,7 +14,7 @@ module "elasticache" {
   private_subnet_ids = ["subnet-00000000000000000", "subnet-00000000000000001"]
   vpc_id             = "vpc-00000000"
   instance_type      = "cache.m3.medium"
-  read_replicas      = 1
+  replica_count      = 1
   multi_az           = "true"
   security_group_ids = ["${module.bastion.security_group_id}"]
 }
@@ -28,7 +28,7 @@ module "elasticache" {
   name               = "redis-name"
   private_subnet_ids = ["subnet-00000000000000000", "subnet-00000000000000001"]
   vpc_id             = "vpc-00000000"
-  read_replicas      = 1
+  replica_count      = 1
   multi_az           = "true"
   security_group_ids = ["${module.bastion.security_group_id}"]
   num_node_groups    = 2
@@ -37,7 +37,7 @@ module "elasticache" {
 
 ## Input
 - **name:** name of the elasticache cluster.
-- **type:** is cluster mode enabled? [Default: standalone]. Valid values: cluster, standalone. If cluster is selected multi_az must be true.
+- **type:** is cluster mode enabled? [Default: service]. Valid values: cluster, service. If cluster is selected multi_az must be true.
 - **engine:** the name of the cache engine to be used for the clusters in this replication group. [Default: `redis`]. Valid values: at the moment only `redis` is supported
 - **version:** the version number of the cache engine to be used for the cache clusters in this replication group.
 - **port:** the port number on which each of the cache nodes will accept connections. [Default: 6379].
@@ -47,7 +47,7 @@ module "elasticache" {
 - **instance_type:** the compute and memory capacity of the nodes in the node group.
 - **maintenance_window:** specifies the weekly time range for when maintenance on the cache cluster is performed. The format is ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. [Default: sun:05:00-sun:09:00].
 - **apply_immediately:** specifies whether any modifications are applied immediately, or during the next maintenance window. [Default: false].
-- **read_replicas:** specify the number of replica nodes. [Default: 0]. Valid values are 0 to 5. Changing this number when cluster_mode_enabled = true will force a new resource.
+- **replica_count:** specify the number of replica nodes. [Default: 0]. Valid values are 0 to 5. Changing this number when cluster_mode_enabled = true will force a new resource.
 - **multi_az:** specifies whether a read-only replica will be automatically promoted to read/write primary if the existing primary fails. If true, Multi-AZ is enabled for this replication group. If false, Multi-AZ is disabled for this replication group. Must be enabled for Redis (cluster mode enabled) replication groups. [Default: false].
 - **num_node_groups:** - specify the number of node groups (shards) for cluster mode enabled replication groups. Changing this number will trigger an online resizing operation before other settings modifications.
 - **security_group_ids:** list of security group ids which are going to be granted access to the replication group.

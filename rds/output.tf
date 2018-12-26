@@ -23,5 +23,5 @@ output "security_group_id" {
 }
 
 output "billing_suggestion" {
-  value = "Reserved Instances: ${var.instance_class} x ${var.replica_count+1}"
+  value = "Reserved Instances: ${var.instance_type} x ${var.replica_count+1}"
 }

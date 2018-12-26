@@ -20,7 +20,7 @@ resource "aws_elasticache_replication_group" "clustermodedisabled" {
   parameter_group_name          = "${var.parameter_group_name}"
   subnet_group_name             = "${aws_elasticache_subnet_group.main.name}"
   security_group_ids            = ["${aws_security_group.main.id}"]
-  number_cache_clusters         = "${var.read_replicas + 1}"
+  number_cache_clusters         = "${var.replica_count + 1}"
   maintenance_window            = "${var.maintenance_window}"
   port                          = "${var.port}"
   at_rest_encryption_enabled    = "true"
@@ -48,7 +48,7 @@ resource "aws_elasticache_replication_group" "clustermodeenabled" {
   transit_encryption_enabled    = "true"
 
   cluster_mode {
-    replicas_per_node_group = "${var.read_replicas}"
+    replicas_per_node_group = "${var.replica_count}"
     num_node_groups         = "${var.num_node_groups}"
   }
 

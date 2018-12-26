@@ -39,7 +39,7 @@ variable "apply_immediately" {
   default = "false"
 }
 
-variable "read_replicas" {
+variable "replica_count" {
   default = 0
 }
 
@@ -52,7 +52,7 @@ variable "num_node_groups" {
 }
 
 variable "type" {
-  default = "standalone"
+  default = "service"
 }
 
 variable "security_group_ids" {

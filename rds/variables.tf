@@ -36,7 +36,7 @@ variable "engine_mode" {
   default = "provisioned"
 }
 
-variable "instance_class" {
+variable "instance_type" {
   default = "db.t2.micro"
 }
 

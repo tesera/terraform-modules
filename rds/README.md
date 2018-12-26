@@ -107,7 +107,7 @@ The workaround is either assume the role as an IAM user, or attach the rdb-conne
 - **engine:** database engine [Default: postgres]
 - **engine_version:** database engine version. [Default: 10.x] The currently supported version can be checked here - https://aws.amazon.com/rds/postgresql/faqs/
 - **engine_mode:** The database engine mode. Used only with type = cluster. Valid values: provisioned, serverless. [Default: provisioned]. Limitations when using serverless - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/aurora-serverless.html
-- **instance_class:** instance type of the RDS instance. encryption will be turned on for all `db.*.*large` instances
+- **instance_type:** instance type of the RDS instance. encryption will be turned on for all `db.*.*large` instances
 - **backup_window:** window of time when a backup can be triggered
 - **parameter_group_name:** name of the DB parameter group to associate - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithParamGroups.html. If we haven't created a custom group we should use the default group matching the engine version
 - **allocated_storage:** amount of allocated storage in GB
