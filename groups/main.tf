@@ -27,19 +27,22 @@ resource "aws_iam_policy" "groups" {
       "Action": [
         "sts:AssumeRole"
       ],
-      "Condition": {
-        "Bool": {
-          "aws:MultiFactorAuthPresent": "true"
-        }
-      },
       "Resource": [
-        "arn:aws:iam::${aws_organizations_account.main.*.id[index(aws_organizations_account.main.*.name, element(split("-",local.groups[count.index]),0))]}:role/${element(split("-",local.groups[count.index]),1)}"
-      ]
+        "arn:aws:iam::${var.sub_accounts[element(split("-",local.groups[count.index]),0)]}:role/${element(split("-",local.groups[count.index]),1)}"
+        ]
     }
   ]
 }
 POLICY
 }
+
+/*
+"Condition": {
+  "Bool": {
+    "aws:MultiFactorAuthPresent": "${local.role_mfa}"
+  }
+},
+*/
 
 resource "aws_iam_group_policy_attachment" "groups" {
   count      = "${length(keys(local.groups))}"
@@ -162,33 +165,33 @@ resource "aws_iam_group_policy_attachment" "user" {
 
 # Terraform
 
-resource "aws_iam_group" "terraform" {
-  name = "MasterTerraform"
-}
+//resource "aws_iam_group" "terraform" {
+//  name = "MasterTerraform"
+//}
 
 # TODO update policy - s3 read/write, dynamodb read/write
-resource "aws_iam_policy" "terraform" {
-  name        = "TerraformAccess"
-  policy      = <<POLICY
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "AllowUsersAllActionsForTerraform",
-            "Effect": "Allow",
-            "Action": [
-                "*"
-            ],
-            "Resource": [
-                "arn:aws:iam::${local.account_id}:*"
-            ]
-        }
-    ]
-}
-POLICY
-}
+//resource "aws_iam_policy" "terraform" {
+//  name        = "TerraformAccess"
+//  policy      = <<POLICY
+//{
+//    "Version": "2012-10-17",
+//    "Statement": [
+//        {
+//            "Sid": "AllowUsersAllActionsForTerraform",
+//            "Effect": "Allow",
+//            "Action": [
+//                "*"
+//            ],
+//            "Resource": [
+//                "arn:aws:iam::${local.account_id}:*"
+//            ]
+//        }
+//    ]
+//}
+//POLICY
+//}
 
-resource "aws_iam_group_policy_attachment" "terraform" {
-  group      = "${aws_iam_group.terraform.name}"
-  policy_arn = "${aws_iam_policy.terraform.arn}"
-}
+//resource "aws_iam_group_policy_attachment" "terraform" {
+//  group      = "${aws_iam_group.terraform.name}"
+//  policy_arn = "${aws_iam_policy.terraform.arn}"
+//}
