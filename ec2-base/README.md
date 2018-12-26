@@ -94,6 +94,7 @@ aws_secret_access_key =
 [${name}-${workspace}]
 source_profile = ${name}
 role_arn = arn:aws:iam::${SUB_ACCOUNT_ID}:role/admin
+session_name = ${name}-${workspace}
 ```
 
 ## Input
