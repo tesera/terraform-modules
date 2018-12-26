@@ -1,15 +1,10 @@
-module "defaults" {
-  source = "../defaults"
-  name   = "${var.name}"
-  tags   = "${var.default_tags}"
-}
 
 resource "aws_elasticache_subnet_group" "main" {
-  name       = "${local.name}-group"
+  name       = "${local.name}-${var.engine}-group"
   subnet_ids = ["${var.private_subnet_ids}"]
 }
 
-resource "aws_elasticache_replication_group" "clustermodedisabled" {
+resource "aws_elasticache_replication_group" "service" {
   count                         = "${var.type == "cluster" ? 0 : 1}"
   automatic_failover_enabled    = "${var.multi_az}"
   replication_group_id          = "${local.name}-group"
@@ -27,11 +22,11 @@ resource "aws_elasticache_replication_group" "clustermodedisabled" {
   transit_encryption_enabled    = "true"
 
   tags = "${merge(local.tags, map(
-    "Name", "${local.name}-cluster"
+    "Name", "${local.name}-${var.engine}-cluster"
   ))}"
 }
 
-resource "aws_elasticache_replication_group" "clustermodeenabled" {
+resource "aws_elasticache_replication_group" "cluster" {
   count                         = "${var.type == "cluster" ? 1 : 0}"
   automatic_failover_enabled    = "${var.multi_az}"
   replication_group_id          = "${local.name}-group"
@@ -53,6 +48,6 @@ resource "aws_elasticache_replication_group" "clustermodeenabled" {
   }
 
   tags = "${merge(local.tags, map(
-    "Name", "${local.name}-cluster"
+    "Name", "${local.name}-${var.engine}-cluster"
   ))}"
 }

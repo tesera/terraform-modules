@@ -6,7 +6,7 @@ resource "aws_rds_cluster" "main" {
   master_password                     = "${var.password}"
   final_snapshot_identifier           = "${local.identifier}-final"
   skip_final_snapshot                 = "${var.skip_final_snapshot}"
-  engine                              = "${var.cluster_engine}"
+  engine                              = "${var.engine}"
   engine_version                      = "${var.engine_version}"
   engine_mode                         = "${var.engine_mode}"
   storage_encrypted                   = "true"
