@@ -41,6 +41,10 @@ variable "timeout" {
   default = 30
 }
 
+variable "xray" {
+  type="string"
+  default = "false"
+}
 //variable "authorizer_client_id" {}
 //variable "authorizer_client_secret" {}
 

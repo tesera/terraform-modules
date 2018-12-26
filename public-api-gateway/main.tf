@@ -1,33 +1,3 @@
-# Enable Logging - TODO move to global setup
-resource "aws_api_gateway_account" "main" {
-  cloudwatch_role_arn = "${aws_iam_role.main-logs.arn}"
-}
-
-resource "aws_iam_role" "main-logs" {
-  name = "${var.name}-apig-logs-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "apigateway.amazonaws.com"
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "main-logs" {
-  role       = "${aws_iam_role.main-logs.name}"
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
-}
-
 # Setup APIG
 resource "aws_api_gateway_rest_api" "main" {
   name = "${local.name}"
@@ -35,6 +5,14 @@ resource "aws_api_gateway_rest_api" "main" {
   endpoint_configuration {
     types = ["REGIONAL"]
   }
+}
+
+resource "aws_api_gateway_stage" "test" {
+  stage_name = "${local.stage_name}"
+  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  deployment_id = "${aws_api_gateway_deployment.main.id}"
+
+  xray_tracing_enabled = "${var.xray}"
 }
 
 # aws_api_gateway_deployment.main: Error creating API Gateway Deployment: BadRequestException: The REST API doesn't contain any methods

@@ -88,3 +88,13 @@ region = us-east-1
 role_arn = arn:aws:iam:123456789:role/admin
 source_profile = main
 ```
+
+## Enabled Account level services
+
+### Trusted Advisor
+1. Go to [Trusted Advisor Dashboard](https://console.aws.amazon.com/trustedadvisor/home)
+1. TODO https://aws.amazon.com/premiumsupport/trustedadvisor/
+
+### Macie
+1. [Set Up](https://docs.aws.amazon.com/macie/latest/userguide/macie-setting-up.html#macie-setting-up-enable)
+
