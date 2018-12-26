@@ -39,12 +39,12 @@ module "elasticache" {
 - **name:** name of the elasticache cluster.
 - **type:** is cluster mode enabled? [Default: service]. Valid values: cluster, service. If cluster is selected multi_az must be true.
 - **engine:** the name of the cache engine to be used for the clusters in this replication group. [Default: `redis`]. Valid values: at the moment only `redis` is supported
-- **version:** the version number of the cache engine to be used for the cache clusters in this replication group.
+- **engine_version:** the version number of the cache engine to be used for the cache clusters in this replication group.
 - **port:** the port number on which each of the cache nodes will accept connections. [Default: 6379].
 - **parameter_group_name:** the name of the parameter group to associate with this replication group. If this argument is omitted, the default cache parameter group for the engine is used.
 - **vpc_id:** VPC id.
 - **private_subnet_ids:** list of VPC subnet IDs.
-- **instance_type:** the compute and memory capacity of the nodes in the node group.
+- **instance_type:** the compute and memory capacity of the nodes in the node group. [Default `cache.t2.micro`]
 - **maintenance_window:** specifies the weekly time range for when maintenance on the cache cluster is performed. The format is ddd:hh24:mi-ddd:hh24:mi (24H Clock UTC). The minimum maintenance window is a 60 minute period. [Default: sun:05:00-sun:09:00].
 - **apply_immediately:** specifies whether any modifications are applied immediately, or during the next maintenance window. [Default: false].
 - **replica_count:** specify the number of replica nodes. [Default: 0]. Valid values are 0 to 5. Changing this number when cluster_mode_enabled = true will force a new resource.

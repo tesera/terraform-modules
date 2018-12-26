@@ -9,7 +9,7 @@ variable "engine" {
   default = "redis"
 }
 
-variable "version" {
+variable "engine_version" {
   default = "4.0.10"
 }
 
