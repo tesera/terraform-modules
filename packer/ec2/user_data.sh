@@ -82,6 +82,9 @@ echo "***** Setup Inspector Agent *****"
 wget https://inspector-agent.amazonaws.com/linux/latest/install
 bash install
 
+echo "***** Setup SSM Agent *****"
+# already built into Amazon Linux 2 AMI
+
 echo "***** Setup the EFS mount helper *****"
 yum install -y amazon-efs-utils
 

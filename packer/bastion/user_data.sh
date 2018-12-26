@@ -35,6 +35,11 @@ yum install fail2ban -y
 systemctl enable fail2ban
 
 echo "***** Setup SSH via IAM *****"
+# 2018-10-31 Amazon Linux 2 was pushed with a breaking change
+# https://aws.amazon.com/de/amazon-linux-2/release-notes/
+# https://github.com/widdix/aws-ec2-ssh/issues/142
+sed -i 's@AuthorizedKeysCommand /usr/bin/timeout 5s /opt/aws/bin/curl_authorized_keys %u %f@#AuthorizedKeysCommand /usr/bin/timeout 5s /opt/aws/bin/curl_authorized_keys %u %f@g' /etc/ssh/sshd_config
+sed -i 's@AuthorizedKeysCommandUser ec2-instance-connect@#AuthorizedKeysCommandUser ec2-instance-connect@g' /etc/ssh/sshd_config
 rpm -i https://s3-eu-west-1.amazonaws.com/widdix-aws-ec2-ssh-releases-eu-west-1/aws-ec2-ssh-1.9.1-1.el7.centos.noarch.rpm
 
 echo "***** Setup CloudWatch Logging *****"
@@ -103,6 +108,9 @@ rpm -i https://s3.amazonaws.com/amazoncloudwatch-agent/amazon_linux/amd64/latest
 echo "***** Setup Inspector Agent *****"
 wget https://inspector-agent.amazonaws.com/linux/latest/install
 bash install
+
+echo "***** Setup SSM Agent *****"
+# already built into Amazon Linux 2 AMI
 
 echo "***** Update *****"
 yum update -y
