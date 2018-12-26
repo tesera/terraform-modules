@@ -109,7 +109,7 @@ variable "bastion_ip" {
   default = ""
 }
 
-variable "init_scripts_folder" {
+variable "bootstrap_folder" {
   default = ""
 }
 

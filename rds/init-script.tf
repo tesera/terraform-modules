@@ -1,5 +1,5 @@
 data "template_file" "pgsql" {
-  count    = "${var.init_scripts_folder == "" ? 0 : 1}"
+  count    = "${var.bootstrap_folder == "" ? 0 : 1}"
   template = "${file("${path.module}/pgsql_template.sh")}"
 
   vars {
@@ -9,26 +9,26 @@ data "template_file" "pgsql" {
     DB_HOST             = "${local.endpoint}"
     DB_PORT             = "${local.port}"
     DATABASE_NAME       = "${local.db_name}"
-    INIT_SCRIPTS_FOLDER = "${var.init_scripts_folder}"
+    INIT_SCRIPTS_FOLDER = "${var.bootstrap_folder}"
   }
 }
 
 resource "local_file" "pgsql" {
-  count      = "${var.init_scripts_folder == "" ? 0 : 1}"
+  count      = "${var.bootstrap_folder == "" ? 0 : 1}"
   content    = "${data.template_file.pgsql.rendered}"
   filename   = "${path.cwd}/pgsql.sh"
   depends_on = ["aws_rds_cluster_instance.main"]
 }
 
 data "archive_file" "init_scripts" {
-  count       = "${var.init_scripts_folder == "" ? 0 : 1}"
+  count       = "${var.bootstrap_folder == "" ? 0 : 1}"
   type        = "zip"
   output_path = "${path.cwd}/init_sql_script.zip"
-  source_dir  = "${var.init_scripts_folder}"
+  source_dir  = "${var.bootstrap_folder}"
 }
 
 resource "null_resource" "docker" {
-  count = "${var.init_scripts_folder == "" ? 0 : 1}"
+  count = "${var.bootstrap_folder == "" ? 0 : 1}"
 
   # Changes to the files in init_scripts_folder will execute the script
   triggers {
