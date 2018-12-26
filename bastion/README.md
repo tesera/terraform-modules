@@ -31,6 +31,16 @@ module "bastion" {
   iam_user_groups   = "Developer,Admin"
   iam_sudo_groups   = "Admin"
 }
+module "bastion" {
+  source            = "git@github.com:tesera/terraform-modules//bastion?ref=v0.1.3"
+  name              = "${local.workspace["name"]}"
+  instance_type     = "${local.workspace["bastion_instance_type"]}"
+  vpc_id            = "${module.vpc.id}"
+  network_acl_id    = "${module.vpc.network_acl_id}"
+  public_subnet_ids = "${module.vpc.public_subnet_ids}"
+  iam_user_groups   = "${join(",",local.workspace["bastion_user_group"])}"
+  iam_sudo_groups   = "${join(",",local.workspace["bastion_sudo_group"])}"
+}
 ```
 
 ### Create global SSH key
@@ -96,10 +106,5 @@ Host cn-test-ecs
   HostName **PRIVATEIP**
 ```
 
-## TODO
-- [ ] test CloudWatch Logging
-- [ ] fail2ban alerts
-- [ ] MFA - google authenticator
-- [ ] OS hardening
-  - CIS
-  - ClamAV
+## References
+- [widdix/aws-ec2-ssh](https://github.com/widdix/aws-ec2-ssh/blob/master/aws-ec2-ssh.conf)
