@@ -6,7 +6,7 @@ output "port" {
   value = "${local.port}"
 }
 
-output "reader_endpoints" {
+output "replica_endpoints" {
   value = "${aws_rds_cluster.main.*.reader_endpoint}"
 }
 

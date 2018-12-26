@@ -128,6 +128,7 @@ All scripts are going to be executed in a single transaction against the databas
 ## Output
 
 - **endpoint:** connection endpoint
+- **replica_endpoints:** read replica endpoints
 - **password:** password of the master DB user
 - **username:** username of the master DB user
 - **security_group_id:** the security group that was created and associated with this instance

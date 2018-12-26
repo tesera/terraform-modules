@@ -55,8 +55,8 @@ module "elasticache" {
 ## Output
 
 - **security_group_id:** the security group that was created and associated with this replication group.
-- **master_endpoint:** the address of the replication group configuration endpoint.
-- **read_replica_endpoints:** the identifiers of all the nodes that are part of this replication group.
+- **endpoint:** the address of the replication group configuration endpoint.
+- **replica_endpoints:** the identifiers of all the nodes that are part of this replication group.
 - **port:** the port number on which each of the cache nodes will accept connections.
 
 
