@@ -4,7 +4,7 @@ module "ec2-base" {
   default_tags           = "${var.default_tags}"
   account_id             = "${var.account_id}"
   vpc_id                 = "${var.vpc_id}"
-  subnet_ids             = "${var.subnet_ids}"
+  subnet_ids             = ["${var.subnet_ids}"]
   subnet_public          = "${var.subnet_public}"
   image_id               = "${var.image_id != "" ? var.image_id : data.aws_ami.main.image_id}"
   instance_type          = "${var.instance_type}"
@@ -15,6 +15,6 @@ module "ec2-base" {
   min_size               = "${var.min_size}"
   max_size               = "${var.max_size}"
   desired_capacity       = "${var.desired_capacity}"
-  efs_ids                = "${var.efs_ids}"
-  efs_security_group_ids = "${var.efs_security_group_ids}"
+  efs_ids                = ["${var.efs_ids}"]
+  efs_security_group_ids = ["${var.efs_security_group_ids}"]
 }

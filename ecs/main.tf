@@ -15,7 +15,7 @@ module "ec2" {
   name                   = "${var.name}-ecs"
   account_id             = "${local.account_id}"
   vpc_id                 = "${var.vpc_id}"
-  subnet_ids             = "${var.private_subnet_ids}"
+  subnet_ids             = ["${var.private_subnet_ids}"]
   image_id               = "${local.image_id}"
   instance_type          = "${local.instance_type}"
   user_data              = "${data.template_file.userdata.rendered}"
