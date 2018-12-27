@@ -2,6 +2,10 @@ output "name" {
   value = "${aws_ecs_cluster.main.name}"
 }
 
+output "id" {
+  value = "${aws_ecs_cluster.main.id}"
+}
+
 # EC2 Output
 output "iam_role_name" {
   value = "${module.ec2.iam_role_name}"
