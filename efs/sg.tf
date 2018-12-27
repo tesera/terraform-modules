@@ -3,6 +3,6 @@ data "aws_subnet" "first" {
 }
 
 resource "aws_security_group" "main" {
-  name   = "${var.name}-${aws_efs_file_system.main.id}"
+  name   = "${var.name}-efs-${aws_efs_file_system.main.id}"
   vpc_id = "${data.aws_subnet.first.vpc_id}"
 }

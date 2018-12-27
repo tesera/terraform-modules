@@ -22,8 +22,8 @@ module "ec2" {
   min_size               = "${local.min_size}"
   max_size               = "${local.max_size}"
   desired_capacity       = "${local.desired_capacity}"
-  efs_ids                = "${var.efs_ids}"
-  efs_security_group_ids = "${var.efs_security_group_ids}"
+  efs_ids                = ["${var.efs_ids}"]
+  efs_security_group_ids = ["${var.efs_security_group_ids}"]
 }
 
 resource "aws_iam_role_policy_attachment" "main-ecs" {

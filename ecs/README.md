@@ -38,6 +38,8 @@ module "ecs" {
 - **min_size:** auto-scaling - min instance count [Default: 2]
 - **max_size:** auto-scaling - max instance count [Default: 2]
 - **desired_capacity:** auto-scaling - desired instance count [Default: 2]
+- **efs_ids:** list of EFS IDs
+- **efs_security_group_ids:** list of EFS security groups
 
 ## Output
 - **name:** ecs cluster name
