@@ -1,7 +1,11 @@
-data "aws_region" "current" {}
+module "defaults" {
+  source = "../defaults"
+  name   = "${var.name}"
+  #tags   = "${var.default_tags}"
+}
 
 locals {
-  aws_region = "${data.aws_region.current.name}"
+  region = "${module.defaults.region}"
   name       = "${replace(var.name, "/[_]/", "-")}"
   stage_name = "api"
 

@@ -1,7 +1,12 @@
-data "aws_region" "current" {}
+module "defaults" {
+  source = "../defaults"
+  name   = "${var.name}"
+  tags   = "${var.default_tags}"
+}
 
 locals {
-  aws_region    = "${data.aws_region.current.name}"
+  region        = "${module.defaults.region}"
+  tags          = "${module.defaults.tags}"
   name          = "${replace(var.name, "/[_]/", "-")}"
   sse_algorithm = "AES256"
 }

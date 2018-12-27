@@ -2,8 +2,12 @@ output "account_id" {
   value = "${local.account_id}"
 }
 
-output "aws_region" {
-  value = "${local.aws_region}"
+output "profile" {
+  value = "${local.profile}"
+}
+
+output "region" {
+  value = "${local.region}"
 }
 
 output "name" {

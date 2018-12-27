@@ -10,6 +10,8 @@ python get-pip.py
 echo "***** Update awscli *****"
 /usr/local/bin/pip install --upgrade awscli
 
+sudo curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-darwin-amd64-latest
+
 echo "***** Setup CloudWatch Logging *****"
 yum install awslogs -y
 cat << EOF > /etc/init.d/configure-awslogs

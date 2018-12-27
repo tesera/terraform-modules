@@ -37,7 +37,7 @@ resource "aws_s3_bucket" "main-s3-logs" {
 
 resource "aws_s3_bucket" "main" {
   bucket              = "${local.name}-static-assets"
-  region              = "${local.aws_region}"
+  region              = "${local.region}"
   acl                 = "private"
   acceleration_status = "Enabled"
 

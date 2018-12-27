@@ -5,6 +5,11 @@ variable "name" {
   description = "AWS S3 Bucket. {env}-{name}"
 }
 
+variable "default_tags" {
+  type = "map"
+  default = {}
+}
+
 variable "aliases" {
   type        = "list"
   description = "Cloudfront Aliases"

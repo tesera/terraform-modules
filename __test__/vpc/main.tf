@@ -1,5 +1,5 @@
 locals {
-  aws_region = "ca-central-1"
+  region = "ca-central-1"
   profile    = "tesera"
   name       = "tesera-modules-test"
   key_name   = "${aws_key_pair.root_public_key.key_name}"
@@ -11,7 +11,7 @@ resource "aws_key_pair" "root_public_key" {
 }
 
 provider "aws" {
-  region  = "${local.aws_region}"
+  region  = "${local.region}"
   profile = "${local.profile}"
 }
 
@@ -125,7 +125,7 @@ output "nat_billing_suggestion" {
 ## Private Subnets
 //resource "aws_vpc_endpoint" "s3" {
 //  vpc_id          = "${module.vpc.id}"
-//  service_name    = "com.amazonaws.${local.aws_region}.s3"
+//  service_name    = "com.amazonaws.${local.region}.s3"
 //  route_table_ids = [
 //    "${module.vpc.private_route_table_ids}"]
 //}

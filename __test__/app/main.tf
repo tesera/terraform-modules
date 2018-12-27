@@ -9,7 +9,7 @@
 //}
 
 locals {
-  aws_region  = "ca-central-1"
+  region  = "ca-central-1"
   profile     = "tesera"
   name        = "tesera-modules-test"
   domain_root = "tesera.com"
@@ -17,7 +17,7 @@ locals {
 }
 
 provider "aws" {
-  region  = "${local.aws_region}"
+  region  = "${local.region}"
   profile = "${local.profile}"
 }
 

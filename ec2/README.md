@@ -31,7 +31,7 @@ data "template_file" "main-userdata" {
   template = "${file("${path.module}/userdata.sh")}"
 
   vars {
-    REGION          = "${local.aws_region}"
+    REGION          = "${local.region}"
   }
 }
 ```

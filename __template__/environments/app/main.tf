@@ -9,7 +9,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = "${var.aws_region}"
+  region  = "${var.region}"
   profile = "${var.profile}"
   assume_role = {
     role_arn = "arn:aws:iam::*:role/admin"

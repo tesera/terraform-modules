@@ -29,7 +29,7 @@ resource "aws_lambda_permission" "main" {
   principal     = "apigateway.amazonaws.com"
 
   # "${aws_api_gateway_deployment.example.execution_arn}/*/${var.http_method}${var.resource_path}"
-  source_arn = "arn:aws:execute-api:${local.aws_region}:${local.account_id}:${var.rest_api_id}/*/${var.http_method}${var.resource_path}"
+  source_arn = "arn:aws:execute-api:${local.region}:${local.account_id}:${var.rest_api_id}/*/${var.http_method}${var.resource_path}"
 }
 
 resource "aws_iam_role" "lambda" {

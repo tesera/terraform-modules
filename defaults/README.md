@@ -7,7 +7,7 @@ Collection of module defaults
 
 ## Output
 - **account_id:** Current Account ID
-- **aws_region:** Current AWS Region
+- **region:** Current AWS Region
 - **name:** Sanitized `name`
 - **name_alphanumeric:** Sanitized `name` that is only `[a-zA-Z0-9]` (ie for AWS WAF)
 - **tags:** tags merged with defaults
@@ -28,7 +28,7 @@ module "defaults" {
 
 locals {
   account_id   = "${module.defaults.account_id}"
-  aws_region   = "${module.defaults.aws_region}"
+  region   = "${module.defaults.region}"
   name         = "${module.defaults.name}"
   tags         = "${module.defaults.tags}"
 }
