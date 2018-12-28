@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "main-s3-logs" {
-  provider      = "aws.edge"
+  provider            = "aws.edge"
   bucket              = "${local.name}-static-assets-access-logs"
   acl                 = "log-delivery-write"
   acceleration_status = "Enabled"
@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "main-s3-logs" {
     id      = "log"
     enabled = true
 
-    prefix = "log/"
+    prefix  = "log/"
 
     tags {
       "rule"      = "log"
@@ -37,9 +37,8 @@ resource "aws_s3_bucket" "main-s3-logs" {
 }
 
 resource "aws_s3_bucket" "main" {
-  provider      = "aws.edge"
+  provider            = "aws.edge"
   bucket              = "${local.name}-static-assets"
-  region              = "${local.region}"
   acl                 = "private"
   acceleration_status = "Enabled"
 
@@ -76,18 +75,18 @@ resource "aws_s3_bucket" "main" {
 
 data "aws_iam_policy_document" "s3" {
   statement {
-    actions = [
+    actions    = [
       "s3:ListBucket",
       "s3:GetObject",
     ]
 
-    resources = [
+    resources  = [
       "${aws_s3_bucket.main.arn}",
       "${aws_s3_bucket.main.arn}/*",
     ]
 
     principals = {
-      type = "AWS"
+      type        = "AWS"
 
       identifiers = [
         "${aws_cloudfront_origin_access_identity.main.iam_arn}",
