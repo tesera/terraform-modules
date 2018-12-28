@@ -7,6 +7,6 @@ module "defaults" {
 locals {
   region        = "${module.defaults.region}"
   tags          = "${module.defaults.tags}"
-  name          = "${replace(var.name, "/[_]/", "-")}"
+  name          = "${module.defaults.name}"
   sse_algorithm = "AES256"
 }

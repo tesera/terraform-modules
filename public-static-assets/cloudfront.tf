@@ -3,11 +3,11 @@ resource "aws_cloudfront_origin_access_identity" "main" {
 }
 
 resource "aws_cloudfront_distribution" "main" {
-  enabled         = true
-  http_version    = "http2"
-  is_ipv6_enabled = true
+  enabled             = true
+  http_version        = "http2"
+  is_ipv6_enabled     = true
 
-  aliases = "${var.aliases}"
+  aliases             = "${var.aliases}"
 
   origin {
     origin_id   = "${local.name}"
@@ -19,14 +19,21 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   default_cache_behavior {
-    target_origin_id = "${local.name}"
-    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
-    cached_methods   = ["GET", "HEAD"]
+    target_origin_id       = "${local.name}"
+    allowed_methods        = [
+      "GET",
+      "HEAD",
+      "OPTIONS"]
+    cached_methods         = [
+      "GET",
+      "HEAD"]
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
-    default_ttl            = 86400               # 1d
-    max_ttl                = 31536000            # 1y
+    default_ttl            = 86400
+    # 1d
+    max_ttl                = 31536000
+    # 1y
     compress               = true
 
     forwarded_values {
@@ -72,16 +79,16 @@ resource "aws_cloudfront_distribution" "main" {
   //    response_code         = 200
   //  }
 
-  web_acl_id = "${var.web_acl_id}"
-  tags {
-    Name      = "${local.name} Static Assets"
-    Terraform = "true"
-  }
+  web_acl_id          = "${var.web_acl_id}"
+
+  tags                = "${merge(local.tags, map(
+    "Name", "${local.name} CloudFront"
+  ))}"
 }
 
 resource "aws_s3_bucket" "main-cdn-logs" {
-  provider      = "aws.edge"
-  bucket = "${local.name}-cdn-access-logs"
+  provider = "aws.edge"
+  bucket   = "${local.name}-${terraform.workspace}-cdn-access-logs"
 
   lifecycle_rule {
     enabled = true
@@ -90,4 +97,8 @@ resource "aws_s3_bucket" "main-cdn-logs" {
       days = 30
     }
   }
+
+  tags     = "${merge(local.tags, map(
+    "Name", "${local.name} CloudFront Access Logs"
+  ))}"
 }

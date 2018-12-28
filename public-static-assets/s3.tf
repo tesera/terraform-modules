@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "main-s3-logs" {
   provider            = "aws.edge"
-  bucket              = "${local.name}-static-assets-access-logs"
+  bucket              = "${local.name}-${terraform.workspace}-static-assets-access-logs"
   acl                 = "log-delivery-write"
   acceleration_status = "Enabled"
 
@@ -30,15 +30,14 @@ resource "aws_s3_bucket" "main-s3-logs" {
     }
   }
 
-  tags {
-    Name      = "${local.name} Static Assets Access Logs"
-    Terraform = "true"
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${local.name} Static Assets Access Logs"
+  ))}"
 }
 
 resource "aws_s3_bucket" "main" {
   provider            = "aws.edge"
-  bucket              = "${local.name}-static-assets"
+  bucket              = "${local.name}-${terraform.workspace}-static-assets"
   acl                 = "private"
   acceleration_status = "Enabled"
 
@@ -67,10 +66,10 @@ resource "aws_s3_bucket" "main" {
       }
     }
   }
-  tags {
-    Name      = "${local.name} Static Assets"
-    Terraform = "true"
-  }
+
+  tags = "${merge(local.tags, map(
+    "Name", "${local.name} Static Assets"
+  ))}"
 }
 
 data "aws_iam_policy_document" "s3" {
