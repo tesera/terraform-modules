@@ -9,8 +9,8 @@ const headers = {
     //"Expect-CT":""
   },
   'html': {
-    // Content-Security-Policy-Report-Only: https://{report-uri}.report-uri.com/r/d/csp/reportOnly
-    // Content-Security-Policy:             https://{report-uri}.report-uri.com/r/d/csp/enforce
+    // 'Content-Security-Policy-Report-Only': 'https://{report-uri}.report-uri.com/r/d/csp/reportOnly'
+    // 'Content-Security-Policy':             'https://{report-uri}.report-uri.com/r/d/csp/enforce'
     'Content-Security-Policy': 'default-src \'none\';' +
       ' img-src \'self\';' +
       ' script-src \'self\';' +

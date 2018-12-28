@@ -1,4 +1,5 @@
 resource "aws_s3_bucket" "main-s3-logs" {
+  provider      = "aws.edge"
   bucket              = "${local.name}-static-assets-access-logs"
   acl                 = "log-delivery-write"
   acceleration_status = "Enabled"
@@ -36,6 +37,7 @@ resource "aws_s3_bucket" "main-s3-logs" {
 }
 
 resource "aws_s3_bucket" "main" {
+  provider      = "aws.edge"
   bucket              = "${local.name}-static-assets"
   region              = "${local.region}"
   acl                 = "private"
