@@ -1,4 +1,4 @@
-# Web Application Firewall (WAF)
+# Edge Web Application Firewall (WAF)
 To be used with CloudFront.
 
 Ported from [AWS WAF to Mitigate OWASP's Top 10 Web Application Vulnerabilities](https://aws.amazon.com/about-aws/whats-new/2017/07/use-aws-waf-to-mitigate-owasps-top-10-web-application-vulnerabilities/) Template (2017-10-01).

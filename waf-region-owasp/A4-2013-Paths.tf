@@ -1,4 +1,4 @@
-resource "awsregional_waf_rule" "wafgPathsRule" {
+resource "aws_wafregional_rule" "wafgPathsRule" {
   depends_on = [
     "aws_wafregional_byte_match_set.wafgPathsStringSet",
   ]

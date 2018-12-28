@@ -17,6 +17,12 @@ module "waf" {
   ipBlackListId = "${aws_waf_ipset.black.id"
   ipWhiteListId = "${aws_waf_ipset.white.id}"
 }
+
+resource "aws_wafregional_web_acl_association" "alb" {
+  resource_arn = "${module.alb.arn}"
+  web_acl_id   = "${module.waf.id}"
+}
+
 ```
 
 ### IP Lists
