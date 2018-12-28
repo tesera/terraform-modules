@@ -73,7 +73,6 @@ resource "aws_s3_bucket" "main" {
 }
 
 data "aws_iam_policy_document" "s3" {
-  provider = "aws.edge"
   statement {
     actions    = [
       "s3:ListBucket",
@@ -96,6 +95,7 @@ data "aws_iam_policy_document" "s3" {
 }
 
 resource "aws_s3_bucket_policy" "main" {
+  provider = "aws.edge"
   bucket = "${aws_s3_bucket.main.id}"
   policy = "${data.aws_iam_policy_document.s3.json}"
 }
