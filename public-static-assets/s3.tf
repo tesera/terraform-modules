@@ -30,7 +30,7 @@ resource "aws_s3_bucket" "main-s3-logs" {
     }
   }
 
-  tags = "${merge(local.tags, map(
+  tags                = "${merge(local.tags, map(
     "Name", "${local.name} Static Assets Access Logs"
   ))}"
 }
@@ -67,12 +67,13 @@ resource "aws_s3_bucket" "main" {
     }
   }
 
-  tags = "${merge(local.tags, map(
+  tags                = "${merge(local.tags, map(
     "Name", "${local.name} Static Assets"
   ))}"
 }
 
 data "aws_iam_policy_document" "s3" {
+  provider = "aws.edge"
   statement {
     actions    = [
       "s3:ListBucket",
