@@ -1,4 +1,4 @@
-resource "aws_waf_web_acl" "wafrOwaspACL" {
+resource "aws_wafregional_web_acl" "wafrOwaspACL" {
   depends_on = [
     "aws_wafregional_rule.wafgAdminAccessRule",
     "aws_wafregional_rule.wafgAuthTokenRule",
