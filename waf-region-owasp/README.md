@@ -1,5 +1,5 @@
-# Web Application Firewall (WAF)
-
+# Regional Web Application Firewall (WAF)
+To be used with Application Load Balancers.
 
 Ported from [AWS WAF to Mitigate OWASP's Top 10 Web Application Vulnerabilities](https://aws.amazon.com/about-aws/whats-new/2017/07/use-aws-waf-to-mitigate-owasps-top-10-web-application-vulnerabilities/) Template (2017-10-01).
 
@@ -9,7 +9,7 @@ Ported from [AWS WAF to Mitigate OWASP's Top 10 Web Application Vulnerabilities]
 ### Module
 ```hcl-terraform
 module "waf" {
-  source        = "git@github.com:tesera/terraform-modules//waf-owasp"
+  source        = "git@github.com:tesera/terraform-modules//waf-region-owasp"
   name          = "${var.env}ApplicationName"
   defaultAction = "${var.defaultAction}"
 
