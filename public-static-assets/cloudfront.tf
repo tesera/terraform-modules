@@ -44,25 +44,26 @@ resource "aws_cloudfront_distribution" "main" {
       }
     }
 
+    # TODO update when v0.12 released
     lambda_function_association {
       event_type = "viewer-request"
       lambda_arn = "${local.lambda_viewer_request_enabled ? aws_lambda_function.viewer_request.qualified_arn : ""}"
     }
 
-    lambda_function_association = {
-      event_type = "origin-request"
-      lambda_arn = "${local.lambda_origin_request_enabled ? aws_lambda_function.origin_request.qualified_arn : ""}"
-    }
+    #lambda_function_association {
+    #  event_type = "origin-request"
+    #  lambda_arn = "${local.lambda_origin_request_enabled ? aws_lambda_function.origin_request.qualified_arn : ""}"
+    #}
 
     lambda_function_association {
       event_type = "viewer-response"
       lambda_arn = "${local.lambda_viewer_response_enabled ? aws_lambda_function.viewer_response.qualified_arn : ""}"
     }
 
-    lambda_function_association = {
-      event_type = "origin-response"
-      lambda_arn = "${local.lambda_origin_response_enabled ? aws_lambda_function.origin_response.qualified_arn : ""}"
-    }
+    #lambda_function_association {
+    #  event_type = "origin-response"
+    #  lambda_arn = "${local.lambda_origin_response_enabled ? aws_lambda_function.origin_response.qualified_arn : ""}"
+    #}
 
   }
 
