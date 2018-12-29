@@ -1,0 +1,14 @@
+{
+  "name": "edge-request",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "tape": "^4.8.0"
+  },
+  "scripts": {
+    "test": "tape ./index.spec.js"
+  },
+  "license": "MIT"
+}

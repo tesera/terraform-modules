@@ -25,14 +25,36 @@ variable "web_acl_id" {
   description = "WAF ACL ID"
 }
 
+# lambda@edge
+variable "lambda_viewer_request_default" {
+  default     = false
+}
+
 variable "lambda_viewer_request" {
   type        = "string"
   default     = ""
-  description = "function content to be used for edge lambda"
 }
 
+variable "lambda_origin_request_default" {
+  default     = false
+}
+variable "lambda_origin_request" {
+  type        = "string"
+  default     = ""
+}
+
+variable "lambda_viewer_response_default" {
+  default     = false
+}
 variable "lambda_viewer_response" {
   type        = "string"
   default     = ""
-  description = "function content to be used for edge lambda"
+}
+
+variable "lambda_origin_response_default" {
+  default     = false
+}
+variable "lambda_origin_response" {
+  type        = "string"
+  default     = ""
 }

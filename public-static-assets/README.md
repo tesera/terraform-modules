@@ -44,7 +44,8 @@ module "app" {
   aliases             = ["${var.env != "prod" ? "${var.env}-": ""}appname.example.com"]
   acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
   web_acl_id          = "${module.waf.id}"
-  lambda_viewer_response = "${file("${path.module}/vieewr-response.js")}"
+  lambda_viewer_response_default = true
+  lambda_viewer_response = "${file("${path.module}/viewer-response.js")}"
 }
 ```
 
@@ -54,7 +55,10 @@ module "app" {
 - **acm_certificate_arn:** Domain Certificate ARN
 - **web_acl_id:** WAF ACL ID
 - **lambda_viewer_request:** By default this module includes a lambda function to add security headers to all responses. This can be overwritten using the above example.
+- **lambda_origin_request:** By default this module passes the request through.
 - **lambda_viewer_response:** By default this module includes a lambda function to add index.html as the default sub directory object. This can be overwritten using the above example.
+- **lambda_origin_response:** By default this module passes the response through.
+- **lambda_\*_default:** Boolean to determine if the default lambda should be attached to the CloudFront [Default: false]
 
 ## Output
 - **bucket:** `${aws_s3_bucket.main.id}` Full name of the S3 bucket.
