@@ -25,7 +25,13 @@ variable "web_acl_id" {
   description = "WAF ACL ID"
 }
 
-variable "lambda_edge_content" {
+variable "lambda_viewer_request" {
+  type        = "string"
+  default     = ""
+  description = "function content to be used for edge lambda"
+}
+
+variable "lambda_viewer_response" {
   type        = "string"
   default     = ""
   description = "function content to be used for edge lambda"

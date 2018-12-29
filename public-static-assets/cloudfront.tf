@@ -46,8 +46,15 @@ resource "aws_cloudfront_distribution" "main" {
 
     lambda_function_association {
       event_type = "viewer-response"
-      lambda_arn = "${aws_lambda_function.response_headers.qualified_arn}"
+      lambda_arn = "${aws_lambda_function.viewer_request.qualified_arn}"
     }
+
+    lambda_function_association {
+      event_type = "viewer-response"
+      lambda_arn = "${aws_lambda_function.viewer_response.qualified_arn}"
+    }
+
+    #lambda_function_association = null
   }
 
   viewer_certificate {

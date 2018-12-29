@@ -1,5 +1,5 @@
 {
-  "name": "edge",
+  "name": "edge-response",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,6 +10,5 @@
   "scripts": {
     "test": "tape ./index.spec.js"
   },
-  "author": "Tesera Systems",
   "license": "MIT"
 }
