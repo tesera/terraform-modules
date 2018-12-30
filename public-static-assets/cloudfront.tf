@@ -4,10 +4,17 @@ resource "aws_cloudfront_origin_access_identity" "main" {
 
 resource "aws_cloudfront_distribution" "main" {
   enabled             = true
-  http_version        = "http2"
   is_ipv6_enabled     = true
+  http_version        = "http2"
+  web_acl_id          = "${var.web_acl_id}"
 
   aliases             = "${var.aliases}"
+
+  viewer_certificate {
+    acm_certificate_arn      = "${var.acm_certificate_arn}"
+    minimum_protocol_version = "TLSv1.2_2018"
+    ssl_support_method       = "sni-only"
+  }
 
   origin {
     origin_id   = "${local.name}"
@@ -60,17 +67,12 @@ resource "aws_cloudfront_distribution" "main" {
       lambda_arn = "${local.lambda_viewer_response_enabled ? aws_lambda_function.viewer_response.qualified_arn : ""}"
     }
 
+    // TODO - https://stackoverflow.com/questions/46262030/single-page-application-with-lambdaedge
     #lambda_function_association {
     #  event_type = "origin-response"
     #  lambda_arn = "${local.lambda_origin_response_enabled ? aws_lambda_function.origin_response.qualified_arn : ""}"
     #}
 
-  }
-
-  viewer_certificate {
-    acm_certificate_arn      = "${var.acm_certificate_arn}"
-    minimum_protocol_version = "TLSv1.2_2018"
-    ssl_support_method       = "sni-only"
   }
 
   restrictions {
@@ -79,30 +81,17 @@ resource "aws_cloudfront_distribution" "main" {
     }
   }
 
-  logging_config {
-    include_cookies = false
-    bucket          = "${aws_s3_bucket.main-cdn-logs.bucket_domain_name}"
-  }
-
   default_root_object = "index.html"
 
   custom_error_response {
     error_code = 404
     response_page_path = "index.html"
   }
-
-
-  // TODO - https://stackoverflow.com/questions/46262030/single-page-application-with-lambdaedge
-  // 404 pages don't run through lambda@edge response
-  // https://aws.amazon.com/about-aws/whats-new/2017/12/lambda-at-edge-now-allows-you-to-customize-error-responses-from-your-origin/
-  //  custom_error_response {
-  //    error_code            = 404
-  //    error_caching_min_ttl = 5
-  //    response_page_path    = "/index.html"
-  //    response_code         = 200
-  //  }
-
-  web_acl_id          = "${var.web_acl_id}"
+  
+  logging_config {
+    include_cookies = false
+    bucket          = "${aws_s3_bucket.main-cdn-logs.bucket_domain_name}"
+  }
 
   tags                = "${merge(local.tags, map(
     "Name", "${local.name} CloudFront"
