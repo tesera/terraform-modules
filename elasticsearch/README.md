@@ -70,7 +70,7 @@ Sample index/mapping json - mapping.json:
 - **vpc_id:** VPC id.
 - **private_subnet_ids:** list of VPC subnet IDs. if multi_az = false exactly one subnet needs to be specified.
 - **instance_type:** instance type of data nodes in the cluster. [Default: r4.large.elasticsearch]. 
-- **instance_count:** number of instances in the cluster. [Default: 2].
+- **node_count:** number of instances in the cluster. [Default: 2].
 - **dedicated_master_enabled:** indicates whether dedicated master nodes are enabled for the cluster. [Default: false].
 - **dedicated_master_type:** instance type of the dedicated master nodes in the cluster.
 - **dedicated_master_count:** number of dedicated master nodes in the cluster. [Default: 0].

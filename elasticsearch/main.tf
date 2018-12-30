@@ -1,8 +1,3 @@
-module "defaults" {
-  source = "../defaults"
-  name   = "${var.name}"
-  tags   = "${var.default_tags}"
-}
 
 resource "aws_elasticsearch_domain" "main" {
   domain_name           = "${local.name}"
@@ -10,7 +5,7 @@ resource "aws_elasticsearch_domain" "main" {
 
   cluster_config {
     instance_type            = "${var.instance_type}"
-    instance_count           = "${var.instance_count}"
+    instance_count           = "${var.node_count}"
     dedicated_master_enabled = "${var.dedicated_master_count}"
     dedicated_master_type    = "${var.dedicated_master_type}"
     dedicated_master_count   = "${var.dedicated_master_count}"
@@ -52,11 +47,13 @@ resource "aws_elasticsearch_domain" "main" {
               "Action": "es:*",
               "Principal": "*",
               "Effect": "Allow",
-              "Resource": "arn:aws:es:${local.aws_region}:${local.account_id}:domain/${local.name}/*"
+              "Resource": "arn:aws:es:${local.region}:${local.account_id}:domain/${local.name}/*"
           }
       ]
   }
   CONFIG
 
-  tags = "${local.tags}"
+  tags = "${merge(local.tags, map(
+    "Name", "${local.name}"
+  ))}"
 }

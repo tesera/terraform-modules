@@ -1,9 +1,14 @@
-data "aws_region" "current" {}
-data "aws_caller_identity" "current" {}
+module "defaults" {
+  source = "../../../defaults"
+  name   = "${var.name}"
+  tags   = "${var.default_tags}"
+}
 
 locals {
-  account_id  = "${data.aws_caller_identity.current.account_id}"
-  aws_region  = "${data.aws_region.current.name}"
+  account_id = "${module.defaults.account_id}"
+  region     = "${module.defaults.region}"
+  name       = "${module.defaults.name}"
+  tags       = "${module.defaults.tags}"
   name        = "${replace(var.name, "/[_]/", "-")}"
   http_method = "${lower(var.http_method)}"
   path_name   = "${replace(var.resource_path, "/[/:{}]/", "-")}"

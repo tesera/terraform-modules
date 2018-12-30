@@ -12,5 +12,5 @@ output "security_group_id" {
 }
 
 output "billing_suggestion" {
-  value = "Reserved Instances: ${var.instance_type} x ${local.desired_capacity} (${local.aws_region})"
+  value = "Reserved Instances: ${var.instance_type} x ${local.desired_capacity} (${local.region})"
 }

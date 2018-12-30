@@ -1,9 +1,9 @@
 resource "aws_sns_topic" "main" {
-  name     = "${var.name}-uptime-alarm"
   provider = "aws.edge"
+  name     = "${var.name}-alarm"
 
   provisioner "local-exec" {
-    command = "aws sns subscribe --profile ${local.profile} --topic-arn ${self.arn} --region ${local.aws_region} --protocol email --notification-endpoint ${var.sns_subscribe_primary}"
+    command = "aws sns subscribe --profile ${local.profile} --topic-arn ${self.arn} --region ${local.region} --protocol email --notification-endpoint ${var.sns_subscribe_primary}"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_route53_health_check" "main" {
 
 resource "aws_cloudwatch_metric_alarm" "main" {
   provider            = "aws.edge"
-  alarm_name          = "${var.name}-uptime-failed"
+  alarm_name          = "${var.name}-failed"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
   comparison_operator = "LessThanThreshold"

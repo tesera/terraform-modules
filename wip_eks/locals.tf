@@ -1,6 +1,3 @@
-data "aws_region" "current" {}
-data "aws_caller_identity" "current" {}
-
 data "aws_ami" "main" {
   most_recent = true
 
@@ -33,7 +30,7 @@ module "defaults" {
 
 locals {
   account_id       = "${module.defaults.account_id}"
-  aws_region       = "${module.defaults.aws_region}"
+  region           = "${module.defaults.region}"
   name             = "${module.defaults.name}"
   tags             = "${module.defaults.tags}"
   cluster_name     = "${module.defaults.name}-eks"

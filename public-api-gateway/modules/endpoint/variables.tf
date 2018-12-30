@@ -1,5 +1,10 @@
 variable "name" {}
 
+variable "default_tags" {
+  type    = "map"
+  default = {}
+}
+
 //variable "security_group_ids" {
 //  type = "list"
 //  default = []

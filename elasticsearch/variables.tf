@@ -35,7 +35,7 @@ variable "instance_type" {
   default = "r4.large.elasticsearch"
 }
 
-variable "instance_count" {
+variable "node_count" {
   default = 2
 }
 

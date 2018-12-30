@@ -6,7 +6,7 @@ module "eks" {
     "${var.private_subnet_ids}",
   ]
 
-  tags            = "${local.tags}"
+  tags            = "${*****}"
   vpc_id          = "${var.vpc_id}"
   manage_aws_auth = false
   map_accounts    = ["${local.account_id}"]

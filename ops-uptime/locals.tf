@@ -1,8 +1,10 @@
-data "aws_region" "current" {}
-
-data "profile" "current" {}
+module "defaults" {
+  source = "../defaults"
+  name   = "${var.name}-uptime"
+  #tags   = "${var.default_tags}"
+}
 
 locals {
-  aws_region = "${data.aws_region.current.name}"
-  profile    = "${data. profile.current.name}"
+  region  = "${module.defaults.region}"
+  profile = "${module.defaults.profile}"
 }
