@@ -6,7 +6,7 @@ resource "aws_wafregional_rule" "wafrXSSRule" {
   name        = "${local.name}wafrXSSRule"
   metric_name = "${local.name}wafrXSSRule"
 
-  predicates {
+  predicate {
     data_id = "${aws_wafregional_xss_match_set.wafrXSSSet.id}"
     negated = false
     type    = "XssMatch"
