@@ -6,5 +6,7 @@ resource "aws_security_group" "main" {
   name   = "${var.name}-${aws_efs_file_system.main.id}"
   vpc_id = "${data.aws_subnet.first.vpc_id}"
 
-  tags = "${local.tags}"
+  tags = "${merge(local.tags, map(
+    "Name", "${var.name}-${aws_efs_file_system.main.id}"
+  ))}"
 }

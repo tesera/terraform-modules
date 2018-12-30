@@ -26,7 +26,7 @@ variable "private_subnet_ids" {
 }
 
 variable "type" {
-  description = "this is dummy placeholder. is not used"
+  description = "this is dummy placeholder"
   default = "service"
 }
 

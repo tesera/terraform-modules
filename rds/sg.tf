@@ -10,6 +10,10 @@ resource "aws_security_group" "main" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  tags = "${merge(local.tags, map(
+    "Name", "${local.identifier}"
+  ))}"
 }
 
 resource "aws_security_group_rule" "rds_access" {

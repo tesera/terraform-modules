@@ -12,7 +12,9 @@ resource "aws_security_group" "main" {
     ]
   }
 
-  tags = "${local.tags}"
+  tags = "${merge(local.tags, map(
+    "Name", "${var.name}"
+  ))}"
 }
 
 resource "aws_security_group_rule" "efs_access" {

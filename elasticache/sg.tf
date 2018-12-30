@@ -1,9 +1,11 @@
 resource "aws_security_group" "main" {
-  name        = "${local.name}-elasticsearch-security-group"
+  name        = "${local.name}-elasticache-${var.type}-security-group"
   description = "SecurityGroup for ${local.name}"
   vpc_id      = "${var.vpc_id}"
 
-  tags = "${local.tags}"
+  tags = "${merge(local.tags, map(
+    "Name", "${local.name}-elasticache-${var.type}"
+  ))}"
 }
 
 resource "aws_security_group_rule" "redis_access" {

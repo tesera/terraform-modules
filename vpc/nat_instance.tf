@@ -148,7 +148,9 @@ resource "aws_security_group" "main" {
     ]
   }
 
-  tags = "${local.tags}"
+  tags = "${merge(local.tags, map(
+    "Name", "${var.name}-nat-${local.az_name[count.index]}"
+  ))}"
 }
 
 resource "aws_security_group_rule" "ssh" {
