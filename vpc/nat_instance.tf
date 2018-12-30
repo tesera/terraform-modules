@@ -197,7 +197,7 @@ resource "aws_iam_policy" "main-nat" {
   count       = "${var.nat_type == "instance" ? local.az_count : 0}"
   name        = "${local.name}-nat-${local.az_name[count.index]}-route-policy"
   path        = "/"
-  description = "${loacl.name} NAT Route Tables Policy"
+  description = "${local.name} NAT Route Tables Policy"
 
   policy = <<EOF
 {
