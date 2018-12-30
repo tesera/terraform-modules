@@ -2,6 +2,8 @@ resource "aws_security_group" "main" {
   name        = "${local.name}-elasticsearch-security-group"
   description = "SecurityGroup for ${local.name}"
   vpc_id      = "${var.vpc_id}"
+
+  tags = "${local.tags}"
 }
 
 resource "aws_security_group_rule" "redis_access" {
