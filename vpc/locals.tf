@@ -24,6 +24,7 @@ module "defaults" {
   tags   = "${var.default_tags}"
 }
 
+# For asg
 module "defaults_nat" {
   source = "../defaults"
   name   = "${var.name}-nat"

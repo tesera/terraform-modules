@@ -1,12 +1,9 @@
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
-data "profile" "current" {}
 
 locals {
   account_id = "${data.aws_caller_identity.current.account_id}"
   profile    = "${data.aws_caller_identity.current.user_id}"
-
-  #profile           = "${data.profile.current.name}"
   region            = "${data.aws_region.current.name}"
   name              = "${replace(var.name, "/[^a-zA-Z0-9-]/", "-")}"
   name_alphanumeric = "${replace(var.name, "/[^a-zA-Z0-9]/", "")}"
