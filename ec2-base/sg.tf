@@ -1,5 +1,5 @@
 resource "aws_security_group" "main" {
-  name   = "${var.name}"
+  name   = "${var.name}-security-group"
   vpc_id = "${var.vpc_id}"
 
   egress {
@@ -11,6 +11,8 @@ resource "aws_security_group" "main" {
       "0.0.0.0/0",
     ]
   }
+
+  tags = "${local.tags}"
 }
 
 resource "aws_security_group_rule" "efs_access" {

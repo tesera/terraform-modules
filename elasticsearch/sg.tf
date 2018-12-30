@@ -1,5 +1,5 @@
 resource "aws_security_group" "main" {
-  name        = "${local.name}-sg"
+  name        = "${local.name}-elasticache-security-group"
   description = "SecurityGroup for ${local.name}"
   vpc_id      = "${var.vpc_id}"
   tags        = "${local.tags}"
