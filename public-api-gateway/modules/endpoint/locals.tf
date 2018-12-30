@@ -5,10 +5,10 @@ module "defaults" {
 }
 
 locals {
-  account_id = "${module.defaults.account_id}"
-  region     = "${module.defaults.region}"
-  name       = "${module.defaults.name}"
-  tags       = "${module.defaults.tags}"
+  account_id  = "${module.defaults.account_id}"
+  region      = "${module.defaults.region}"
+  name        = "${module.defaults.name}"
+  tags        = "${module.defaults.tags}"
   name        = "${replace(var.name, "/[_]/", "-")}"
   http_method = "${lower(var.http_method)}"
   path_name   = "${replace(var.resource_path, "/[/:{}]/", "-")}"

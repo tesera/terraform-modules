@@ -1,4 +1,3 @@
-
 resource "aws_elasticsearch_domain" "main" {
   domain_name           = "${local.name}"
   elasticsearch_version = "${var.engine_version}"
