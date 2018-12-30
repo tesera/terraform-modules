@@ -85,9 +85,10 @@ resource "aws_cloudfront_distribution" "main" {
 
   custom_error_response {
     error_code = 404
+    response_code = 200
     response_page_path = "index.html"
   }
-  
+
   logging_config {
     include_cookies = false
     bucket          = "${aws_s3_bucket.main-cdn-logs.bucket_domain_name}"
