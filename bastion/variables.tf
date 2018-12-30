@@ -1,4 +1,5 @@
 variable "name" {}
+
 variable "default_tags" {
   type    = "map"
   default = {}

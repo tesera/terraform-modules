@@ -1,5 +1,14 @@
+module "defaults" {
+  source = "../defaults"
+  name   = "${var.name}-bastion"
+  tags   = "${var.default_tags}"
+}
+
 locals {
-  aws_region    = "us-east-1"
+  account_id    = "${module.defaults.account_id}"
+  region        = "${module.defaults.region}"
+  name          = "${module.defaults.name}"
+  tags          = "${module.defaults.tags}"
   name          = "${replace(var.name, "/[_]/", "-")}"
   sse_algorithm = "AES256"
 }

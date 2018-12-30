@@ -62,10 +62,9 @@ resource "aws_cloudfront_distribution" "main" {
     bucket          = "${aws_s3_bucket.main-logs.bucket_domain_name}"
   }
 
-  tags {
-    Name      = "${local.name} Domain Redirection"
-    Terraform = "true"
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${var.name} Domain Redirection"
+  ))}"
 }
 
 resource "aws_s3_bucket" "main-logs" {

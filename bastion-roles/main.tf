@@ -1,7 +1,7 @@
 # This allow a bastion in a sub accou to read the SSH key for users in a group
 resource "aws_iam_role" "ssh" {
-  count       = "${length(keys(local.sub_accounts))}"
-  name        = "${element(keys(local.sub_accounts),count.index)}-ssh-role"
+  count = "${length(keys(local.sub_accounts))}"
+  name  = "${element(keys(local.sub_accounts),count.index)}-ssh-role"
 
   assume_role_policy = <<POLICY
 {
@@ -20,14 +20,15 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "ssh" {
-  count       = "${length(keys(local.sub_accounts))}"
+  count      = "${length(keys(local.sub_accounts))}"
   role       = "${aws_iam_role.ssh.*.name[count.index]}"
   policy_arn = "${aws_iam_policy.ssh.arn}"
 }
 
 resource "aws_iam_policy" "ssh" {
-  name        = "sub-account-ssh-policy"
-  policy      = <<POLICY
+  name = "sub-account-ssh-policy"
+
+  policy = <<POLICY
 {
   "Version": "2012-10-17",
   "Statement": [

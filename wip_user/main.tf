@@ -1,4 +1,3 @@
-
 # Users
 resource "aws_iam_user" "user" {
   name          = "${element(split("@",var.email),0)}"
@@ -12,7 +11,6 @@ resource "aws_iam_user_login_profile" "user" {
 }
 
 resource "null_resource" "users" {
-
   triggers {
     encrypted_password = "${aws_iam_user_login_profile.user.encrypted_password}"
   }
@@ -24,10 +22,10 @@ resource "null_resource" "users" {
 }
 
 resource "aws_iam_user_group_membership" "user" {
-  user   = "${aws_iam_user.user.name}"
+  user = "${aws_iam_user.user.name}"
 
   groups = [
-    "${concat(list("User"),var.groups)}"
+    "${concat(list("User"),var.groups)}",
   ]
 }
 
@@ -45,7 +43,3 @@ resource "aws_iam_account_password_policy" "strict" {
   require_numbers                = false
   require_symbols                = false
 }
-
-
-
-

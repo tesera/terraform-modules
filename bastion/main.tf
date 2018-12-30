@@ -1,10 +1,9 @@
 resource "aws_eip" "main" {
   vpc = "true"
 
-  tags {
-    Name      = "${var.name}-bastion"
-    Terraform = "true"
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${var.name}"
+  ))}"
 }
 
 data "template_file" "userdata" {
@@ -20,7 +19,7 @@ data "template_file" "userdata" {
 
 module "ec2" {
   source           = "../ec2-base"
-  name             = "${var.name}-bastion"
+  name             = "${var.name}"
   account_id       = "${local.account_id}"
   vpc_id           = "${var.vpc_id}"
   subnet_ids       = ["${var.public_subnet_ids}"]
@@ -38,21 +37,21 @@ resource "aws_security_group_rule" "pubic-ssh" {
   protocol          = "tcp"
   security_group_id = "${module.ec2.security_group_id}"
 
-  cidr_blocks       = [
+  cidr_blocks = [
     "0.0.0.0/0",
   ]
 
-  to_port           = 22
-  type              = "ingress"
+  to_port = 22
+  type    = "ingress"
 }
 
 # extend role
 resource "aws_iam_policy" "main-ip" {
-  name        = "${local.name}-bastion-ip-policy"
+  name        = "${local.name}-ip-policy"
   path        = "/"
-  description = "${local.name}-bastion-ip Policy"
+  description = "${local.name}-ip Policy"
 
-  policy      = <<EOF
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -76,11 +75,11 @@ resource "aws_iam_role_policy_attachment" "main-ip" {
 }
 
 resource "aws_iam_policy" "main-iam" {
-  name        = "${local.name}-bastion-iam-policy"
+  name        = "${local.name}-iam-policy"
   path        = "/"
   description = "${local.name} SSH IAM Policy"
 
-  policy      = <<EOF
+  policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [

@@ -1,4 +1,3 @@
-
 module "defaults" {
   source = "../defaults"
   name   = "${var.name}"

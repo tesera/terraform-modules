@@ -8,8 +8,8 @@ resource "aws_api_gateway_rest_api" "main" {
 }
 
 resource "aws_api_gateway_stage" "test" {
-  stage_name = "${local.stage_name}"
-  rest_api_id = "${aws_api_gateway_rest_api.main.id}"
+  stage_name    = "${local.stage_name}"
+  rest_api_id   = "${aws_api_gateway_rest_api.main.id}"
   deployment_id = "${aws_api_gateway_deployment.main.id}"
 
   xray_tracing_enabled = "${var.xray}"

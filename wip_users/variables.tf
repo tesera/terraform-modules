@@ -1,22 +1,21 @@
 variable "account_alias" {
-  type = "string"
+  type    = "string"
   default = ""
 }
 
 variable "account_email" {
-  type = "string"
+  type    = "string"
   default = ""
 }
+
 //variable "password_policy" {}
 
 variable "users" {
-  type = "map"
+  type    = "map"
   default = {}
 }
 
-
-
 variable "pgp_key_path" {
-  type = "string"
+  type    = "string"
   default = ""
 }

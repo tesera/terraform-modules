@@ -18,10 +18,9 @@ resource "aws_rds_cluster" "main" {
   apply_immediately                   = "${var.apply_immediately}"
   iam_database_authentication_enabled = "${var.iam_database_authentication_enabled}"
 
-  tags {
-    Name      = "${local.identifier} Aurora Cluster"
-    Terraform = true
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${local.identifier} Aurora Cluster"
+  ))}"
 }
 
 resource "aws_rds_cluster_instance" "main" {
@@ -36,8 +35,7 @@ resource "aws_rds_cluster_instance" "main" {
   db_parameter_group_name = "${var.parameter_group_name}"
   apply_immediately       = "${var.apply_immediately}"
 
-  tags {
-    Name      = "${local.identifier} Aurora Instance"
-    Terraform = true
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${local.identifier} Aurora Instance"
+  ))}"
 }

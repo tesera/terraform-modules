@@ -32,7 +32,7 @@ module "defaults_nat" {
 
 locals {
   account_id   = "${module.defaults.account_id}"
-  region   = "${module.defaults.region}"
+  region       = "${module.defaults.region}"
   name         = "${module.defaults.name}"
   tags         = "${module.defaults.tags}"
   cidr_block   = "${var.cidr_block}"

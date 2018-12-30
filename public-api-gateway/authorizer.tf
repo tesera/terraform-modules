@@ -87,10 +87,9 @@ resource "aws_lambda_function" "authorizer" {
       CLIENT_SECRET = ""
     }
   }
-  tags {
-    Name      = "Authorizer for API Gateway"
-    Terraform = true
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "Authorizer for API Gateway"
+  ))}"
 }
 
 data "archive_file" "authorizer" {

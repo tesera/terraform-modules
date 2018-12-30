@@ -28,11 +28,10 @@ resource "aws_cognito_user_pool" "main" {
     require_uppercase = true
   }
 
-
-  tags {
-    "Name"    = "${local.name}-user-pool"
-    "Project" = "Terraform"
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${local.name}-user-pool",
+    "Project", "Terraform"
+  ))}"
 }
 
 resource "aws_cognito_user_pool_domain" "main" {

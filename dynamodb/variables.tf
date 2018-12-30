@@ -1,4 +1,10 @@
 variable "name" {}
+
+variable "default_tags" {
+  type    = "map"
+  default = {}
+}
+
 variable "hash_key" {}
 
 # variable "range_key" {

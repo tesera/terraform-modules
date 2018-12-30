@@ -20,7 +20,7 @@ module "defaults" {
 
 locals {
   account_id       = "${module.defaults.account_id}"
-  region       = "${module.defaults.region}"
+  region           = "${module.defaults.region}"
   name             = "${module.defaults.name}"
   tags             = "${module.defaults.tags}"
   image_id         = "${var.image_id != "" ? var.image_id : data.aws_ami.main.image_id}"

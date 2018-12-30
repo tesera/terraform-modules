@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "main-s3-logs" {
     id      = "log"
     enabled = true
 
-    prefix  = "log/"
+    prefix = "log/"
 
     tags {
       "rule"      = "log"
@@ -30,7 +30,7 @@ resource "aws_s3_bucket" "main-s3-logs" {
     }
   }
 
-  tags                = "${merge(local.tags, map(
+  tags = "${merge(local.tags, map(
     "Name", "${local.name} Static Assets Access Logs"
   ))}"
 }
@@ -66,26 +66,25 @@ resource "aws_s3_bucket" "main" {
       }
     }
   }
-
-  tags                = "${merge(local.tags, map(
+  tags = "${merge(local.tags, map(
     "Name", "${local.name} Static Assets"
   ))}"
 }
 
 data "aws_iam_policy_document" "s3" {
   statement {
-    actions    = [
+    actions = [
       "s3:ListBucket",
       "s3:GetObject",
     ]
 
-    resources  = [
+    resources = [
       "${aws_s3_bucket.main.arn}",
       "${aws_s3_bucket.main.arn}/*",
     ]
 
     principals = {
-      type        = "AWS"
+      type = "AWS"
 
       identifiers = [
         "${aws_cloudfront_origin_access_identity.main.iam_arn}",
@@ -96,6 +95,6 @@ data "aws_iam_policy_document" "s3" {
 
 resource "aws_s3_bucket_policy" "main" {
   provider = "aws.edge"
-  bucket = "${aws_s3_bucket.main.id}"
-  policy = "${data.aws_iam_policy_document.s3.json}"
+  bucket   = "${aws_s3_bucket.main.id}"
+  policy   = "${data.aws_iam_policy_document.s3.json}"
 }

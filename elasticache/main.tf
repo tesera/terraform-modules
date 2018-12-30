@@ -1,4 +1,3 @@
-
 resource "aws_elasticache_subnet_group" "main" {
   name       = "${local.name}-${var.engine}-group"
   subnet_ids = ["${var.private_subnet_ids}"]

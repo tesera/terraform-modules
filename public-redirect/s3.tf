@@ -1,7 +1,7 @@
 resource "aws_s3_bucket" "main" {
-  bucket = "${local.name}-redirect"
-  region = "${local.aws_region}"
-  acl    = "private"
+  provider = "aws.edge"
+  bucket   = "${local.name}-redirect"
+  acl      = "private"
 
   website {
     redirect_all_requests_to = "https://${var.redirect}"
@@ -15,10 +15,9 @@ resource "aws_s3_bucket" "main" {
     }
   }
 
-  tags {
-    Name      = "${local.name} Domain Redirection"
-    Terraform = "true"
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${var.name} Domain Redirection"
+  ))}"
 }
 
 data "aws_iam_policy_document" "s3" {
@@ -44,6 +43,7 @@ data "aws_iam_policy_document" "s3" {
 }
 
 resource "aws_s3_bucket_policy" "main" {
-  bucket = "${aws_s3_bucket.main.id}"
-  policy = "${data.aws_iam_policy_document.s3.json}"
+  provider = "aws.edge"
+  bucket   = "${aws_s3_bucket.main.id}"
+  policy   = "${data.aws_iam_policy_document.s3.json}"
 }

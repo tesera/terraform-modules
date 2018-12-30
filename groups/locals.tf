@@ -3,7 +3,8 @@ data "external" "groups" {
     "node",
     "${path.module}/groups.js",
     "${join(",",keys(var.sub_accounts))}",
-    "${join(",",var.roles)}"]
+    "${join(",",var.roles)}",
+  ]
 }
 
 module "defaults" {
@@ -11,7 +12,7 @@ module "defaults" {
 }
 
 locals {
-  account_id = "${module.defaults.account_id}"
-  groups     = "${data.external.groups.result}"
+  account_id   = "${module.defaults.account_id}"
+  groups       = "${data.external.groups.result}"
   sub_accounts = "${var.sub_accounts}"
 }

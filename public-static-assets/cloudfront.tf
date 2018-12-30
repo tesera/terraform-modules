@@ -3,12 +3,12 @@ resource "aws_cloudfront_origin_access_identity" "main" {
 }
 
 resource "aws_cloudfront_distribution" "main" {
-  enabled             = true
-  is_ipv6_enabled     = true
-  http_version        = "http2"
-  web_acl_id          = "${var.web_acl_id}"
+  enabled         = true
+  is_ipv6_enabled = true
+  http_version    = "http2"
+  web_acl_id      = "${var.web_acl_id}"
 
-  aliases             = "${var.aliases}"
+  aliases = "${var.aliases}"
 
   viewer_certificate {
     acm_certificate_arn      = "${var.acm_certificate_arn}"
@@ -26,22 +26,28 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   default_cache_behavior {
-    target_origin_id       = "${local.name}"
-    allowed_methods        = [
+    target_origin_id = "${local.name}"
+
+    allowed_methods = [
       "GET",
       "HEAD",
-      "OPTIONS"]
-    cached_methods         = [
+      "OPTIONS",
+    ]
+
+    cached_methods = [
       "GET",
-      "HEAD"]
+      "HEAD",
+    ]
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
     default_ttl            = 86400
+
     # 1d
-    max_ttl                = 31536000
+    max_ttl = 31536000
+
     # 1y
-    compress               = true
+    compress = true
 
     forwarded_values {
       query_string = true
@@ -72,7 +78,6 @@ resource "aws_cloudfront_distribution" "main" {
     #  event_type = "origin-response"
     #  lambda_arn = "${local.lambda_origin_response_enabled ? aws_lambda_function.origin_response.qualified_arn : ""}"
     #}
-
   }
 
   restrictions {
@@ -84,8 +89,8 @@ resource "aws_cloudfront_distribution" "main" {
   default_root_object = "/index.html"
 
   custom_error_response {
-    error_code = 404
-    response_code = 200
+    error_code         = 404
+    response_code      = 200
     response_page_path = "/index.html"
   }
 
@@ -94,7 +99,7 @@ resource "aws_cloudfront_distribution" "main" {
     bucket          = "${aws_s3_bucket.main-cdn-logs.bucket_domain_name}"
   }
 
-  tags                = "${merge(local.tags, map(
+  tags = "${merge(local.tags, map(
     "Name", "${local.name} CloudFront"
   ))}"
 }
@@ -111,7 +116,7 @@ resource "aws_s3_bucket" "main-cdn-logs" {
     }
   }
 
-  tags     = "${merge(local.tags, map(
+  tags = "${merge(local.tags, map(
     "Name", "${local.name} CloudFront Access Logs"
   ))}"
 }

@@ -6,7 +6,7 @@ variable "name" {
 }
 
 variable "default_tags" {
-  type = "map"
+  type    = "map"
   default = {}
 }
 
@@ -27,34 +27,37 @@ variable "web_acl_id" {
 
 # lambda@edge
 variable "lambda_viewer_request_default" {
-  default     = false
+  default = false
 }
 
 variable "lambda_viewer_request" {
-  type        = "string"
-  default     = ""
+  type    = "string"
+  default = ""
 }
 
 variable "lambda_origin_request_default" {
-  default     = false
+  default = false
 }
+
 variable "lambda_origin_request" {
-  type        = "string"
-  default     = ""
+  type    = "string"
+  default = ""
 }
 
 variable "lambda_viewer_response_default" {
-  default     = false
+  default = false
 }
+
 variable "lambda_viewer_response" {
-  type        = "string"
-  default     = ""
+  type    = "string"
+  default = ""
 }
 
 variable "lambda_origin_response_default" {
-  default     = false
+  default = false
 }
+
 variable "lambda_origin_response" {
-  type        = "string"
-  default     = ""
+  type    = "string"
+  default = ""
 }

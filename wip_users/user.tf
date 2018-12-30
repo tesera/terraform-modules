@@ -6,14 +6,13 @@ resource "aws_iam_user" "user" {
 }
 
 resource "aws_iam_user_group_membership" "user" {
-  count  = "${length(keys(var.users))}"
-  user   = "${aws_iam_user.user.*.name[count.index]}"
+  count = "${length(keys(var.users))}"
+  user  = "${aws_iam_user.user.*.name[count.index]}"
 
   groups = [
-    "${concat(list("User"), var.users[element(keys(var.users),count.index)])}"
+    "${concat(list("User"), var.users[element(keys(var.users),count.index)])}",
   ]
 }
-
 
 resource "aws_iam_user_login_profile" "user" {
   count           = "${ (var.pgp_key_path == "" || var.account_email == "") ? 0 : length(keys(var.users)) }"
@@ -35,9 +34,5 @@ resource "null_resource" "users" {
   }
 }
 
-
 # TODO - ssh https://www.terraform.io/docs/providers/aws/r/iam_user_ssh_key.html - pull form gh
-
-
-
 

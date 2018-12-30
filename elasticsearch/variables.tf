@@ -7,7 +7,7 @@ variable "default_tags" {
 
 variable "engine" {
   description = "this is a dummy placeholder. is not used"
-  default = "elasticsearch"
+  default     = "elasticsearch"
 }
 
 variable "engine_version" {
@@ -27,7 +27,7 @@ variable "private_subnet_ids" {
 
 variable "type" {
   description = "this is dummy placeholder"
-  default = "service"
+  default     = "service"
 }
 
 #r4.large is required since not all instance types support encrypt_at_rest

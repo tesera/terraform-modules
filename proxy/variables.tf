@@ -1,4 +1,10 @@
 variable "name" {}
+
+variable "default_tags" {
+  type    = "map"
+  default = {}
+}
+
 variable "vpc_id" {}
 variable "network_acl_id" {}
 
@@ -46,8 +52,4 @@ variable "proxy_endpoint" {}
 
 variable "proxy_port" {
   default = "443"
-}
-
-variable "key_name" {
-  default = ""
 }

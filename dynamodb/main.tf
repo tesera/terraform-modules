@@ -23,9 +23,9 @@ resource "aws_dynamodb_table" "main" {
   server_side_encryption {
     enabled = "${var.encryption_enabled}"
   }
-  tags {
-    Name = "${var.name}"
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${local.name}"
+  ))}"
 }
 
 resource "aws_appautoscaling_target" "read_target" {

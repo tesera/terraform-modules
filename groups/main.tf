@@ -5,8 +5,9 @@
 
 resource "aws_iam_group" "groups" {
   count = "${length(keys(local.groups))}"
+
   #name = "${local.groups[count.index]}"
-  name  = "${join("", list(
+  name = "${join("", list(
     upper(substr(element(split("-",local.groups[count.index]),0), 0, 1)),
     substr(element(split("-",local.groups[count.index]),0), 1, -1),
     upper(substr(element(split("-",local.groups[count.index]),1), 0, 1)),
@@ -16,9 +17,10 @@ resource "aws_iam_group" "groups" {
 
 //# Update after v0.12.0
 resource "aws_iam_policy" "groups" {
-  count       = "${length(keys(local.groups))}"
-  name        = "${local.groups[count.index]}-policy"
-  policy      = <<POLICY
+  count = "${length(keys(local.groups))}"
+  name  = "${local.groups[count.index]}-policy"
+
+  policy = <<POLICY
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -77,8 +79,9 @@ resource "aws_iam_group" "user" {
 }
 
 resource "aws_iam_policy" "user" {
-  name        = "UserAccess"
-  policy      = <<POLICY
+  name = "UserAccess"
+
+  policy = <<POLICY
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -165,9 +168,11 @@ resource "aws_iam_group_policy_attachment" "user" {
 
 # Terraform
 
+
 //resource "aws_iam_group" "terraform" {
 //  name = "MasterTerraform"
 //}
+
 
 # TODO update policy - s3 read/write, dynamodb read/write
 //resource "aws_iam_policy" "terraform" {
@@ -191,7 +196,9 @@ resource "aws_iam_group_policy_attachment" "user" {
 //POLICY
 //}
 
+
 //resource "aws_iam_group_policy_attachment" "terraform" {
 //  group      = "${aws_iam_group.terraform.name}"
 //  policy_arn = "${aws_iam_policy.terraform.arn}"
 //}
+

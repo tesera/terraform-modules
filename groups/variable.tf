@@ -1,8 +1,6 @@
-
-
 //
 variable "roles" {
-  type = "list"
+  type    = "list"
   default = ["admin"]
 }
 
@@ -20,16 +18,17 @@ variable "roles" {
 
 variable "sub_accounts" {
   type = "map"
+
   default = {
-    operations = ""
-    production = ""
-    staging = ""
-    testing = ""
+    operations  = ""
+    production  = ""
+    staging     = ""
+    testing     = ""
     development = ""
   }
 }
 
 variable "role_mfa" {
-  type = "string"
+  type    = "string"
   default = "false"
 }

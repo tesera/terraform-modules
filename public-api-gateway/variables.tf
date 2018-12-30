@@ -3,6 +3,11 @@ variable "name" {
   description = "AWS S3 Bucket. {env}-{name}"
 }
 
+variable "default_tags" {
+  type    = "map"
+  default = {}
+}
+
 variable "aliases" {
   type        = "list"
   description = "Cloudfront Aliases"
@@ -42,9 +47,10 @@ variable "timeout" {
 }
 
 variable "xray" {
-  type="string"
+  type    = "string"
   default = "false"
 }
+
 //variable "authorizer_client_id" {}
 //variable "authorizer_client_secret" {}
 

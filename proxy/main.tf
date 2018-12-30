@@ -1,10 +1,9 @@
 resource "aws_eip" "main" {
   vpc = "true"
 
-  tags {
-    Name      = "${var.name}-proxy"
-    Terraform = "true"
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${local.name}"
+  ))}"
 }
 
 data "template_file" "main-userdata" {
@@ -23,13 +22,12 @@ data "template_file" "main-userdata" {
 
 module "ec2" {
   source                    = "../ec2"
-  name                      = "${var.name}-proxy"
+  name                      = "${var.name}"
   account_id                = "${local.account_id}"
   vpc_id                    = "${var.vpc_id}"
   subnet_ids                = "${var.public_subnet_ids}"
   subnet_public             = "true"
   image_id                  = "${local.image_id}"
-  key_name                  = "${var.key_name}"
   banner                    = "Proxy"
   userdata                  = "${data.template_file.main-userdata.rendered}"
   iam_user_groups           = "${var.iam_user_groups}"
@@ -41,9 +39,9 @@ module "ec2" {
 }
 
 resource "aws_iam_policy" "main-ip" {
-  name        = "${var.name}-proxy-ip-policy"
+  name        = "${var.name}-ip-policy"
   path        = "/"
-  description = "${var.name}-proxy-ip Policy"
+  description = "${var.name}-ip Policy"
 
   policy = <<EOF
 {

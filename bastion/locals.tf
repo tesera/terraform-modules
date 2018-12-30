@@ -2,27 +2,35 @@ data "aws_ami" "main" {
   most_recent = true
 
   filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-gp2-ssh"]
+    name = "name"
+
+    values = [
+      "amzn2-ami-hvm-*-x86_64-gp2-ssh",
+    ]
   }
 
   filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
+    name = "virtualization-type"
+
+    values = [
+      "hvm",
+    ]
   }
 
-  owners = ["self"]
+  owners = [
+    "self",
+  ]
 }
 
 module "defaults" {
   source = "../defaults"
-  name   = "${var.name}"
+  name   = "${var.name}-bastion"
   tags   = "${var.default_tags}"
 }
 
 locals {
   account_id       = "${module.defaults.account_id}"
-  region       = "${module.defaults.region}"
+  region           = "${module.defaults.region}"
   name             = "${module.defaults.name}"
   tags             = "${module.defaults.tags}"
   image_id         = "${var.image_id != "" ? var.image_id : data.aws_ami.main.image_id}"

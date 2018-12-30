@@ -36,10 +36,9 @@ resource "aws_db_instance" "main" {
   backup_window           = "${var.backup_window}"
   # Availability
   multi_az = "${var.multi_az}"
-  tags {
-    Name      = "${local.identifier} Master/Slave"
-    Terraform = true
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${local.identifier} Master/Slave"
+  ))}"
 }
 
 resource "aws_db_instance" "replica" {
@@ -75,8 +74,7 @@ resource "aws_db_instance" "replica" {
   backup_retention_period = 0
   # Availability
   multi_az = false
-  tags {
-    Name      = "${var.name} ${var.engine} Replica"
-    Terraform = true
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${local.identifier} Replica"
+  ))}"
 }

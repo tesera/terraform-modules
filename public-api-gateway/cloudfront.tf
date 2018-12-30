@@ -70,10 +70,9 @@ resource "aws_cloudfront_distribution" "main" {
 
   web_acl_id = "${var.web_acl_id}"
 
-  tags {
-    Name      = "${local.name} API Gateway"
-    Terraform = "true"
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${local.name} API Gateway"
+  ))}"
 }
 
 // TODO update archive policy
