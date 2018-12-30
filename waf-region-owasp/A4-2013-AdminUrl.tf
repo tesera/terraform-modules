@@ -9,13 +9,13 @@ resource "aws_wafregional_rule" "wafgAdminAccessRule" {
   name        = "${local.name}wafgAdminAccessRule"
   metric_name = "${local.name}wafgAdminAccessRule"
 
-  predicates {
+  predicate {
     data_id = "${aws_wafregional_byte_match_set.wafrAdminUrlStringSet.id}"
     negated = false
     type    = "ByteMatch"
   }
 
-  predicates {
+  predicate {
     data_id = "${local.ipset_admin_id}"
     negated = false
     type    = "IPMatch"

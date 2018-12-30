@@ -6,7 +6,7 @@ resource "aws_wafregional_rule" "wafgServerSideIncludeRule" {
   name        = "${local.name}wafgServerSideIncludeRule"
   metric_name = "${local.name}wafgServerSideIncludeRule"
 
-  predicates {
+  predicate {
     data_id = "${aws_wafregional_byte_match_set.wafgServerSideIncludeStringSet.id}"
     negated = false
     type    = "ByteMatch"

@@ -17,7 +17,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     type = "${var.defaultAction}"
   }
 
-  rules {
+  rule {
     action {
       type = "BLOCK"
     }
@@ -26,7 +26,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     rule_id  = "${aws_wafregional_rule.wafrSizeRestrictionRule.id}"
   }
 
-  rules {
+  rule {
     action {
       type = "BLOCK"
     }
@@ -35,7 +35,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     rule_id  = "${aws_wafregional_rule.wafgIpBlackListRule.id}"
   }
 
-  rules {
+  rule {
     action {
       type = "BLOCK"
     }
@@ -44,7 +44,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     rule_id  = "${aws_wafregional_rule.wafgAuthTokenRule.id}"
   }
 
-  rules {
+  rule {
     action {
       type = "BLOCK"
     }
@@ -53,7 +53,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     rule_id  = "${aws_wafregional_rule.wafgSQLiRule.id}"
   }
 
-  rules {
+  rule {
     action {
       type = "BLOCK"
     }
@@ -62,7 +62,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     rule_id  = "${aws_wafregional_rule.wafrXSSRule.id}"
   }
 
-  rules {
+  rule {
     action {
       type = "BLOCK"
     }
@@ -71,7 +71,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     rule_id  = "${aws_wafregional_rule.wafgPathsRule.id}"
   }
 
-  rules {
+  rule {
     action {
       type = "BLOCK"
     }
@@ -80,7 +80,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     rule_id  = "${aws_wafregional_rule.wafgCSRFRule.id}"
   }
 
-  rules {
+  rule {
     action {
       type = "BLOCK"
     }
@@ -89,7 +89,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     rule_id  = "${aws_wafregional_rule.wafgServerSideIncludeRule.id}"
   }
 
-  rules {
+  rule {
     action {
       type = "BLOCK"
     }
@@ -98,7 +98,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     rule_id  = "${aws_wafregional_rule.wafgAdminAccessRule.id}"
   }
 
-  rules {
+  rule {
     action {
       type = "ALLOW"
     }

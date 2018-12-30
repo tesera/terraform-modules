@@ -6,7 +6,7 @@ resource "aws_wafregional_rule" "wafrSizeRestrictionRule" {
   name        = "${local.name}wafrSizeRestrictionRule"
   metric_name = "${local.name}wafrSizeRestrictionRule"
 
-  predicates {
+  predicate {
     data_id = "${aws_wafregional_size_constraint_set.wafgSizeRestrictionSet.id}"
     negated = false
     type    = "SizeConstraint"

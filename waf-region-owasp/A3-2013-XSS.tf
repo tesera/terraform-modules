@@ -16,7 +16,7 @@ resource "aws_wafregional_rule" "wafrXSSRule" {
 resource "aws_wafregional_xss_match_set" "wafrXSSSet" {
   name = "${local.name}wafrXSSSet"
 
-  xss_match_tuples {
+  xss_match_tuple {
     text_transformation = "URL_DECODE"
 
     field_to_match {
@@ -24,7 +24,7 @@ resource "aws_wafregional_xss_match_set" "wafrXSSSet" {
     }
   }
 
-  xss_match_tuples {
+  xss_match_tuple {
     text_transformation = "HTML_ENTITY_DECODE"
 
     field_to_match {
@@ -32,7 +32,7 @@ resource "aws_wafregional_xss_match_set" "wafrXSSSet" {
     }
   }
 
-  xss_match_tuples {
+  xss_match_tuple {
     text_transformation = "URL_DECODE"
 
     field_to_match {
@@ -40,7 +40,7 @@ resource "aws_wafregional_xss_match_set" "wafrXSSSet" {
     }
   }
 
-  xss_match_tuples {
+  xss_match_tuple {
     text_transformation = "HTML_ENTITY_DECODE"
 
     field_to_match {
@@ -48,7 +48,7 @@ resource "aws_wafregional_xss_match_set" "wafrXSSSet" {
     }
   }
 
-  xss_match_tuples {
+  xss_match_tuple {
     text_transformation = "URL_DECODE"
 
     field_to_match {
@@ -56,7 +56,7 @@ resource "aws_wafregional_xss_match_set" "wafrXSSSet" {
     }
   }
 
-  xss_match_tuples {
+  xss_match_tuple {
     text_transformation = "HTML_ENTITY_DECODE"
 
     field_to_match {
@@ -64,7 +64,7 @@ resource "aws_wafregional_xss_match_set" "wafrXSSSet" {
     }
   }
 
-  xss_match_tuples {
+  xss_match_tuple {
     text_transformation = "URL_DECODE"
 
     field_to_match {
@@ -73,7 +73,7 @@ resource "aws_wafregional_xss_match_set" "wafrXSSSet" {
     }
   }
 
-  xss_match_tuples {
+  xss_match_tuple {
     text_transformation = "HTML_ENTITY_DECODE"
 
     field_to_match {

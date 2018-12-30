@@ -9,7 +9,7 @@ resource "aws_wafregional_rule" "wafgAuthTokenRule" {
   name        = "${local.name}wafgAuthTokenRule"
   metric_name = "${local.name}wafgAuthTokenRule"
 
-  predicates {
+  predicate {
     data_id = "${aws_wafregional_byte_match_set.wafrAuthTokenStringSet.id}"
     negated = false
     type    = "ByteMatch"

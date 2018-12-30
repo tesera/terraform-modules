@@ -7,13 +7,13 @@ resource "aws_wafregional_rule" "wafgCSRFRule" {
   name        = "${local.name}wafgCSRFRule"
   metric_name = "${local.name}wafgCSRFRule"
 
-  predicates {
+  predicate {
     data_id = "${aws_wafregional_byte_match_set.wafgCSRFMethodStringSet.id}"
     negated = false
     type    = "ByteMatch"
   }
 
-  predicates {
+  predicate {
     data_id = "${aws_wafregional_size_constraint_set.wafgCSRFTokenSizeConstraint.id}"
     negated = false
     type    = "SizeConstraint"

@@ -6,7 +6,7 @@ resource "aws_wafregional_rule" "wafgSQLiRule" {
   name        = "${local.name}wafgSQLiRule"
   metric_name = "${local.name}wafgSQLiRule"
 
-  predicates {
+  predicate {
     data_id = "${aws_wafregional_sql_injection_match_set.wafrSQLiSet.id}"
     negated = false
     type    = "SqlInjectionMatch"
@@ -16,7 +16,7 @@ resource "aws_wafregional_rule" "wafgSQLiRule" {
 resource "aws_wafregional_sql_injection_match_set" "wafrSQLiSet" {
   name = "${local.name}wafrSQLiSet"
 
-  sql_injection_match_tuples {
+  sql_injection_match_tuple {
     text_transformation = "URL_DECODE"
 
     field_to_match {
@@ -24,7 +24,7 @@ resource "aws_wafregional_sql_injection_match_set" "wafrSQLiSet" {
     }
   }
 
-  sql_injection_match_tuples {
+  sql_injection_match_tuple {
     text_transformation = "HTML_ENTITY_DECODE"
 
     field_to_match {
@@ -32,7 +32,7 @@ resource "aws_wafregional_sql_injection_match_set" "wafrSQLiSet" {
     }
   }
 
-  sql_injection_match_tuples {
+  sql_injection_match_tuple {
     text_transformation = "URL_DECODE"
 
     field_to_match {
@@ -40,7 +40,7 @@ resource "aws_wafregional_sql_injection_match_set" "wafrSQLiSet" {
     }
   }
 
-  sql_injection_match_tuples {
+  sql_injection_match_tuple {
     text_transformation = "HTML_ENTITY_DECODE"
 
     field_to_match {
@@ -48,7 +48,7 @@ resource "aws_wafregional_sql_injection_match_set" "wafrSQLiSet" {
     }
   }
 
-  sql_injection_match_tuples {
+  sql_injection_match_tuple {
     text_transformation = "URL_DECODE"
 
     field_to_match {
@@ -56,7 +56,7 @@ resource "aws_wafregional_sql_injection_match_set" "wafrSQLiSet" {
     }
   }
 
-  sql_injection_match_tuples {
+  sql_injection_match_tuple {
     text_transformation = "HTML_ENTITY_DECODE"
 
     field_to_match {
@@ -64,7 +64,7 @@ resource "aws_wafregional_sql_injection_match_set" "wafrSQLiSet" {
     }
   }
 
-  sql_injection_match_tuples {
+  sql_injection_match_tuple {
     text_transformation = "URL_DECODE"
 
     field_to_match {
@@ -73,7 +73,7 @@ resource "aws_wafregional_sql_injection_match_set" "wafrSQLiSet" {
     }
   }
 
-  sql_injection_match_tuples {
+  sql_injection_match_tuple {
     text_transformation = "HTML_ENTITY_DECODE"
 
     field_to_match {
