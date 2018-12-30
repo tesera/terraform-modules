@@ -63,7 +63,7 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   tags = "${merge(local.tags, map(
-    "Name", "${var.name} Domain Redirection"
+    "Name", "${local.name} Domain Redirection"
   ))}"
 }
 

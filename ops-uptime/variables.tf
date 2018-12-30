@@ -2,6 +2,11 @@ variable "name" {
   type = "string"
 }
 
+variable "default_tags" {
+  type    = "map"
+  default = {}
+}
+
 variable "fqdn" {
   type        = "string"
   description = "fully qualified domain name"

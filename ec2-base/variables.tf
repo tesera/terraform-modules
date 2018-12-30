@@ -5,10 +5,6 @@ variable "default_tags" {
   default = {}
 }
 
-variable "account_id" {
-  default = ""
-}
-
 variable "vpc_id" {}
 
 variable "subnet_ids" {

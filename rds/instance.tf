@@ -3,7 +3,7 @@ resource "aws_db_instance" "main" {
   auto_minor_version_upgrade          = true
   allow_major_version_upgrade         = false
   allocated_storage                   = "${var.allocated_storage}"
-  identifier                          = "${var.name}-${var.engine}"
+  identifier                          = "${local.name}-${var.engine}-${var.type}"
   storage_type                        = "${var.storage_type}"
   engine                              = "${var.engine}"
   engine_version                      = "${var.engine_version}"
@@ -48,7 +48,7 @@ resource "aws_db_instance" "replica" {
   auto_minor_version_upgrade  = true
   allow_major_version_upgrade = false
   allocated_storage           = "${var.allocated_storage}"
-  identifier                  = "${var.name}-replica-${count.index}"
+  identifier                  = "${local.name}-${var.engine}-${var.type}-replica-${count.index}"
   storage_type                = "${var.storage_type}"
   engine                      = "${var.engine}"
   engine_version              = "${var.engine_version}"

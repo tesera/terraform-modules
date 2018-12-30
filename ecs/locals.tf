@@ -14,7 +14,7 @@ data "aws_ami" "main" {
 
 module "defaults" {
   source = "../defaults"
-  name   = "${var.name}"
+  name   = "${var.name}-ecs"
   tags   = "${var.default_tags}"
 }
 

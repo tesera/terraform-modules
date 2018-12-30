@@ -1,6 +1,6 @@
 resource "aws_sns_topic" "main" {
   provider = "aws.edge"
-  name     = "${var.name}-alarm"
+  name     = "${local.name}-alarm"
 
   provisioner "local-exec" {
     command = "aws sns subscribe --profile ${local.profile} --topic-arn ${self.arn} --region ${local.region} --protocol email --notification-endpoint ${var.sns_subscribe_primary}"
@@ -22,14 +22,14 @@ resource "aws_route53_health_check" "main" {
     "us-west-2",
   ]
 
-  tags = {
-    Name = "${var.name}-health-check"
-  }
+  tags = "${merge(local.tags, map(
+    "Name", "${local.name}-health-check"
+  ))}"
 }
 
 resource "aws_cloudwatch_metric_alarm" "main" {
   provider            = "aws.edge"
-  alarm_name          = "${var.name}-failed"
+  alarm_name          = "${local.name}-failed"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
   comparison_operator = "LessThanThreshold"

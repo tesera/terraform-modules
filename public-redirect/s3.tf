@@ -16,7 +16,7 @@ resource "aws_s3_bucket" "main" {
   }
 
   tags = "${merge(local.tags, map(
-    "Name", "${var.name} Domain Redirection"
+    "Name", "${local.name} Domain Redirection"
   ))}"
 }
 

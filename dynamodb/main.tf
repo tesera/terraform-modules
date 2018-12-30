@@ -1,5 +1,5 @@
 resource "aws_dynamodb_table" "main" {
-  name           = "${var.name}"
+  name           = "${local.name}"
   read_capacity  = "${var.min_read_capacity}"
   write_capacity = "${var.min_write_capacity}"
   hash_key       = "${var.hash_key}"

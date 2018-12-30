@@ -2,7 +2,7 @@ resource "aws_eip" "main" {
   vpc = "true"
 
   tags = "${merge(local.tags, map(
-    "Name", "${var.name}"
+    "Name", "${local.name}"
   ))}"
 }
 
@@ -19,8 +19,7 @@ data "template_file" "userdata" {
 
 module "ec2" {
   source           = "../ec2-base"
-  name             = "${var.name}"
-  account_id       = "${local.account_id}"
+  name             = "${local.name}"
   vpc_id           = "${var.vpc_id}"
   subnet_ids       = ["${var.public_subnet_ids}"]
   subnet_public    = "true"

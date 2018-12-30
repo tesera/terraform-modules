@@ -1,5 +1,5 @@
 resource "aws_security_group" "main" {
-  name   = "${var.name}-security-group"
+  name   = "${local.name}-security-group"
   vpc_id = "${var.vpc_id}"
 
   egress {
@@ -13,7 +13,7 @@ resource "aws_security_group" "main" {
   }
 
   tags = "${merge(local.tags, map(
-    "Name", "${var.name}"
+    "Name", "${local.name}"
   ))}"
 }
 

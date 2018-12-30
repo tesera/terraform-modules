@@ -1,5 +1,5 @@
 resource "aws_ecs_cluster" "main" {
-  name = "${var.name}-ecs"
+  name = "${local.name}"
 }
 
 data "template_file" "userdata" {
@@ -12,8 +12,7 @@ data "template_file" "userdata" {
 
 module "ec2" {
   source                 = "../ec2-base"
-  name                   = "${var.name}-ecs"
-  account_id             = "${local.account_id}"
+  name                   = "${local.name}"
   vpc_id                 = "${var.vpc_id}"
   subnet_ids             = ["${var.private_subnet_ids}"]
   image_id               = "${local.image_id}"

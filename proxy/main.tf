@@ -22,8 +22,7 @@ data "template_file" "main-userdata" {
 
 module "ec2" {
   source                    = "../ec2"
-  name                      = "${var.name}"
-  account_id                = "${local.account_id}"
+  name                      = "${local.name}"
   vpc_id                    = "${var.vpc_id}"
   subnet_ids                = "${var.public_subnet_ids}"
   subnet_public             = "true"
@@ -39,9 +38,9 @@ module "ec2" {
 }
 
 resource "aws_iam_policy" "main-ip" {
-  name        = "${var.name}-ip-policy"
+  name        = "${local.name}-ip-policy"
   path        = "/"
-  description = "${var.name}-ip Policy"
+  description = "${local.name} IP Policy"
 
   policy = <<EOF
 {

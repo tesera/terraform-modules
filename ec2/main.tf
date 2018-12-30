@@ -1,8 +1,7 @@
 module "ec2-base" {
   source                 = "../ec2-base"
-  name                   = "${var.name}"
-  default_tags           = "${var.default_tags}"
-  account_id             = "${var.account_id}"
+  name                   = "${local.name}"
+  default_tags           = "${local.tags}"
   vpc_id                 = "${var.vpc_id}"
   subnet_ids             = ["${var.subnet_ids}"]
   subnet_public          = "${var.subnet_public}"
