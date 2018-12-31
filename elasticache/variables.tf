@@ -10,7 +10,7 @@ variable "engine" {
 }
 
 variable "engine_version" {
-  default = "4.0.10"
+  default = "5.0"
 }
 
 variable "port" {
@@ -18,7 +18,7 @@ variable "port" {
 }
 
 variable "parameter_group_name" {
-  default = "default.redis4.0"
+  default = ""
 }
 
 variable "vpc_id" {}

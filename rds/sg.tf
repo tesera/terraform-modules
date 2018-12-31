@@ -1,7 +1,6 @@
 resource "aws_security_group" "main" {
-  name        = "${local.identifier}-security-group"
-  description = "SecurityGroup for ${local.identifier}"
-  vpc_id      = "${var.vpc_id}"
+  name   = "${local.identifier}-security-group"
+  vpc_id = "${var.vpc_id}"
 
   # Allow all outbound traffic.
   egress {
@@ -12,7 +11,8 @@ resource "aws_security_group" "main" {
   }
 
   tags = "${merge(local.tags, map(
-    "Name", "${local.identifier}"
+    "Name", "${local.identifier}",
+    "Description", "SecurityGroup for ${local.identifier}"
   ))}"
 }
 

@@ -37,10 +37,10 @@ module "elasticache" {
 
 ## Input
 - **name:** name of the elasticache cluster.
-- **type:** is cluster mode enabled? [Default: service]. Valid values: cluster, service. If cluster is selected multi_az must be true.
+- **type:** is cluster mode enabled? [Default: `service`]. Valid values: cluster, service. If cluster is selected multi_az must be true.
 - **engine:** the name of the cache engine to be used for the clusters in this replication group. [Default: `redis`]. Valid values: at the moment only `redis` is supported
-- **engine_version:** the version number of the cache engine to be used for the cache clusters in this replication group.
-- **port:** the port number on which each of the cache nodes will accept connections. [Default: 6379].
+- **engine_version:** the version number of the cache engine to be used for the cache clusters in this replication group. [Default `5.0`]
+- **port:** the port number on which each of the cache nodes will accept connections. [Default: `6379`].
 - **parameter_group_name:** the name of the parameter group to associate with this replication group. If this argument is omitted, the default cache parameter group for the engine is used.
 - **vpc_id:** VPC id.
 - **private_subnet_ids:** list of VPC subnet IDs.

@@ -9,7 +9,7 @@ resource "aws_db_instance" "main" {
   engine_version                      = "${var.engine_version}"
   instance_class                      = "${var.instance_type}"
   name                                = "${local.db_name}"
-  parameter_group_name                = "${var.parameter_group_name}"
+  parameter_group_name                = "${local.parameter_group_name}"
   apply_immediately                   = "${var.apply_immediately}"
   iam_database_authentication_enabled = "${var.iam_database_authentication_enabled}"
 
@@ -54,7 +54,7 @@ resource "aws_db_instance" "replica" {
   engine_version              = "${var.engine_version}"
   instance_class              = "${var.instance_type}"
   name                        = "${local.db_name}"
-  parameter_group_name        = "${var.parameter_group_name}"
+  parameter_group_name        = "${local.parameter_group_name}"
   apply_immediately           = true
 
   # Confidentiality

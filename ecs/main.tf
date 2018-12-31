@@ -32,9 +32,9 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerServiceforEC2Role" 
 }
 
 resource "aws_iam_policy" "AmazonECSServiceRolePolicy" {
-  name        = "${local.name}-AmazonECSServiceRolePolicy"
+  name = "${local.name}-AmazonECSServiceRolePolicy"
 
-  policy      = <<POLICY
+  policy = <<POLICY
 {
     "Version": "2012-10-17",
     "Statement": [

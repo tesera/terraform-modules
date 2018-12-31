@@ -1,10 +1,10 @@
 resource "aws_security_group" "main" {
-  name        = "${local.name}-elasticsearch-${var.type}-security-group"
-  description = "SecurityGroup for ${local.name}"
-  vpc_id      = "${var.vpc_id}"
+  name   = "${local.name}-elasticsearch-${var.type}-security-group"
+  vpc_id = "${var.vpc_id}"
 
   tags = "${merge(local.tags, map(
-    "Name", "${local.name}-elasticsearch-${var.type}"
+    "Name", "${local.name}-elasticsearch-${var.type}",
+    "Description", "SecurityGroup for ${local.name}"
   ))}"
 }
 

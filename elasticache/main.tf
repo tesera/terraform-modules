@@ -11,7 +11,7 @@ resource "aws_elasticache_replication_group" "service" {
   engine                        = "${var.engine}"
   engine_version                = "${var.engine_version}"
   node_type                     = "${var.instance_type}"
-  parameter_group_name          = "${var.parameter_group_name}"
+  parameter_group_name          = "${local.parameter_group_name}"
   subnet_group_name             = "${aws_elasticache_subnet_group.main.name}"
   security_group_ids            = ["${aws_security_group.main.id}"]
   number_cache_clusters         = "${var.replica_count + 1}"
@@ -33,7 +33,7 @@ resource "aws_elasticache_replication_group" "cluster" {
   engine                        = "${var.engine}"
   engine_version                = "${var.engine_version}"
   node_type                     = "${var.instance_type}"
-  parameter_group_name          = "${var.parameter_group_name}"
+  parameter_group_name          = "${local.parameter_group_name}"
   subnet_group_name             = "${aws_elasticache_subnet_group.main.name}"
   security_group_ids            = ["${aws_security_group.main.id}"]
   maintenance_window            = "${var.maintenance_window}"

@@ -18,7 +18,7 @@ variable "resource_path" {
 }
 
 variable "failure_threshold" {
-  type    = "sting"
+  type    = "string"
   default = "3"
 }
 

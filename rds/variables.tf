@@ -34,7 +34,7 @@ variable "engine" {
 }
 
 variable "engine_version" {
-  default = "10.3"
+  default = "10"
 }
 
 variable "engine_mode" {
@@ -50,7 +50,7 @@ variable "backup_window" {
 }
 
 variable "parameter_group_name" {
-  default = "default.postgres10"
+  default = ""
 }
 
 variable "allocated_storage" {
