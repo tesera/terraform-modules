@@ -9,7 +9,7 @@ resource "aws_iam_role" "main" {
       "Effect": "Allow",
       "Principal": {
         "Service": [
-          "ec2.amazonaws.com"
+          "${var.iam _service}.amazonaws.com"
         ]
       },
       "Action": "sts:AssumeRole"

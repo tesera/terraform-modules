@@ -1,3 +1,4 @@
+# SSE:AWS not supportted
 resource "aws_s3_bucket" "main-s3-logs" {
   provider            = "aws.edge"
   bucket              = "${local.name}-${terraform.workspace}-static-assets-access-logs"

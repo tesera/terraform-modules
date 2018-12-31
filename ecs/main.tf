@@ -12,6 +12,7 @@ data "template_file" "userdata" {
 
 module "ec2" {
   source                 = "../ec2-base"
+  iam_service            = "ecs"
   name                   = "${local.name}"
   vpc_id                 = "${var.vpc_id}"
   subnet_ids             = ["${var.private_subnet_ids}"]
@@ -25,7 +26,62 @@ module "ec2" {
   efs_security_group_ids = ["${var.efs_security_group_ids}"]
 }
 
-resource "aws_iam_role_policy_attachment" "main-ecs" {
+resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerServiceforEC2Role" {
   role       = "${module.ec2.iam_role_name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_iam_policy" "AmazonECSServiceRolePolicy" {
+  name        = "${local.name}-AmazonECSServiceRolePolicy"
+
+  policy      = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ECSTaskManagement",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:AttachNetworkInterface",
+                "ec2:CreateNetworkInterface",
+                "ec2:CreateNetworkInterfacePermission",
+                "ec2:DeleteNetworkInterface",
+                "ec2:DeleteNetworkInterfacePermission",
+                "ec2:Describe*",
+                "ec2:DetachNetworkInterface",
+                "elasticloadbalancing:DeregisterInstancesFromLoadBalancer",
+                "elasticloadbalancing:DeregisterTargets",
+                "elasticloadbalancing:Describe*",
+                "elasticloadbalancing:RegisterInstancesWithLoadBalancer",
+                "elasticloadbalancing:RegisterTargets",
+                "route53:ChangeResourceRecordSets",
+                "route53:CreateHealthCheck",
+                "route53:DeleteHealthCheck",
+                "route53:Get*",
+                "route53:List*",
+                "route53:UpdateHealthCheck",
+                "servicediscovery:DeregisterInstance",
+                "servicediscovery:Get*",
+                "servicediscovery:List*",
+                "servicediscovery:RegisterInstance",
+                "servicediscovery:UpdateInstanceCustomHealthStatus"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "ECSTagging",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:CreateTags"
+            ],
+            "Resource": "arn:aws:ec2:*:*:network-interface/*"
+        }
+    ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "AmazonECSServiceRolePolicy" {
+  role       = "${module.ec2.iam_role_name}"
+  policy_arn = "${aws_iam_policy.AmazonECSServiceRolePolicy.arn}"
 }
