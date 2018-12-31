@@ -19,8 +19,8 @@ output "security_group_id" {
   value = "${module.ec2.security_group_id}"
 }
 
-output "autoscaling_group_id" {
-  value = "${module.ec2.autoscaling_group_id}"
+output "autoscaling_group_name" {
+  value = "${module.ec2.autoscaling_group_name}"
 }
 
 output "billing_suggestion" {
