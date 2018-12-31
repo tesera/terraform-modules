@@ -61,7 +61,7 @@ variable "efs_security_group_ids" {
   default = []
 }
 
-variable "iam _service" {
+variable "iam_service" {
   type = "string"
   default = "ec2"
 }
