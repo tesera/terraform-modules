@@ -1,5 +1,6 @@
 terraform {
   required_version = ">= 0.12.0"
+
   backend "s3" {
     bucket         = "terraform-state-"
     key            = "api/terraform.tfstate"
@@ -11,8 +12,9 @@ terraform {
 
 variable "workspace_iam_roles" {
   type = "map"
+
   default = {
-    devemopment = "arn:aws:iam::DEVELOPMENT-ACCOUNT-ID:role/Terraform"
+    development = "arn:aws:iam::DEVELOPMENT-ACCOUNT-ID:role/Terraform"
     testing     = "arn:aws:iam::TESTING-ACCOUNT-ID:role/Terraform"
     staging     = "arn:aws:iam::STAGING-ACCOUNT-ID:role/Terraform"
     production  = "arn:aws:iam::PRODUCTION-ACCOUNT-ID:role/Terraform"
@@ -20,15 +22,15 @@ variable "workspace_iam_roles" {
 }
 
 provider "aws" {
-  region  = "${var.aws_region}"
-  profile = "${var.profile}"
+  region      = "${var.aws_region}"
+  profile     = "${var.profile}"
   assume_role = "${var.workspace_iam_roles[terraform.workspace]}"
 }
 
 provider "aws" {
-  region  = "us-east-1"
-  profile = "${var.profile}"
-  alias   = "edge"
+  region      = "us-east-1"
+  profile     = "${var.profile}"
+  alias       = "edge"
   assume_role = "${var.workspace_iam_roles[terraform.workspace]}"
 }
 
@@ -45,3 +47,4 @@ data "terraform_remote_state" "vpc" {
 }
 
 ## API
+
