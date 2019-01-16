@@ -17,6 +17,7 @@ variable "aliases" {
 
 variable "acm_certificate_arn" {
   "type" = "string"
+  default = ""
 }
 
 variable "web_acl_id" {

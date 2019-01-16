@@ -11,6 +11,7 @@ resource "aws_cloudfront_distribution" "main" {
   aliases = "${var.aliases}"
 
   viewer_certificate {
+    cloudfront_default_certificate = "${(var.acm_certificate_arn == "")}"
     acm_certificate_arn      = "${var.acm_certificate_arn}"
     minimum_protocol_version = "TLSv1.2_2018"
     ssl_support_method       = "sni-only"
@@ -88,11 +89,11 @@ resource "aws_cloudfront_distribution" "main" {
 
   default_root_object = "/index.html"
 
-  custom_error_response {
+  /*custom_error_response {
     error_code         = 404
-    response_code      = 200
+    response_code      = 404
     response_page_path = "/index.html"
-  }
+  }*/
 
   logging_config {
     include_cookies = false
