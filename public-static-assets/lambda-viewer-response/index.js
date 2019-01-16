@@ -23,23 +23,16 @@ const headers = {
       ' report-uri https://{report-uri}.report-uri.com/r/d/csp/reportOnly',
     // https://github.com/WICG/feature-policy/blob/master/features.md
     'Feature-Policy': '' +
-      ' accelerometer \'none\'' +
-      ' ambient-light-sensor \'none\'' +
-      ' autoplay \'none\'' +
       ' camera \'none\'' +
-      ' encrypted-media \'none\'' +
-      ' fullscreen \'none\'' +
-      ' geolocation \'none\'' +
+      ' fullscreen \'self\'' +
       ' gyroscope \'none\'' +
+      ' geolocation \'none\'' +
       ' magnetometer \'none\'' +
       ' microphone \'none\'' +
       ' midi \'none\'' +
       ' payment \'none\'' +
-      ' picture-in-picture \'none\'' +
       ' speaker \'none\'' +
-      ' usb \'none\'' +
-      ' vr \'none\'' +
-      ' sync-xhr \'none\'',
+      ' sync-xhr \'self\'',
     'X-Frame-Options': 'DENY',
     'X-XSS-Protection': '1; mode=block',
     'X-UA-Compatible': 'ie=edge'
