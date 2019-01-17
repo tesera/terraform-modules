@@ -8,6 +8,7 @@ resource "aws_security_group" "main" {
   ))}"
 }
 
+# TODO confirm if needed, remove if not
 resource "aws_security_group_rule" "elasticsearch_ssh_access" {
   count                    = "${length(var.security_group_ids)}"
   security_group_id        = "${aws_security_group.main.id}"

@@ -106,7 +106,6 @@ resource "aws_cloudfront_distribution" "main" {
 }
 
 resource "aws_s3_bucket" "main-cdn-logs" {
-  provider = "aws.edge"
   bucket   = "${local.name}-${terraform.workspace}-cdn-access-logs"
 
   lifecycle_rule {

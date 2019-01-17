@@ -14,7 +14,9 @@ variable "engine_version" {
   default = "6.3"
 }
 
-variable "vpc_id" {}
+variable "vpc_id" {
+  type = "string"
+}
 
 variable "security_group_ids" {
   type    = "list"
