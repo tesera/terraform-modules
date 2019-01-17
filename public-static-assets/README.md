@@ -66,3 +66,5 @@ module "app" {
 - **domain_name:** `${aws_cloudfront_distribution.main.domain_name}` CloudFront Domain Name for DNS updating.
 - **hosted_zone_id:** `${aws_cloudfront_distribution.main.hosted_zone_id}` CloudFront Hosted Zone ID.
 
+## TODO
+- add in price class var
