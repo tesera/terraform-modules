@@ -27,7 +27,7 @@ module "vpc" {
 ```hcl-terraform
 resource "aws_vpc_endpoint" "s3" {
   vpc_id            = "${module.vpc.id}"
-  service_name      = "com.amazonaws.${var.region}.s3"
+  service_name      = "com.amazonaws.${local.workspace["region"]}.s3"
   route_table_ids   = ["${module.vpc.private_route_table_ids}"]
   policy            = <<POLICY
 {
@@ -45,7 +45,7 @@ POLICY
 
 resource "aws_vpc_endpoint" "dynamodb" {
   vpc_id          = "${module.vpc.id}"
-  service_name    = "com.amazonaws.${var.region}.dynamodb"
+  service_name    = "com.amazonaws.${local.workspace["region"]}.dynamodb"
   route_table_ids = ["${module.vpc.private_route_table_ids}"]
   policy          = <<POLICY
 {

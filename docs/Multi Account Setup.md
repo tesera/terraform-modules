@@ -26,6 +26,7 @@ See [How do I create and activate a new Amazon Web Services account?](https://aw
 1. Enter 4-digit code into your phone after picking up and press `Continue`.
 1. Press `Free`.
 1. Setup MFA *
+1. Add 
 
 ### Create `terraform` User
 1. Go to IAM.
@@ -41,7 +42,7 @@ See [How do I create and activate a new Amazon Web Services account?](https://aw
 1. Set Sub Account Root Password (See [Accessing and Administering the Member Accounts in Your Organization](https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_access.html#orgs_manage_accounts_access-as-root))
 1. Add `terraform` user w/ admin policy and access keys
 1. `terraform apply` `./environments/state`
-1. `tfe apply` `./environments/account`
+1. `terraform apply` `./environments/account`
 1. Delete `terraform` User from account
 1. Repeat for each environments, operations, adn forensics accounts
 
@@ -54,6 +55,17 @@ See [How do I create and activate a new Amazon Web Services account?](https://aw
 1. Press `Create access key`.
 1. Replace `Access key ID` and `Secret access key` in `~/.aws/credentials` for `[username]` to new credentials.
 
+### Create Access Keys
+1. Got to [`IAM`](https://console.aws.amazon.com/iam/home/) if not already there.
+1. Click `Users` -> `${username}` -> `Security credentials` -> `Create access key` under `Access Keys`.
+1. Copy into `~/.aws/credentials`.
+
+```bash
+[main]
+aws_access_key_id = access_key_id
+aws_secret_access_key = secret_access_key
+```
+
 ### Setup MFA
 1. Got to [`IAM`](https://console.aws.amazon.com/iam/home/) if not already there.
 1. Click `Users` -> `${username}` -> `Security credentials` -> `Manage` beside `Assigned MFA device:`. 
@@ -65,28 +77,15 @@ See [How do I create and activate a new Amazon Web Services account?](https://aw
 ### Setup `Switch Role` in Console
 1. From account drop down choose `Switch Role`.
 1. Press `Switch Role`.
-1. Enter `Account` (ID), `Role`, `Display Name` and press `Switch Role`
+1. Enter `Account` (ID), `Role`, `Display Name` and press `Switch Role`.
 
-### Setup `Assume Role` in Cli
-`~/.aws/credentials`
+### Setup `Assume Role` in CLI
+Update `~/.aws/credentials`:
 ```bash
-[main]
-aws_access_key_id = userkey
-aws_secret_access_key = userkey
-
-```
-
-`~/.aws/config`
-```bash
-[profile main]
-output = json
-region = us-east-1
-
-[profile main-production]
-output = json
-region = us-east-1
-role_arn = arn:aws:iam:123456789:role/admin
+[main-environment]
 source_profile = main
+role_arn = arn:aws:iam:${account_id}:role/admin
+session_name = main-environment
 ```
 
 ## Enabled Account level services
