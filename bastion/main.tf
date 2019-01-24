@@ -24,6 +24,7 @@ module "ec2" {
   subnet_ids       = ["${var.public_subnet_ids}"]
   subnet_public    = "true"
   image_id         = "${local.image_id}"
+  instance_type    = "${var.instance_type}"
   user_data        = "${data.template_file.userdata.rendered}"
   min_size         = "${local.min_size}"
   max_size         = "${local.max_size}"
