@@ -34,7 +34,7 @@ module "ecs" {
 - **vpc_id:** vpc id
 - **private_subnet_ids:** array of private subnet ids
 - **image_id:** override the base image, must be CentOS based (ie has yum, rpm, docker) [Default: AWS ECS-Optimized]
-- **instance_type:** override the instance type [Default: t2.micro]
+- **instance_type:** override the instance type [Default: t3.micro]
 - **min_size:** auto-scaling - min instance count [Default: 2]
 - **max_size:** auto-scaling - max instance count [Default: 2]
 - **desired_capacity:** auto-scaling - desired instance count [Default: 2]

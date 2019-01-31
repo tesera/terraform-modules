@@ -21,7 +21,7 @@
         ],
         "most_recent": true
       },
-      "instance_type": "t2.micro",
+      "instance_type": "t3.micro",
       "ssh_username": "ec2-user",
       "ami_name": "amzn2-ami-hvm-{{isotime \"20060102030405\"}}-x86_64-gp2-ssh"
     }

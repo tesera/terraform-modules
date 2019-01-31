@@ -52,7 +52,7 @@ resource "aws_security_group_rule" "proxy" {
 - **iam_user_groups:** name of iam group that should have ssh access, comma separated list [Default: none]
 - **iam_sudo_groups:** name of iam group that should have ssh sudo access, comma separated list [Default: none]
 - **image_id:** override the base image, must be CentOS based (ie has yum and rpm) [Default: AWS Linux]
-- **instance_type:** override the instance type [Default: t2.micro]
+- **instance_type:** override the instance type [Default: t3.micro]
 - **bastion_security_group_id:** bastion security group id [Default: none]
 - **proxy_name:** name of the proxy [Default: proxy]
 - **proxy_endpoint:** RDS domain endpoint

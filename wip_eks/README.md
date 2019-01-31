@@ -53,7 +53,7 @@ output "cluster_name" {
 - **iam_user_groups:** name of iam group that should have ssh access, comma separated list
 - **iam_sudo_groups:** name of iam group that should have ssh sudo access, comma separated list
 - **image_id:** override the base image, must be CentOS based (ie has yum, rpm, docker) [Default: AWS EKS-Optimized]
-- **instance_type:** override the instance type [Default: t2.micro]
+- **instance_type:** override the instance type [Default: t3.micro]
 - **bastion_security_group_id:** bastion security group id [Default: none]
 - **min_size:** auto-scaling - min instance count [Default: 2]
 - **max_size:** auto-scaling - max instance count [Default: 2]

@@ -28,7 +28,7 @@ module "eks" {
         "asg_desired_capacity","${local.desired_capacity}",
         "asg_maz_size","${local.max_size}",
         "asg_min_size","${local.min_size}",
-        "instance_type", "${var.instance_type != "" ? var.instance_type : "t2.micro"}",
+        "instance_type", "${var.instance_type != "" ? var.instance_type : "t3.micro"}",
         "root_volume_size","50",
         "root_volume_type","gp2",
         "key_name","${var.key_name}",

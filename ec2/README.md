@@ -93,7 +93,7 @@ aws ssm start-session --target i-00000000000000000 --profile default
 - **subnet_ids:** array of public subnet ids
 - **subnet_public:** is the subnet public? [Default: false]
 - **image_id:** override the base image, must be CentOS based (ie has yum, rpm, docker) [Default: AWS ECS-Optimized]
-- **instance_type:** override the instance type [Default: t2.micro]
+- **instance_type:** override the instance type [Default: t3.micro]
 - **user_data:** contents of user data to apply to ec2
 - **min_size:** auto-scaling - min instance count [Default: 1]
 - **max_size:** auto-scaling - max instance count [Default: 1]

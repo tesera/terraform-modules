@@ -103,7 +103,7 @@ key_name                  | name of root ssh key, should be used for debug only 
 bastion_security_group_id | bastion security group id | string | `` | No
 iam_user_groups           | name of iam group that should have ssh access, comma separated list | string | `` | No
 iam_sudo_groups           | name of iam group that should have ssh sudo access, comma separated list | string | `` | No
-instance_type             | override the instance type | string | `t2.micro` | No
+instance_type             | override the instance type | string | `t3.micro` | No
 
 ## Output
 - **id:** vpc id

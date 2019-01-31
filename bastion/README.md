@@ -51,7 +51,7 @@ resource "aws_iam_group" "developers" {
 - **iam_user_groups:** name of iam group that should have ssh access, comma separated list
 - **iam_sudo_groups:** name of iam group that should have ssh sudo access, comma separated list
 - **image_id:** override the base image, must be CentOS based (ie has yum and rpm) [Default: AWS Linux]
-- **instance_type:** override the instance type [Default: t2.micro]
+- **instance_type:** override the instance type [Default: t3.micro]
 
 ## Output
 - **public_ip:** public ip
