@@ -89,6 +89,7 @@ resource "aws_network_acl_rule" "egress_postgres" {
 ```
 
 ### Output config information to SSM Paramstore for use from Serverless, Lambda or other components
+```
 resource "aws_ssm_parameter" "vpc_sg" {
   name        = "/infrastructure/vpc/sg"
   description = "VPC security group"
