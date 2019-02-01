@@ -103,6 +103,31 @@ The workaround is either assume the role as an IAM user, or attach the rdb-conne
 
 ```
 
+### Output configuration info to SSM Param store for use from Serverless, Lambda or other components
+Force use of SSL needs to be set through DB Parameters groups. Example of creating such param group:
+```hcl-terraform
+resource "aws_ssm_parameter" "db_endpoint" {
+  name        = "/config/database/endpoint"
+  description = "Endpoint to connect to the database"
+  type        = "SecureString"
+  value       = "${module.db.endpoint}"
+}
+
+resource "aws_ssm_parameter" "db_port" {
+  name        = "/config/database/port"
+  description = "Port to connect to the database"
+  type        = "SecureString"
+  value       = "${module.db.port}"
+}
+
+resource "aws_ssm_parameter" "db_username" {
+  name        = "/config/database/username"
+  description = "Username to connect to the database"
+  type        = "SecureString"
+  value       = "${module.db.username}"
+}
+```
+
 ## Input
 - **type:** type of RDS. [Default: `service`]. Valid values: `service`, `cluster`.
 - **name:** name of the RDS instance

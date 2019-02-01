@@ -88,6 +88,22 @@ resource "aws_network_acl_rule" "egress_postgres" {
 }
 ```
 
+### Output config information to SSM Paramstore for use from Serverless, Lambda or other components
+resource "aws_ssm_parameter" "vpc_sg" {
+  name        = "/infrastructure/vpc/sg"
+  description = "VPC security group"
+  type        = "SecureString"
+  value       = "${aws_security_group.lambda.id}"
+}
+
+resource "aws_ssm_parameter" "vpc_private_subnets" {
+  name        = "/infrastructure/vpc/private_subnets"
+  description = "VPC private subnets "
+  type        = "SecureString"
+  value       = "${join(",", module.vpc.private_subnet_ids)}"
+}
+```
+
 ## Input
 Name | Description | Type | Default | Required
 -----|-------------|------|---------|----------
