@@ -111,7 +111,7 @@ Name | Description | Type | Default | Required
 name | Application Name | string | `` | No
 cidr_block | Custom CIDR block, must end with `.0.0/16` | string | `10.0.0.0/16` | No
 az_count | Number on AZs to initialize. Note: RDS/EKS requires min of 2. See [Map](https://aws.amazon.com/about-aws/global-infrastructure/) for AZ count for each region. | string | `2` | No
-nat_type | Type of NAT to use `gateway` or `instance`. See [Comparison](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-comparison.html). | string | `gateway` | No
+nat_type | Type of NAT to use `gateway`, `instance` or `none`. See [Comparison](https://docs.aws.amazon.com/vpc/latest/userguide/vpc-nat-comparison.html). | string | `gateway` | No
 
 ### Input for EC2 instance
 Name | Description | Type | Default | Required
