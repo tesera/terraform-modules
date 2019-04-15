@@ -23,11 +23,52 @@ Before using this terraform module, the "ec2" and "ecs" AMIs need to be created 
 ### Module
 ```hcl-terraform
 module "ecs" {
-  source            = "git@github.com:tesera/terraform-modules//ecs"
+  source            = "git@github.com:tesera/terraform-modules//ecs?ref=v0.3.0"
   name              = "${local.name}"
   vpc_id            = "${module.vpc.id}"
   private_subnet_ids = ["${module.vpc.private_subnet_ids}"]
 }
+
+# Logging
+resource "aws_cloudwatch_log_group" "app" {
+  name              = "/ecs/${local.name}-ecs-app"
+  retention_in_days = 30
+  tags {
+    Name = "${local.name}-ecs-app"
+  }
+}
+
+# Task
+resource "aws_ecs_task_definition" "app" {
+  family                   = "${local.name}-ecs-app"
+  requires_compatibilities = [
+    "EC2"]
+  cpu                      = "**"
+  memory                   = "**"
+  network_mode             = "host"
+  container_definitions = <<DEFINITION
+[
+  {
+    "name": "app",
+    "image": "**",
+    "essential": true,
+    "executionRoleArn": "${module.ecs.iam_role_name}",
+    "environment":[
+      { "name":"KEY", "value":"VALUE" }
+    ],
+    "logConfiguration":{
+      "logDriver": "awslogs",
+      "options":{
+        "awslogs-group":"${aws_cloudwatch_log_group.import.name}",
+        "awslogs-region":"${local.aws_region}",
+        "awslogs-stream-prefix":"ecs"
+      }
+    }
+  }
+]
+DEFINITION
+}
+
 ```
 
 ## Input

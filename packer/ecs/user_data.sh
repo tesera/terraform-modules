@@ -8,9 +8,7 @@ curl -O https://bootstrap.pypa.io/get-pip.py
 python get-pip.py
 
 echo "***** Update awscli *****"
-/usr/local/bin/pip install --upgrade awscli
-
-sudo curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-darwin-amd64-latest
+pip install --upgrade awscli
 
 echo "***** Setup CloudWatch Logging *****"
 yum install awslogs -y
@@ -96,7 +94,10 @@ curl -O https://inspector-agent.amazonaws.com/linux/latest/install
 bash install
 
 echo "***** Setup SSM Agent *****"
-yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+# already built into Amazon Linux 2 AMI
 
 echo "***** Setup the EFS mount helper *****"
 yum install -y amazon-efs-utils
+
+echo "***** Setup ECS CLI *****"
+sudo curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-darwin-amd64-latest

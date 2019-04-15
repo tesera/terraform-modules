@@ -5,7 +5,7 @@ data "aws_ami" "main" {
     name = "name"
 
     values = [
-      "amzn-ami-*-amazon-ecs-optimized",
+      "amzn2-ami-ecs-hvm-*-x86_64-ebs",
     ]
   }
 
