@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 
+# Docs
 # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-install.html
+# https://aws.amazon.com/premiumsupport/knowledge-center/ecs-agent-disconnected/
+
+# Logs
+# /var/log/cloud-init-output.log
+# /var/log/ecs/ecs-agent.log
 
 echo "***** Update *****"
 yum update -y
@@ -113,6 +119,4 @@ status ecs
 status amazon-ssm-agent
 service awslogs status
 
-# Logs
-# /var/log/cloud-init-output.log
-# /var/log/ecs/ecs-agent.log
+
