@@ -12,7 +12,7 @@ data "template_file" "userdata" {
 
 module "ec2" {
   source                 = "../ec2-base"
-  iam_service            = "ec2"
+  iam_service            = "ec2"              // TODO ["ec2","ecs"]
   name                   = "${local.name}"
   vpc_id                 = "${var.vpc_id}"
   subnet_ids             = [
