@@ -20,30 +20,14 @@ pip install --upgrade awscli
 
 echo "***** Setup CloudWatch Logging *****"
 yum install awslogs -y
-cat << EOF > /etc/init.d/configure-awslogs
-#!/bin/sh
-# chkconfig: 2345 94 26
-# description:      This script is responsible for configuring AWSLogs agent. Needs to run before awslogs.
-
-start() {
-  INSTANCE_ID=\$(curl -s -m 60 http://169.254.169.254/latest/meta-data/instance-id)
-  sed -i "s/{instance_id}/\$INSTANCE_ID/" /etc/awslogs/awslogs.conf
-}
-
-case "\$1" in 
-    start)
-       start
-       ;;
-    *)
-       echo "Usage: \$0 start"
-esac
-
-exit 0 
+cat << EOF > /usr/local/bin/configure-awslogs.sh
+#!/usr/bin/env bash
+INSTANCE_ID=$(curl -s -m 60 http://169.254.169.254/latest/meta-data/instance-id)
+sed -i "s/{instance_id}/\$INSTANCE_ID/" /etc/awslogs/awslogs.conf
 EOF
-chmod +x /etc/init.d/configure-awslogs
-chkconfig --add configure-awslogs 
-chkconfig configure-awslogs on
-chkconfig awslogs on
+chmod +x /usr/local/bin/configure-awslogs.sh
+sed -i '/ExecStart=/i ExecStartPre=/usr/local/bin/configure-awslogs.sh' /usr/lib/systemd/system/awslogsd.service
+systemctl enable awslogsd
 
 echo "***** Setup CloudWatch Agent *****"
 cat << EOF > /etc/cloudwatch-agent.conf
