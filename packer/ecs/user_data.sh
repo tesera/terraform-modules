@@ -94,10 +94,13 @@ curl -O https://inspector-agent.amazonaws.com/linux/latest/install
 bash install
 
 echo "***** Setup SSM Agent *****"
+# https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-manual-agent-install.html
 # already built into Amazon Linux 2 AMI
 
 echo "***** Setup the EFS mount helper *****"
 yum install -y amazon-efs-utils
 
 echo "***** Setup ECS CLI *****"
-sudo curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-darwin-amd64-latest
+# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html
+sudo curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest
+#echo "$(curl -s https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest.md5) /usr/local/bin/ecs-cli" | md5sum -c -
