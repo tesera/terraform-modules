@@ -87,7 +87,7 @@ bash install
 
 echo "***** Setup SSM Agent *****"
 # https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-manual-agent-install.html
-# already built into Amazon Linux 2 AMI
+sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
 
 echo "***** Setup the EFS mount helper *****"
 yum install -y amazon-efs-utils
@@ -99,8 +99,8 @@ sudo curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-
 
 echo "***** Status Check *****"
 service docker status
-status ecs
-status amazon-ssm-agent
+systemctl status ecs
+systemctl status amazon-ssm-agent
 service awslogs status
 
 

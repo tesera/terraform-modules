@@ -110,7 +110,7 @@ wget https://inspector-agent.amazonaws.com/linux/latest/install
 bash install
 
 echo "***** Setup SSM Agent *****"
-# already built into Amazon Linux 2 AMI
+sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
 
 echo "***** Update *****"
 yum update -y

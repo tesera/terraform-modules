@@ -52,7 +52,7 @@ resource "aws_ecs_task_definition" "app" {
     "name": "app",
     "image": "**",
     "essential": true,
-    "executionRoleArn": "${module.ecs.iam_role_name}",
+    "executionRoleArn": "${aws_iam_role.app.name}",
     "environment":[
       { "name":"KEY", "value":"VALUE" }
     ],
@@ -67,6 +67,27 @@ resource "aws_ecs_task_definition" "app" {
   }
 ]
 DEFINITION
+}
+
+resource "aws_iam_role" "app" {
+  name = "${local.name}-app-role"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": [
+          "ecs.amazonaws.com"
+        ]
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+POLICY
 }
 
 ```
