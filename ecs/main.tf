@@ -15,15 +15,20 @@ module "ec2" {
   iam_service            = "ecs"
   name                   = "${local.name}"
   vpc_id                 = "${var.vpc_id}"
-  subnet_ids             = ["${var.private_subnet_ids}"]
+  subnet_ids             = [
+    "${var.private_subnet_ids}"]
   image_id               = "${local.image_id}"
   instance_type          = "${local.instance_type}"
   user_data              = "${data.template_file.userdata.rendered}"
   min_size               = "${local.min_size}"
   max_size               = "${local.max_size}"
   desired_capacity       = "${local.desired_capacity}"
-  efs_ids                = ["${var.efs_ids}"]
-  efs_security_group_ids = ["${var.efs_security_group_ids}"]
+  volume_type            = "${var.volume_type}"
+  volume_size            = "${var.volume_size}"
+  efs_ids                = [
+    "${var.efs_ids}"]
+  efs_security_group_ids = [
+    "${var.efs_security_group_ids}"]
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerServiceforEC2Role" {
