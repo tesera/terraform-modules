@@ -25,7 +25,7 @@ variable "volume_type" {
 }
 
 variable "volume_size" {
-  default = "8"
+  default = "30"
 }
 
 variable "min_size" {
