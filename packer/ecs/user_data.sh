@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-install.html
+
 echo "***** Update *****"
 yum update -y
 
@@ -104,3 +106,13 @@ echo "***** Setup ECS CLI *****"
 # https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html
 sudo curl -o /usr/local/bin/ecs-cli https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest
 #echo "$(curl -s https://s3.amazonaws.com/amazon-ecs-cli/ecs-cli-linux-amd64-latest.md5) /usr/local/bin/ecs-cli" | md5sum -c -
+
+echo "***** Status Check *****"
+service docker status
+status ecs
+status amazon-ssm-agent
+service awslogs status
+
+# Logs
+# /var/log/cloud-init-output.log
+# /var/log/ecs/ecs-agent.log
