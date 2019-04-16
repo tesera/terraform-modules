@@ -49,3 +49,7 @@ variable "efs_security_group_ids" {
   type    = "list"
   default = []
 }
+
+variable "key_name" {
+  default = ""
+}

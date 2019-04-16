@@ -29,6 +29,7 @@ module "ec2" {
     "${var.efs_ids}"]
   efs_security_group_ids = [
     "${var.efs_security_group_ids}"]
+  key_name = "${var.key_name}"
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerServiceforEC2Role" {
