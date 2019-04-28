@@ -18,6 +18,10 @@ output "password" {
   value = "${element(concat(aws_rds_cluster.main.*.master_password, aws_db_instance.main.*.password),0)}"
 }
 
+output "database" {
+  value = "${var.db_name}"
+}
+
 output "security_group_id" {
   value = "${aws_security_group.main.id}"
 }

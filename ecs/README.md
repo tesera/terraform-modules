@@ -43,16 +43,17 @@ resource "aws_ecs_task_definition" "app" {
   family                   = "${local.name}-ecs-app"
   requires_compatibilities = [
     "EC2"]
-  cpu                      = "**"
-  memory                   = "**"
-  network_mode             = "host"
+  cpu                      = "${var.docker_cpu}"
+  task_role_arn            = "${aws_iam_role.app.arn}"
+  execution_role_arn       = "${module.ecs.iam_execution_role_arn}"
   container_definitions = <<DEFINITION
 [
   {
     "name": "app",
-    "image": "**",
+    "image": "${var.**}",
     "essential": true,
-    "executionRoleArn": "${aws_iam_role.app.name}",
+    "cpu": ${var.**},
+    "memoryReservation": "${var.**}",
     "environment":[
       { "name":"KEY", "value":"VALUE" }
     ],
@@ -71,7 +72,6 @@ DEFINITION
 
 resource "aws_iam_role" "app" {
   name = "${local.name}-app-role"
-
   assume_role_policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -80,7 +80,7 @@ resource "aws_iam_role" "app" {
       "Effect": "Allow",
       "Principal": {
         "Service": [
-          "ecs.amazonaws.com"
+          "ecs-tasks.amazonaws.com"
         ]
       },
       "Action": "sts:AssumeRole"
@@ -88,6 +88,29 @@ resource "aws_iam_role" "app" {
   ]
 }
 POLICY
+}
+
+resource "aws_iam_policy" "app" {
+  name   = "${local.name}-ecs-task-app-policy"
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "app" {
+  role       = "${aws_iam_role.app.name}"
+  policy_arn = "${aws_iam_policy.app.arn}"
 }
 
 ```
@@ -106,5 +129,8 @@ POLICY
 ## Output
 - **name:** ecs cluster name
 - **security_group_id:** security group applied, add to ingress on private instance security group
-- **iam_role_name:** IAM role name to allow extending of the role
+- **iam_role_name:** IAM EC2 role name to allow extending of the role
+- **iam_role_arn:** IAM EC2 role arn to allow extending of the role
+- **iam_execution_role_name:** IAM task execution role name to allow extending of the role
+- **iam_execution_role_arn:** IAM task execution role arn to allow extending of the role
 - **billing_suggestion:** comments to improve billing cost
