@@ -65,7 +65,8 @@ resource "aws_cloudfront_distribution" "main" {
 
   logging_config {
     include_cookies = false
-    bucket          = "${aws_s3_bucket.main-logs.bucket_domain_name}"
+    bucket          = "${local.logging_bucket}"
+    prefix          = "CloudFront/${var.aliases[0]}/"
   }
 
   web_acl_id = "${var.web_acl_id}"

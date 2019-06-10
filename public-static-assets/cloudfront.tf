@@ -98,7 +98,7 @@ resource "aws_cloudfront_distribution" "main" {
   logging_config {
     include_cookies = false
     bucket          = "${local.logging_bucket}"
-    prefix          = "CloudFront/${aws_s3_bucket.main.bucket_domain_name}/"
+    prefix          = "CloudFront/${var.aliases[0]}/"
   }
 
   tags = "${merge(local.tags, map(

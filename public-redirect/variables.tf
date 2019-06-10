@@ -14,3 +14,8 @@ variable "redirect" {}
 variable "acm_certificate_arn" {
   "type" = "string"
 }
+
+variable "logging_bucket" {
+  type = "string"
+  default = ""
+}

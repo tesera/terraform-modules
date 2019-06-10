@@ -54,3 +54,7 @@ variable "xray" {
 //variable "authorizer_client_id" {}
 //variable "authorizer_client_secret" {}
 
+variable "logging_bucket" {
+  type = "string"
+  default = ""
+}

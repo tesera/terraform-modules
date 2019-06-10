@@ -11,4 +11,6 @@ locals {
   stage_name = "api"
 
   authorizer_path = "${var.authorizer_dir != "" ? var.authorizer_dir : "${path.module}/authorizer"}"
+
+  logging_bucket = "${var.logging_bucket != "" ? var.logging_bucket : "${module.defaults.name}-${terraform.workspace}-edge-logs" }}"
 }
