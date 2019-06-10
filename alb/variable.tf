@@ -49,3 +49,8 @@ variable "autoscaling_group_name" {
 variable "security_group_id" {
   type = "string"
 }
+
+variable "logging_bucket" {
+  type = "string"
+  default = ""
+}
