@@ -38,3 +38,4 @@ See `variables.tf` for extended list of OWASP inputs that can be configured.
 
 ## TODO
 - [ ] Easier ip list management (See CRC module)
+- [ ] Port of https://aws.amazon.com/solutions/aws-waf-security-automations/

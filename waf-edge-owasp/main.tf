@@ -1,11 +1,13 @@
 resource "aws_waf_web_acl" "wafrOwaspACL" {
   depends_on = [
+    "aws_waf_rate_based_rule.wafHTTPFloodRule",
+    "aws_waf_rule.wafgSQLInjectionRule",
+    "aws_waf_rule.wafrXSSRule",
     "aws_waf_rule.wafgAdminAccessRule",
     "aws_waf_rule.wafgAuthTokenRule",
     "aws_waf_rule.wafgCSRFRule",
     "aws_waf_rule.wafgPathsRule",
     "aws_waf_rule.wafgServerSideIncludeRule",
-    "aws_waf_rule.wafrXSSRule",
     "aws_waf_rule.wafgIpBlackListRule",
     "aws_waf_rule.wafgIpWhiteListRule",
   ]
@@ -15,6 +17,15 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
 
   default_action {
     type = "${var.defaultAction}"
+  }
+
+  rules {
+    action {
+      type = "BLOCK"
+    }
+
+    priority = 5
+    rule_id  = "${aws_waf_rate_based_rule.wafHTTPFloodRule.id}"
   }
 
   rules {
@@ -50,7 +61,7 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     }
 
     priority = 40
-    rule_id  = "${aws_waf_rule.wafgSQLiRule.id}"
+    rule_id  = "${aws_waf_rule.wafgSQLInjectionRule.id}"
   }
 
   rules {
@@ -106,4 +117,41 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     priority = 999
     rule_id  = "${aws_waf_rule.wafgIpWhiteListRule.id}"
   }
+
+  logging_configuration {
+    log_destination = "${aws_kinesis_firehose_delivery_stream.logging.arn}"
+    // TODO redacte `password`, `mfa/otp`, tokens
+    //redacted_fields = {}
+  }
+}
+
+
+resource "aws_kinesis_firehose_delivery_stream" "logging" {
+  name        = "${local.name}-waf-stream"
+  destination = "s3"
+
+  s3_configuration {
+    role_arn   = "${aws_iam_role.logging.arn}"
+    bucket_arn = "${var.logging_bucket_arn}"
+  }
+}
+
+resource "aws_iam_role" "logging" {
+  name = "${local.name}-waf-stream-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "firehose.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
 }

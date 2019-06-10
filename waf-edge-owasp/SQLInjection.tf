@@ -1,20 +1,22 @@
-resource "aws_waf_rule" "wafgSQLiRule" {
+# OWASP A1-2017
+
+resource "aws_waf_rule" "wafgSQLInjectionRule" {
   depends_on = [
-    "aws_waf_sql_injection_match_set.wafrSQLiSet",
+    "aws_waf_sql_injection_match_set.wafrSQLInjectionSet",
   ]
 
-  name        = "${local.name}wafgSQLiRule"
-  metric_name = "${local.name}wafgSQLiRule"
+  name        = "${local.name}wafgSQLInjectionRule"
+  metric_name = "${local.name}wafgSQLInjectionRule"
 
   predicates {
-    data_id = "${aws_waf_sql_injection_match_set.wafrSQLiSet.id}"
+    data_id = "${aws_waf_sql_injection_match_set.wafrSQLInjectionSet.id}"
     negated = false
     type    = "SqlInjectionMatch"
   }
 }
 
-resource "aws_waf_sql_injection_match_set" "wafrSQLiSet" {
-  name = "${local.name}wafrSQLiSet"
+resource "aws_waf_sql_injection_match_set" "wafrSQLInjectionSet" {
+  name = "${local.name}wafrSQLInjectionSet"
 
   sql_injection_match_tuples {
     text_transformation = "URL_DECODE"
