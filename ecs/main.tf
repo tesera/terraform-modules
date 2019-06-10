@@ -92,12 +92,6 @@ resource "aws_iam_role_policy_attachment" "AmazonECSServiceRolePolicy" {
   policy_arn = "${aws_iam_policy.AmazonECSServiceRolePolicy.arn}"
 }
 
-resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerServiceforEC2Role" {
-  role       = "${module.ec2.iam_role_name}"
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
-}
-
-
 # https://docs.aws.amazon.com/AmazonECS/latest/userguide/task_execution_IAM_role.html
 resource "aws_iam_role" "task_execution" {
   name = "${local.name}-AmazonECSTaskExecutionRole"
@@ -119,6 +113,8 @@ resource "aws_iam_role" "task_execution" {
 POLICY
 }
 
+
+// TODO make more strict `Resourcs: [var.ecr_repo_arns]`
 resource "aws_iam_role_policy_attachment" "task_execution" {
   role       = "${aws_iam_role.task_execution.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"

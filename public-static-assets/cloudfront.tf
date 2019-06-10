@@ -12,9 +12,9 @@ resource "aws_cloudfront_distribution" "main" {
 
   viewer_certificate {
     cloudfront_default_certificate = "${(var.acm_certificate_arn == "")}"
-    acm_certificate_arn      = "${var.acm_certificate_arn}"
-    minimum_protocol_version = "TLSv1.2_2018"
-    ssl_support_method       = "sni-only"
+    acm_certificate_arn            = "${var.acm_certificate_arn}"
+    minimum_protocol_version       = "TLSv1.2_2018"
+    ssl_support_method             = "sni-only"
   }
 
   origin {
@@ -97,7 +97,8 @@ resource "aws_cloudfront_distribution" "main" {
 
   logging_config {
     include_cookies = false
-    bucket          = "${aws_s3_bucket.main-cdn-logs.bucket_domain_name}"
+    bucket          = "${local.logging_bucket}"
+    prefix          = "CloudFront/${aws_s3_bucket.main.bucket_domain_name}/"
   }
 
   tags = "${merge(local.tags, map(
@@ -106,7 +107,7 @@ resource "aws_cloudfront_distribution" "main" {
 }
 
 resource "aws_s3_bucket" "main-cdn-logs" {
-  bucket   = "${local.name}-${terraform.workspace}-cdn-access-logs"
+  bucket = "${local.name}-${terraform.workspace}-cdn-access-logs"
 
   lifecycle_rule {
     enabled = true
