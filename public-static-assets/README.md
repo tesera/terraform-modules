@@ -37,8 +37,19 @@ module "waf" {
 
 ### Module
 ```hcl-terraform
+
+module "logs" {
+  source = "git@github.com:willfarrell/terraform-s3-logs-module?ref=v0.3.0"
+  name   = "${local.workspace["name"]}-${terraform.workspace}-edge"
+  region = "us-east-1"
+  tags   = [
+    "Name",
+    "Edge Logs"
+  ]
+}
+
 module "app" {
-  source              = "git@github.com:tesera/terraform-modules//public-static-assets"
+  source              = "git@github.com:tesera/terraform-modules//public-static-assets?ref=v0."
 
   name                = "${var.env}-myapp"
   aliases             = ["${var.env != "prod" ? "${var.env}-": ""}appname.example.com"]
@@ -46,6 +57,7 @@ module "app" {
   web_acl_id          = "${module.waf.id}"
   lambda_viewer_response_default = true
   lambda_viewer_response = "${file("${path.module}/viewer-response.js")}"
+  logging_bucket         = "${local[terraform.workspace].name}-${terraform.workspace}-edge-logs"
 }
 ```
 
@@ -59,6 +71,7 @@ module "app" {
 - **lambda_viewer_response:** By default this module includes a lambda function to add index.html as the default sub directory object. This can be overwritten using the above example.
 - **lambda_origin_response:** By default this module passes the response through.
 - **lambda_\*_default:** Boolean to determine if the default lambda should be attached to the CloudFront [Default: false]
+- **logging_bucket:** Bucket id for where teh logs should be sent
 
 ## Output
 - **bucket:** `${aws_s3_bucket.main.id}` Full name of the S3 bucket.

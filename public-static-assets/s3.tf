@@ -45,8 +45,8 @@ resource "aws_s3_bucket" "main" {
   }
 
   logging {
-    target_bucket = "${aws_s3_bucket.main-s3-logs.id}"
-    target_prefix = "log/"
+    target_bucket = "${local.logging_bucket}"
+    target_prefix = "S3/${local.name}-${terraform.workspace}-static-assets/"
   }
 
   // CloudFront unable to reach `aws:kms` - not supported yet (2018-07-10)

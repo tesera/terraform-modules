@@ -62,3 +62,9 @@ variable "lambda_origin_response" {
   type    = "string"
   default = ""
 }
+
+
+variable "logging_bucket" {
+  type = "string"
+  default = ""
+}
