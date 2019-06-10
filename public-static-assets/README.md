@@ -49,7 +49,7 @@ module "logs" {
 }
 
 module "app" {
-  source              = "git@github.com:tesera/terraform-modules//public-static-assets?ref=v0."
+  source              = "git@github.com:tesera/terraform-modules//public-static-assets?ref=v0.4.0"
 
   name                = "${var.env}-myapp"
   aliases             = ["${var.env != "prod" ? "${var.env}-": ""}appname.example.com"]
