@@ -9,5 +9,5 @@ locals {
   name       = "${module.defaults.name}-cloudtrail"
   tags       = "${module.defaults.tags}"
 
-  logging_bucket = "${var.logging_bucket != "" ? var.logging_bucket : "${module.defaults.name}-${terraform.workspace}-edge-logs" }}"
+  logging_bucket = "${var.logging_bucket != "" ? var.logging_bucket : "${module.defaults.name}-${terraform.workspace}-edge-logs" }"
 }
