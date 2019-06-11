@@ -1,4 +1,6 @@
 
+
+
 ```hcl-terraform
 provider "aws" {
   profile = "app-${terraform.workspace}"
@@ -6,7 +8,7 @@ provider "aws" {
   alias   = "edge"
 }
 
-module "redirect" {
+module "uptime" {
   
   providers = {
     aws = "aws.edge"
@@ -14,5 +16,3 @@ module "redirect" {
 }
 
 ```
-## BLOCKED
-https://github.com/terraform-providers/terraform-provider-aws/issues/4757

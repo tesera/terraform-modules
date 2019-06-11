@@ -38,7 +38,6 @@ data "archive_file" "viewer_request" {
 }
 
 resource "aws_lambda_function" "viewer_request" {
-  provider      = "aws.edge"
   function_name = "${local.name}-edge-viewer-request"
   filename      = "${data.archive_file.viewer_request.output_path}"
 
@@ -73,7 +72,6 @@ data "archive_file" "origin_request" {
 }
 
 resource "aws_lambda_function" "origin_request" {
-  provider      = "aws.edge"
   function_name = "${local.name}-edge-origin-request"
   filename      = "${data.archive_file.origin_request.output_path}"
 
@@ -108,7 +106,6 @@ data "archive_file" "viewer_response" {
 }
 
 resource "aws_lambda_function" "viewer_response" {
-  provider      = "aws.edge"
   function_name = "${local.name}-edge-viewer-response"
   filename      = "${data.archive_file.viewer_response.output_path}"
 
@@ -143,7 +140,6 @@ data "archive_file" "origin_response" {
 }
 
 resource "aws_lambda_function" "origin_response" {
-  provider      = "aws.edge"
   function_name = "${local.name}-edge-origin-response"
   filename      = "${data.archive_file.origin_response.output_path}"
 

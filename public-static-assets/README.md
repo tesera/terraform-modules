@@ -32,20 +32,26 @@ module "waf" {
   source = "git@github.com:tesera/terraform-modules//waf-owasp"
   name   = "${var.env}ApplicationName"
   defaultAction = "ALLOW"
+  providers = {
+    aws = "aws.edge"
+  }
 }
 ```
 
 ### Module
 ```hcl-terraform
+provider "aws" {
+  profile = "app-${terraform.workspace}"
+  region  = "us-east-1"
+  alias   = "edge"
+}
 
 module "logs" {
   source = "git@github.com:willfarrell/terraform-s3-logs-module?ref=v0.3.0"
   name   = "${local.workspace["name"]}-${terraform.workspace}-edge"
-  region = "us-east-1"
-  tags   = [
-    "Name",
-    "Edge Logs"
-  ]
+  tags   = {
+    "Name": "Edge Logs"
+  }
 }
 
 module "app" {
@@ -58,6 +64,10 @@ module "app" {
   lambda_viewer_response_default = true
   lambda_viewer_response = "${file("${path.module}/viewer-response.js")}"
   logging_bucket         = "${local[terraform.workspace].name}-${terraform.workspace}-edge-logs"
+  
+  providers = {
+    aws = "aws.edge"
+  }
 }
 ```
 

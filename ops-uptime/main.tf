@@ -1,5 +1,4 @@
 resource "aws_sns_topic" "main" {
-  provider = "aws.edge"
   name     = "${local.name}-alarm"
 
   provisioner "local-exec" {
@@ -28,7 +27,6 @@ resource "aws_route53_health_check" "main" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "main" {
-  provider            = "aws.edge"
   alarm_name          = "${local.name}-failed"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
