@@ -1,39 +1,3 @@
-# SSE:AWS not supportted
-resource "aws_s3_bucket" "main-s3-logs" {
-  bucket              = "${local.name}-${terraform.workspace}-static-assets-access-logs"
-  acl                 = "log-delivery-write"
-  acceleration_status = "Enabled"
-
-  lifecycle_rule {
-    id      = "log"
-    enabled = true
-
-    prefix = "log/"
-
-    tags {
-      "rule"      = "log"
-      "autoclean" = "true"
-    }
-
-    transition {
-      days          = 30
-      storage_class = "STANDARD_IA"
-    }
-
-    transition {
-      days          = 60
-      storage_class = "GLACIER"
-    }
-
-    expiration {
-      days = 90
-    }
-  }
-
-  tags = "${merge(local.tags, map(
-    "Name", "${local.name} Static Assets Access Logs"
-  ))}"
-}
 
 resource "aws_s3_bucket" "main" {
   bucket              = "${local.name}-${terraform.workspace}-static-assets"
@@ -46,7 +10,7 @@ resource "aws_s3_bucket" "main" {
 
   logging {
     target_bucket = "${local.logging_bucket}"
-    target_prefix = "S3/${local.name}-${terraform.workspace}-static-assets/"
+    target_prefix = "AWSLogs/${local.account_id}/S3/${local.name}-${terraform.workspace}-static-assets/"
   }
 
   // CloudFront unable to reach `aws:kms` - not supported yet (2018-07-10)
@@ -61,12 +25,13 @@ resource "aws_s3_bucket" "main" {
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
-        sse_algorithm = "${local.sse_algorithm}"
+        sse_algorithm = "AES256"
       }
     }
   }
   tags = "${merge(local.tags, map(
-    "Name", "${local.name} Static Assets"
+    "Name", "${local.name} Static Assets",
+    "Security", "SSE:AWS"
   ))}"
 }
 

@@ -125,7 +125,7 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
   }
 }
 
-
+data "aws_caller_identity" "current" {}
 resource "aws_kinesis_firehose_delivery_stream" "logging" {
   name        = "${local.name}-waf-stream"
   destination = "s3"
@@ -133,6 +133,7 @@ resource "aws_kinesis_firehose_delivery_stream" "logging" {
   s3_configuration {
     role_arn   = "${aws_iam_role.logging.arn}"
     bucket_arn = "${var.logging_bucket_arn}"
+    prefix     = "/AWSLogs/${data.aws_caller_identity.current.account_id}/WAF/us-east-1/"
   }
 }
 

@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 resource "aws_cloudfront_distribution" "main" {
   enabled         = true
   http_version    = "http2"
@@ -66,7 +68,7 @@ resource "aws_cloudfront_distribution" "main" {
   logging_config {
     include_cookies = false
     bucket          = "${local.logging_bucket}"
-    prefix          = "CloudFront/${var.aliases[0]}/"
+    prefix          = "AWSLogs/${data.aws_caller_identity.current.account_id}/CloudFront/${var.aliases[0]}/"
   }
 
   web_acl_id = "${var.web_acl_id}"

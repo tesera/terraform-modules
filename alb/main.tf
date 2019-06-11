@@ -14,7 +14,6 @@ resource "aws_lb" "main" {
   access_logs {
     bucket  = "${local.logging_bucket}"
     enabled = true
-    prefix = "ALB/${local.name}/"
   }
 
   tags               = "${merge(local.tags, map(

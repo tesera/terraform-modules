@@ -20,6 +20,12 @@ variable "ipBlackListId" {
   default = ""
 }
 
+variable "rateLimit" {
+  description = "This sets the max rate limit per 5 minute period. Default to `2000`"
+  type = "string"
+  default = "2000"
+}
+
 # A4
 variable "adminUrlPrefix" {
   description = "This is the URI path prefix (starting with '/') that identifies your administrative sub-site. You can add additional prefixes later directly in the set."
@@ -70,4 +76,8 @@ variable "includesPrefix" {
   description = "This is the URI path prefix (starting with '/') that identifies any files in your webroot that are server-side included components, and should not be invoked directly via URL. These can be headers, footers, 3rd party server side libraries or components. You can add additional prefixes later directly in the set."
   type        = "string"
   default     = "/includes"
+}
+
+variable "logging_bucket_arn" {
+  description = ""
 }

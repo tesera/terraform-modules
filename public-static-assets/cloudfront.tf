@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 resource "aws_cloudfront_origin_access_identity" "main" {
   comment = "${local.name} S3 static assets origin access policy"
 }
@@ -98,7 +100,7 @@ resource "aws_cloudfront_distribution" "main" {
   logging_config {
     include_cookies = false
     bucket          = "${local.logging_bucket}"
-    prefix          = "CloudFront/${var.aliases[0]}/"
+    prefix          = "AWSLogs/${data.aws_caller_identity.current.account_id}/CloudFront/${var.aliases[0]}/"
   }
 
   tags = "${merge(local.tags, map(
