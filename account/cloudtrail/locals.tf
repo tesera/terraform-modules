@@ -6,7 +6,7 @@ module "defaults" {
 
 locals {
   account_id = "${module.defaults.account_id}"
-  name       = "${module.defaults.name}"
+  name       = "${module.defaults.name}-cloudtrail"
   tags       = "${module.defaults.tags}"
 
   logging_bucket = "${var.logging_bucket != "" ? var.logging_bucket : "${module.defaults.name}-${terraform.workspace}-edge-logs" }}"
