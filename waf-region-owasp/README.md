@@ -14,7 +14,7 @@ module "waf" {
   defaultAction = "${var.defaultAction}"
 
   ipAdminListId = "${aws_waf_ipset.admin.id}"
-  ipBlackListId = "${aws_waf_ipset.black.id"
+  ipBlackListId = "${aws_waf_ipset.black.id}"
   ipWhiteListId = "${aws_waf_ipset.white.id}"
 }
 
