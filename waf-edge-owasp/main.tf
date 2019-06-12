@@ -8,8 +8,8 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     "aws_waf_rule.wafCSRFRule",
     "aws_waf_rule.wafPathsRule",
     "aws_waf_rule.wafServerSideIncludeRule",
-    "aws_waf_rule.wafIpBlackListRule",
-    "aws_waf_rule.wafIpWhiteListRule",
+    "aws_waf_rule.wafIpBlacklistRule",
+    "aws_waf_rule.wafIpWhitelistRule",
   ]
 
   name        = "${local.name}wafrOwaspACL"
