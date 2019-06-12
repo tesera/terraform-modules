@@ -115,25 +115,7 @@ def check_service_dependencies(resource_properties):
 
     logging.getLogger().debug("[check_service_dependencies] End")
 
-def check_requirements(resource_properties):
-    logging.getLogger().debug("[check_requirements] Start")
 
-    #------------------------------------------------------------------------------------------------------------------
-    # Logging Web ACL Traffic for CloudFront distribution
-    #------------------------------------------------------------------------------------------------------------------
-    if (resource_properties['HttpFloodProtectionLogParserActivated'] == "yes" and
-        resource_properties['EndpointType'].lower() == 'cloudfront' and
-        resource_properties['Region'] != 'us-east-1'):
-        raise Exception("If you are capturing AWS WAF logs for a Amazon CloudFront distribution, create the stack in US East (N. Virginia). More info: https://amzn.to/2F5L1Ae")
-
-    #------------------------------------------------------------------------------------------------------------------
-    # Logging Web ACL Traffic for CloudFront distribution
-    #------------------------------------------------------------------------------------------------------------------
-    if (resource_properties['HttpFloodProtectionRateBasedRuleActivated'] == "yes" and
-        int(resource_properties['RequestThreshold']) < 2000):
-        raise Exception("The minimum rate-based rule rate limit per 5 minute period is 2000. If need to use values bellow that, please select AWS Lambda or Amazon Athena log parser.")
-
-    logging.getLogger().debug("[check_requirements] End")
 
 def send_response(event, context, responseStatus, responseData, resourceId, reason=None):
     logging.getLogger().debug("[send_response] Start")
@@ -211,8 +193,6 @@ def lambda_handler(event, context):
 
                 if event['ResourceProperties']['ProtectionActivatedScannersProbes'] == 'yes':
                     check_app_log_bucket(event['ResourceProperties']['Region'], event['ResourceProperties']['AppAccessLogBucket'])
-
-                check_requirements(event['ResourceProperties'])
 
             # DELETE: do nothing
 

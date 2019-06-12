@@ -16,11 +16,7 @@ variable "ipAdminlistId" {
   default = ""
 }
 
-variable "rateLimit" {
-  description = "This sets the max rate limit per 5 minute period. Default to `10000`, min allowed: `2000`"
-  type = "string"
-  default = "10000"
-}
+
 
 # A4
 variable "adminUrlPrefix" {
@@ -74,6 +70,22 @@ variable "includesPrefix" {
   default     = "/includes"
 }
 
+# AWS
+variable "requestThreshold" {
+  description = "If you chose yes for the Activate HTTP Flood Protection parameter, enter the maximum acceptable requests per FIVE-minute period per IP address. Please note that AWS WAF rate based rule requires values greather than 2,000 (if you chose Lambda/Athena log parser options, you can use any value greather than zero). If you chose to deactivate this protection, ignore this parameter. Default to `2000`, min allowed: `2000`"
+  type = "string"
+  default = "2000"
+}
+variable "errorThreshold" {
+  description = "If you chose yes for the Activate Scanners & Probes Protection parameter, enter the maximum acceptable bad requests per minute per IP. If you chose to deactivate this protection protection, ignore this parameter."
+  type = "string"
+  default = "50"
+}
+variable "blockPeriod" {
+  description = "If you chose yes for the Activate Scanners & Probes Protection or HTTP Flood Lambda/Athena log parser parameters, enter the period (in minutes) to block applicable IP addresses. If you chose to deactivate log parsing, ignore this parameter."
+  type = "string"
+  default = "240"
+}
 
 variable "logging_bucket" {
   description = ""

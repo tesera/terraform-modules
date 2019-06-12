@@ -87,10 +87,9 @@ resource "aws_lambda_function" "reputation-list" {
   publish          = true
   environment = {
     variables = {
-      API_TYPE = "edge" # edge, regional
+      API_TYPE = "waf" # waf, waf-regional
       LOG_LEVEL = "INFO"
       METRIC_NAME_PREFIX = "${local.name}-waf"
-      SEND_ANONYMOUS_USAGE_DATA = "No"
     }
   }
 }

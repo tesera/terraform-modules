@@ -270,7 +270,7 @@ exports.handler = function (event, context) {
     if (!event || !event.lists || (event.lists.length === 0) || !event.ipSetIds || (event.ipSetIds.length === 0)) {
         done(context, null, 'Nothing to do');
     } else {
-        if (process.env.API_TYPE == "regional") {
+        if (process.env.API_TYPE == "waf-regional") {
             waf = new aws.WAFRegional({region: event.region});
         } else {
             waf = new aws.WAF();

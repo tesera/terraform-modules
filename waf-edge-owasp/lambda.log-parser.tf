@@ -116,7 +116,6 @@ resource "aws_lambda_function" "log-parser" {
       MAX_AGE_TO_UPDATE = 30
       METRIC_NAME_PREFIX = "${local.name}-waf"
       REGION = "${local.region}"
-      SEND_ANONYMOUS_USAGE_DATA = "No"
     }
   }
 }

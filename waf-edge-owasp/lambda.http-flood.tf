@@ -87,7 +87,7 @@ resource "aws_iam_policy" "http-flood" {
         "waf:UpdateWebACL"
       ],
       "Resource": [
-        "${aws_waf_web_acl.wafrOwaspACL.arn}",
+        "${aws_waf_web_acl.wafOwaspACL.arn}",
         "arn:aws:waf::${local.account_id}:rule/*",
         "arn:aws:waf::${local.account_id}:ratebasedrule/*"
       ],
