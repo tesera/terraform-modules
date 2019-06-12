@@ -8,8 +8,8 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     "aws_waf_rule.wafCSRFRule",
     "aws_waf_rule.wafPathsRule",
     "aws_waf_rule.wafServerSideIncludeRule",
-    "aws_waf_rule.wafIpBlacklistRule",
-    "aws_waf_rule.wafIpWhitelistRule",
+    "aws_waf_rule.wafBlacklistRule",
+    "aws_waf_rule.wafWhitelistRule",
   ]
 
   name        = "${local.name}wafrOwaspACL"
@@ -155,7 +155,7 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
 }
 
 resource "aws_kinesis_firehose_delivery_stream" "logging" {
-  name        = "${local.name}-waf-stream"
+  name        = "aws-waf-logs-${local.name}"
   destination = "s3"
 
   s3_configuration {
