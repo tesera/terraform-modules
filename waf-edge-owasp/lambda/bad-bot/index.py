@@ -58,132 +58,6 @@ def waf_get_ip_set(ip_set_id):
     logging.getLogger().debug('[waf_get_ip_set] End')
     return response
 
-def send_anonymous_usage_data():
-    try:
-        if 'SEND_ANONYMOUS_USAGE_DATA' not in environ or environ['SEND_ANONYMOUS_USAGE_DATA'].lower() != 'yes':
-            return
-
-        logging.getLogger().debug("[send_anonymous_usage_data] Start")
-
-        cw = boto3.client('cloudwatch')
-        usage_data = {
-          "Solution": "SO0006",
-          "UUID": environ['UUID'],
-          "TimeStamp": str(datetime.datetime.utcnow().isoformat()),
-          "Data":
-          {
-              "data_type" : "bad_bot",
-              "bad_bot_ip_set_size" : 0,
-              "allowed_requests" : 0,
-              "blocked_requests_all" : 0,
-              "blocked_requests_bad_bot" : 0,
-              "waf_type" : environ['LOG_TYPE']
-          }
-        }
-
-        #--------------------------------------------------------------------------------------------------------------
-        logging.getLogger().debug("[send_anonymous_usage_data] Get num allowed requests")
-        #--------------------------------------------------------------------------------------------------------------
-        try:
-            response = cw.get_metric_statistics(
-                MetricName='AllowedRequests',
-                Namespace='WAF',
-                Statistics=['Sum'],
-                Period=12*3600,
-                StartTime=datetime.datetime.utcnow() - datetime.timedelta(seconds=12*3600),
-                EndTime=datetime.datetime.utcnow(),
-                Dimensions=[
-                    {
-                        "Name": "Rule",
-                        "Value": "ALL"
-                    },
-                    {
-                        "Name": "WebACL",
-                        "Value": environ['METRIC_NAME_PREFIX'] + 'MaliciousRequesters'
-                    }
-                ]
-            )
-            usage_data['Data']['allowed_requests'] = response['Datapoints'][0]['Sum']
-
-        except Exception as error:
-            logging.getLogger().debug("[send_anonymous_usage_data] Failed to get Num Allowed Requests")
-            logging.getLogger().debug(str(error))
-
-        #--------------------------------------------------------------------------------------------------------------
-        logging.getLogger().info("[send_anonymous_usage_data] Get num blocked requests - all rules")
-        #--------------------------------------------------------------------------------------------------------------
-        try:
-            response = cw.get_metric_statistics(
-                MetricName='BlockedRequests',
-                Namespace='WAF',
-                Statistics=['Sum'],
-                Period=12*3600,
-                StartTime=datetime.datetime.utcnow() - datetime.timedelta(seconds=12*3600),
-                EndTime=datetime.datetime.utcnow(),
-                Dimensions=[
-                    {
-                        "Name": "Rule",
-                        "Value": "ALL"
-                    },
-                    {
-                        "Name": "WebACL",
-                        "Value": environ['METRIC_NAME_PREFIX'] + 'MaliciousRequesters'
-                    }
-                ]
-            )
-            usage_data['Data']['blocked_requests_all'] = response['Datapoints'][0]['Sum']
-
-        except Exception as error:
-            logging.getLogger().debug("[send_anonymous_usage_data] Failed to get num blocked requests - all rules")
-            logging.getLogger().debug(str(error))
-
-        #--------------------------------------------------------------------------------------------------------------
-        logging.getLogger().debug("[send_anonymous_usage_data] Get bad bot data")
-        #--------------------------------------------------------------------------------------------------------------
-        if 'IP_SET_ID_BAD_BOT' in environ:
-            try:
-                response = waf_get_ip_set(environ['IP_SET_ID_BAD_BOT'])
-                if response != None:
-                    usage_data['Data']['bad_bot_ip_set_size'] = len(response['IPSet']['IPSetDescriptors'])
-
-                response = cw.get_metric_statistics(
-                    MetricName='BlockedRequests',
-                    Namespace='WAF',
-                    Statistics=['Sum'],
-                    Period=12*3600,
-                    StartTime=datetime.datetime.utcnow() - datetime.timedelta(seconds=12*3600),
-                    EndTime=datetime.datetime.utcnow(),
-                    Dimensions=[
-                        {
-                            "Name": "Rule",
-                            "Value": environ['METRIC_NAME_PREFIX'] + 'BadBotRule'
-                        },
-                        {
-                            "Name": "WebACL",
-                            "Value": environ['METRIC_NAME_PREFIX'] + 'MaliciousRequesters'
-                        }
-                    ]
-                )
-                usage_data['Data']['blocked_requests_bad_bot'] = response['Datapoints'][0]['Sum']
-
-            except Exception as error:
-                logging.getLogger().debug("[send_anonymous_usage_data] Failed to get bad bot data")
-                logging.getLogger().debug(str(error))
-
-        #--------------------------------------------------------------------------------------------------------------
-        logging.getLogger().info("[send_anonymous_usage_data] Send Data")
-        #--------------------------------------------------------------------------------------------------------------
-        url = 'https://metrics.awssolutionsbuilder.com/generic'
-        req = Request(url, method='POST', data=bytes(json.dumps(usage_data), encoding='utf8'), headers={'Content-Type': 'application/json'})
-        rsp = urlopen(req)
-        rspcode = rsp.getcode()
-        logging.getLogger().debug('[send_anonymous_usage_data] Response Code: {}'.format(rspcode))
-        logging.getLogger().debug("[send_anonymous_usage_data] End")
-
-    except Exception as error:
-        logging.getLogger().debug("[send_anonymous_usage_data] Failed to Send Data")
-        logging.getLogger().debug(str(error))
-
 #======================================================================================================================
 # Lambda Entry Point
 #======================================================================================================================
@@ -213,7 +87,7 @@ def lambda_handler(event, context):
         source_ip = event['headers']['X-Forwarded-For'].split(',')[0].strip()
 
         global waf
-        if environ['LOG_TYPE'] == 'alb':
+        if environ['LOG_TYPE'] == 'regional':
             session = boto3.session.Session(region_name=environ['REGION'])
             waf = session.client('waf-regional', config=Config(retries={'max_attempts': API_CALL_NUM_RETRIES}))
         else:
@@ -224,8 +98,6 @@ def lambda_handler(event, context):
         message = {}
         message['message'] = "[%s] Thanks for the visit."%source_ip
         response['body'] = json.dumps(message)
-
-        send_anonymous_usage_data()
 
     except Exception as error:
         logging.getLogger().error(str(error))

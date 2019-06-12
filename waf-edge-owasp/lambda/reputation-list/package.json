@@ -23,10 +23,11 @@
     "scripts": {
         "test": "NODE_PATH=./node_modules mocha *.spec.js",
         "build-init": "rm -rf dist && rm -f archive.zip && mkdir dist",
-        "build:copy": "cp  dist/",
+        "build:copy": "cp index.js dist/",
         "build:install": "cp package.json dist/ && cd dist && npm install --production",
-        "build": "npm run build-init && npm run build:copy && npm run build:install",
-        "zip": "cd dist && zip -rq reputation-lists-parser.zip ."
+        "build:clean": "rm -rf dist",
+        "build": "npm run build-init && npm run build:copy && npm run build:install && npm run zip && npm run build:clean",
+        "zip": "cd dist && zip -rq archive.zip . && mv archive.zip ../"
     },
     "bundledDependencies": [
         "async",

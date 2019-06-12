@@ -107,7 +107,7 @@ resource "aws_lambda_function" "bad-bot" {
     variables = {
       IP_SET_ID_BAD_BOT = "${aws_waf_ipset.bad-bot.id}"
       LOG_LEVEL = "INFO"
-      LOG_TYPE = "cloudfront" # TODO make param, allow ALB, APIG
+      LOG_TYPE = "edge" # edge, regional
       MAX_AGE_TO_UPDATE = 30
       METRIC_NAME_PREFIX = "${local.name}-waf"
       REGION = "${local.region}"

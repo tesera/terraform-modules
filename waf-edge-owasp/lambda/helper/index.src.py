@@ -98,6 +98,31 @@ def check_service_dependencies(resource_properties):
     except Exception:
         logging.getLogger().debug("[check_service_dependencies] AWS WAF tested")
 
+
+    #------------------------------------------------------------------------------------------------------------------
+    # Amazon Athena
+    #------------------------------------------------------------------------------------------------------------------
+    if resource_properties['AthenaLogParser'] == "yes":
+        try:
+            athena_client = boto3.client('athena')
+            athena_client.list_named_queries()
+        except botocore.exceptions.EndpointConnectionError:
+            unavailable_services.append('Amazon Athena')
+        except Exception:
+            logging.getLogger().debug("[check_service_dependencies] Amazon Athena tested")
+
+    #------------------------------------------------------------------------------------------------------------------
+    # AWS Glue
+    #------------------------------------------------------------------------------------------------------------------
+    if resource_properties['AthenaLogParser'] == "yes":
+        try:
+            glue_client = boto3.client('glue')
+            glue_client.get_databases()
+        except botocore.exceptions.EndpointConnectionError:
+            unavailable_services.append('AWS Glue')
+        except Exception:
+            logging.getLogger().debug("[check_service_dependencies] AWS Glue")
+
     #------------------------------------------------------------------------------------------------------------------
     # Amazon Kinesis Data Firehose
     #------------------------------------------------------------------------------------------------------------------
@@ -259,6 +284,40 @@ def lambda_handler(event, context):
             # UPDATE: do nothing
             # DELETE: do nothing
 
+        elif event['ResourceType'] == "Custom::CreateGlueDatabaseName":
+            #--------------------------------------------------------------------------
+            # Delivery stream names acceptable characters are:
+            #  - Lowercase letters
+            #  - Numbers
+            #  - Underscores
+            # Also:
+            #  - It must be between 1 and 32 characters long. Names longer than that
+            #    break AWS::Athena::NamedQuery database parameter
+            #--------------------------------------------------------------------------
+            if 'CREATE' in request_type:
+                suffix = ''.join([random.choice(string.ascii_letters + string.digits) for n in range(6)]).lower()
+                stack_name = event['ResourceProperties']['StackName']
+
+                # remove spaces
+                stack_name = stack_name.replace(" ", "_")
+
+                # remove everything that is not [a-z0-9] or '_' and strip '_'
+                stack_name = re.sub(r'\W', '', stack_name).strip('_').lower()
+
+                # reduce to max_len (considering random sufix + '_')
+                max_len = 32 - 1 - len(suffix)
+                stack_name = stack_name[:max_len].strip('_')
+
+                # define database name
+                database_name = suffix
+                if len(stack_name) > 0:
+                    database_name = stack_name + '_' + suffix
+
+                responseData['DatabaseName'] = database_name
+                logging.getLogger().debug("DatabaseName: %s"%responseData['DatabaseName'])
+
+            # UPDATE: do nothing
+            # DELETE: do nothing
 
     except Exception as error:
         logging.getLogger().error(error)

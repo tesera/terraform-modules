@@ -167,6 +167,224 @@ def update_waf_ip_set(ip_set_id, outstanding_requesters):
     logging.getLogger().debug('[update_waf_ip_set] End')
     return counter
 
+def send_anonymous_usage_data():
+    try:
+        if 'SEND_ANONYMOUS_USAGE_DATA' not in environ or environ['SEND_ANONYMOUS_USAGE_DATA'].lower() != 'yes':
+            return
+
+        logging.getLogger().debug("[send_anonymous_usage_data] Start")
+
+        cw = boto3.client('cloudwatch')
+        usage_data = {
+            "Solution": "SO0006",
+            "UUID": environ['UUID'],
+            "TimeStamp": str(datetime.datetime.utcnow().isoformat()),
+            "Data":
+            {
+                "data_type" : "lop_parser",
+                "scanners_probes_set_size": 0,
+                "http_flood_set_size": 0,
+                "allowed_requests" : 0,
+                "blocked_requests_all" : 0,
+                "blocked_requests_scanners_probes": 0,
+                "blocked_requests_http_flood": 0,
+                "waf_type" : environ['LOG_TYPE']
+            }
+        }
+
+        #--------------------------------------------------------------------------------------------------------------
+        logging.getLogger().debug("[send_anonymous_usage_data] Get num allowed requests")
+        #--------------------------------------------------------------------------------------------------------------
+        try:
+            response = cw.get_metric_statistics(
+                MetricName='AllowedRequests',
+                Namespace='WAF',
+                Statistics=['Sum'],
+                Period=12*3600,
+                StartTime=datetime.datetime.utcnow() - datetime.timedelta(seconds=12*3600),
+                EndTime=datetime.datetime.utcnow(),
+                Dimensions=[
+                    {
+                        "Name": "Rule",
+                        "Value": "ALL"
+                    },
+                    {
+                        "Name": "WebACL",
+                        "Value": environ['METRIC_NAME_PREFIX'] + 'MaliciousRequesters'
+                    }
+                ]
+            )
+            usage_data['Data']['allowed_requests'] = response['Datapoints'][0]['Sum']
+
+        except Exception as error:
+            logging.getLogger().debug("[send_anonymous_usage_data] Failed to get Num Allowed Requests")
+            logging.getLogger().debug(str(error))
+
+        #--------------------------------------------------------------------------------------------------------------
+        logging.getLogger().info("[send_anonymous_usage_data] Get num blocked requests - all rules")
+        #--------------------------------------------------------------------------------------------------------------
+        try:
+            response = cw.get_metric_statistics(
+                MetricName='BlockedRequests',
+                Namespace='WAF',
+                Statistics=['Sum'],
+                Period=12*3600,
+                StartTime=datetime.datetime.utcnow() - datetime.timedelta(seconds=12*3600),
+                EndTime=datetime.datetime.utcnow(),
+                Dimensions=[
+                    {
+                        "Name": "Rule",
+                        "Value": "ALL"
+                    },
+                    {
+                        "Name": "WebACL",
+                        "Value": environ['METRIC_NAME_PREFIX'] + 'MaliciousRequesters'
+                    }
+                ]
+            )
+            usage_data['Data']['blocked_requests_all'] = response['Datapoints'][0]['Sum']
+
+        except Exception as error:
+            logging.getLogger().debug("[send_anonymous_usage_data] Failed to get num blocked requests - all rules")
+            logging.getLogger().debug(str(error))
+
+        #--------------------------------------------------------------------------------------------------------------
+        logging.getLogger().debug("[send_anonymous_usage_data] Get scanners probes data")
+        #--------------------------------------------------------------------------------------------------------------
+        if 'IP_SET_ID_SCANNERS_PROBES' in environ:
+            try:
+                response = waf_get_ip_set(environ['IP_SET_ID_SCANNERS_PROBES'])
+                if response != None:
+                    usage_data['Data']['scanners_probes_set_size'] = len(response['IPSet']['IPSetDescriptors'])
+
+                response = cw.get_metric_statistics(
+                    MetricName='BlockedRequests',
+                    Namespace='WAF',
+                    Statistics=['Sum'],
+                    Period=12*3600,
+                    StartTime=datetime.datetime.utcnow() - datetime.timedelta(seconds=12*3600),
+                    EndTime=datetime.datetime.utcnow(),
+                    Dimensions=[
+                        {
+                            "Name": "Rule",
+                            "Value": environ['METRIC_NAME_PREFIX'] + 'ScannersProbesRule'
+                        },
+                        {
+                            "Name": "WebACL",
+                            "Value": environ['METRIC_NAME_PREFIX'] + 'MaliciousRequesters'
+                        }
+                    ]
+                )
+                usage_data['Data']['blocked_requests_scanners_probes'] = response['Datapoints'][0]['Sum']
+
+            except Exception as error:
+                logging.getLogger().debug("[send_anonymous_usage_data] Failed to get scanners probes data")
+                logging.getLogger().debug(str(error))
+
+        #--------------------------------------------------------------------------------------------------------------
+        logging.getLogger().debug("[send_anonymous_usage_data] Get HTTP flood data")
+        #--------------------------------------------------------------------------------------------------------------
+        if 'IP_SET_ID_HTTP_FLOOD' in environ:
+            try:
+                response = waf_get_ip_set(environ['IP_SET_ID_HTTP_FLOOD'])
+                if response != None:
+                    usage_data['Data']['http_flood_set_size'] = len(response['IPSet']['IPSetDescriptors'])
+
+                response = cw.get_metric_statistics(
+                    MetricName='BlockedRequests',
+                    Namespace='WAF',
+                    Statistics=['Sum'],
+                    Period=12*3600,
+                    StartTime=datetime.datetime.utcnow() - datetime.timedelta(seconds=12*3600),
+                    EndTime=datetime.datetime.utcnow(),
+                    Dimensions=[
+                        {
+                            "Name": "Rule",
+                            "Value": environ['METRIC_NAME_PREFIX'] + 'HttpFloodRule'
+                        },
+                        {
+                            "Name": "WebACL",
+                            "Value": environ['METRIC_NAME_PREFIX'] + 'MaliciousRequesters'
+                        }
+                    ]
+                )
+                usage_data['Data']['blocked_requests_http_flood'] = response['Datapoints'][0]['Sum']
+
+            except Exception as error:
+                logging.getLogger().debug("[send_anonymous_usage_data] Failed to get HTTP flood data")
+                logging.getLogger().debug(str(error))
+
+        #--------------------------------------------------------------------------------------------------------------
+        logging.getLogger().info("[send_anonymous_usage_data] Send Data")
+        #--------------------------------------------------------------------------------------------------------------
+        url = 'https://metrics.awssolutionsbuilder.com/generic'
+        req = Request(url, method='POST', data=bytes(json.dumps(usage_data), encoding='utf8'), headers={'Content-Type': 'application/json'})
+        rsp = urlopen(req)
+        rspcode = rsp.getcode()
+        logging.getLogger().debug('[send_anonymous_usage_data] Response Code: {}'.format(rspcode))
+        logging.getLogger().debug("[send_anonymous_usage_data] End")
+
+    except Exception as error:
+        logging.getLogger().debug("[send_anonymous_usage_data] Failed to send data")
+        logging.getLogger().debug(str(error))
+
+#======================================================================================================================
+# Athena Log Parser
+#======================================================================================================================
+def process_athena_scheduler_event(event):
+    logging.getLogger().debug('[process_athena_scheduler_event] Start')
+
+    athena_client = boto3.client('athena')
+    response = athena_client.get_named_query(NamedQueryId=event['logParserQuery'])
+
+    s3_ouput = "s3://%s/athena_results/"%event['accessLogBucket']
+    response = athena_client.start_query_execution(
+        QueryString = response['NamedQuery']['QueryString'],
+        QueryExecutionContext = {'Database': event['glueAccessLogsDatabase']},
+        ResultConfiguration = {'OutputLocation': s3_ouput}
+    )
+
+    logging.getLogger().debug('[process_athena_scheduler_event] End')
+
+def process_athena_result(bucket_name, key_name, ip_set_id):
+    logging.getLogger().debug('[process_athena_result] Start')
+
+    try:
+        #--------------------------------------------------------------------------------------------------------------
+        logging.getLogger().info("[process_athena_result] \tDownload file from S3")
+        #--------------------------------------------------------------------------------------------------------------
+        local_file_path = '/tmp/' + key_name.split('/')[-1]
+        s3 = boto3.client('s3')
+        s3.download_file(bucket_name, key_name, local_file_path)
+
+        #--------------------------------------------------------------------------------------------------------------
+        logging.getLogger().info("[process_athena_result] \tRead file content")
+        #--------------------------------------------------------------------------------------------------------------
+        outstanding_requesters = {
+            'general': {},
+            'uriList': {}
+        }
+        utc_now_timestamp_str = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z%z")
+        with open(local_file_path,'r') as csvfile:
+            reader = csv.DictReader(csvfile)
+            for row in reader:
+                # max_counter_per_min is set as 1 just to reuse lambda log parser data structure
+                # and reuse update_waf_ip_set.
+                outstanding_requesters['general'][row['client_ip']] = {
+                    "max_counter_per_min": row['max_counter_per_min'],
+                    "updated_at": utc_now_timestamp_str
+                }
+
+        #--------------------------------------------------------------------------------------------------------------
+        logging.getLogger().info("[process_athena_result] \tUpdate WAF IP Set")
+        #--------------------------------------------------------------------------------------------------------------
+        update_waf_ip_set(ip_set_id, outstanding_requesters)
+
+    except Exception:
+        logging.getLogger().error("[process_athena_result] \tError to read input file")
+
+    logging.getLogger().debug('[process_athena_result] End')
+
 #======================================================================================================================
 # Lambda Log Parser
 #======================================================================================================================

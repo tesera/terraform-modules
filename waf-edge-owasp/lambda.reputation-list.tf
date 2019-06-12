@@ -76,9 +76,9 @@ resource "aws_iam_role_policy_attachment" "reputation-list" {
 
 resource "aws_lambda_function" "reputation-list" {
   function_name = "${local.name}-waf-reputation-list"
-  filename      = "${path.module}/lambda/reputation-list/index.zip"
+  filename      = "${path.module}/lambda/reputation-list/archive.zip"
 
-  source_code_hash = "${filebase64sha256("${path.module}/lambda/reputation-lists-parser/index.zip")}"
+  source_code_hash = "${filebase64sha256("${path.module}/lambda/reputation-list/archive.zip")}"
   role             = "${aws_iam_role.reputation-list.arn}"
   handler          = "index.handler"
   runtime          = "nodejs8.10"
@@ -87,6 +87,7 @@ resource "aws_lambda_function" "reputation-list" {
   publish          = true
   environment = {
     variables = {
+      API_TYPE = "edge" # edge, regional
       LOG_LEVEL = "INFO"
       METRIC_NAME_PREFIX = "${local.name}-waf"
       SEND_ANONYMOUS_USAGE_DATA = "No"
@@ -112,7 +113,6 @@ resource "aws_cloudwatch_event_target" "reputation-list" {
     {"url":"https://check.torproject.org/exit-addresses", "prefix":"ExitAddress"},
     {"url":"https://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt"}
   ],
-  "apiType": "waf",
   "region": "${local.region}",
   "ipSetIds": ["${aws_waf_ipset.reputation-list.id}"]
 }

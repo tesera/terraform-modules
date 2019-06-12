@@ -112,7 +112,7 @@ resource "aws_lambda_function" "log-parser" {
       IP_SET_ID_SCANNERS_PROBES = "${aws_waf_ipset.scanners-probes.id}"
       LIMIT_IP_ADDRESS_RANGES_PER_IP_MATCH_CONDITION = 10000
       LOG_LEVEL = "INFO"
-      LOG_TYPE = "cloudfront" # TODO make param, allow ALB, APIG
+      LOG_TYPE = "cloudfront" # waf, alb, cloudfront
       MAX_AGE_TO_UPDATE = 30
       METRIC_NAME_PREFIX = "${local.name}-waf"
       REGION = "${local.region}"

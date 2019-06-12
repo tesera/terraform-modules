@@ -387,6 +387,70 @@ def clean_ip_set(ip_set_id):
 
 
 #======================================================================================================================
+# Configure AWS WAF Logs
+#======================================================================================================================
+def put_logging_configuration(web_acl_arn, delivery_stream_arn):
+    logging.getLogger().debug("[put_logging_configuration] Start")
+
+    waf_client = boto3.client(environ['API_TYPE'], config=Config(retries={'max_attempts': API_CALL_NUM_RETRIES}))
+    waf_client.put_logging_configuration(
+        LoggingConfiguration = {
+            'ResourceArn': web_acl_arn,
+            'LogDestinationConfigs': [delivery_stream_arn]
+        }
+    )
+
+    logging.getLogger().debug("[put_logging_configuration] End")
+
+def delete_logging_configuration(web_acl_arn):
+    logging.getLogger().debug("[delete_logging_configuration] Start")
+
+    waf_client = boto3.client(environ['API_TYPE'], config=Config(retries={'max_attempts': API_CALL_NUM_RETRIES}))
+    waf_client.delete_logging_configuration(ResourceArn = web_acl_arn)
+
+    logging.getLogger().debug("[delete_logging_configuration] End")
+
+#======================================================================================================================
+# Populate Reputation List
+#======================================================================================================================
+def populate_reputation_list(region, reputation_lists_parser_function, reputation_list_set):
+    logging.getLogger().debug("[populate_reputation_list] Start")
+
+    try:
+        lambda_client = boto3.client('lambda')
+        lambda_client.invoke(
+            FunctionName=reputation_lists_parser_function.rsplit(":",1)[-1],
+            Payload="""{
+                  "lists": [
+                    {
+                        "url": "https://www.spamhaus.org/drop/drop.txt"
+                    },
+                    {
+                        "url": "https://www.spamhaus.org/drop/edrop.txt"
+                    },
+                    {
+                        "url": "https://check.torproject.org/exit-addresses",
+                        "prefix": "ExitAddress "
+                    },
+                    {
+                        "url": "https://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt"
+                    }
+                  ],
+                  "apiType":"%s",
+                  "region":"%s",
+                  "ipSetIds": [
+                        "%s"
+                  ]
+                }"""%(environ['API_TYPE'], region, reputation_list_set)
+        )
+
+    except Exception as error:
+        logging.getLogger().error("[create_stack] Failed to call IP Reputation List function")
+        logging.getLogger().error(str(error))
+
+    logging.getLogger().debug("[populate_reputation_list] End")
+
+#======================================================================================================================
 # Generate Log Parser Config File
 #======================================================================================================================
 def generate_app_log_parser_conf_file(stack_name, error_threshold, block_period, app_access_log_bucket, overwrite):
@@ -509,7 +573,48 @@ def send_response(event, context, responseStatus, responseData, resourceId, reas
 
     logging.getLogger().debug("[send_response] End")
 
+def send_anonymous_usage_data(action_type, resource_properties):
 
+    try:
+        if 'SendAnonymousUsageData' not in resource_properties or resource_properties['SendAnonymousUsageData'].lower() != 'yes':
+            return
+        logging.getLogger().debug("[send_anonymous_usage_data] Start")
+
+        usage_data = {
+            "Solution": "SO0006",
+            "UUID": resource_properties['UUID'],
+            "TimeStamp": str(datetime.datetime.utcnow().isoformat()),
+            "Data":
+            {
+                "Version": "2.3.0",
+                "data_type" : "custom_resource",
+                "region" : resource_properties['Region'],
+                "action" : action_type,
+                "sql_injection_protection": resource_properties['ActivateSqlInjectionProtectionParam'],
+                "xss_scripting_protection": resource_properties['ActivateCrossSiteScriptingProtectionParam'],
+                "http_flood_protection": resource_properties['ActivateHttpFloodProtectionParam'],
+                "scanners_probes_protection": resource_properties['ActivateScannersProbesProtectionParam'],
+                "reputation_lists_protection": resource_properties['ActivateReputationListsProtectionParam'],
+                "bad_bot_protection": resource_properties['ActivateBadBotProtectionParam'],
+                "request_threshold": resource_properties['RequestThreshold'],
+                "error_threshold": resource_properties['ErrorThreshold'],
+                "waf_block_period": resource_properties['WAFBlockPeriod']
+            }
+        }
+
+        #--------------------------------------------------------------------------------------------------------------
+        logging.getLogger().info("[send_anonymous_usage_data] Send Data")
+        #--------------------------------------------------------------------------------------------------------------
+        url = 'https://metrics.awssolutionsbuilder.com/generic'
+        req = Request(url, method='POST', data=bytes(json.dumps(usage_data), encoding='utf8'), headers={'Content-Type': 'application/json'})
+        rsp = urlopen(req)
+        rspcode = rsp.getcode()
+        logging.getLogger().debug('[send_anonymous_usage_data] Response Code: {}'.format(rspcode))
+        logging.getLogger().debug("[send_anonymous_usage_data] End")
+
+    except Exception as error:
+        logging.getLogger().debug("[send_anonymous_usage_data] Failed to Send Data")
+        logging.getLogger().debug(str(error))
 
 #======================================================================================================================
 # Lambda Entry Point

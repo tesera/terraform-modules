@@ -119,7 +119,7 @@ resource "aws_iam_policy" "http-flood" {
         "waf:DeleteLoggingConfiguration"
       ],
       "Resource": [
-        "${aws_waf_web_acl.wafrOwaspACL.arn}"
+        "${aws_waf_web_acl.wafOwaspACL.arn}"
       ],
       "Effect": "Allow"
     },
