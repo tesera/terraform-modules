@@ -3,7 +3,6 @@ To be used with CloudFront.
 
 Ported from [AWS WAF to Mitigate OWASP's Top 10 Web Application Vulnerabilities](https://aws.amazon.com/about-aws/whats-new/2017/07/use-aws-waf-to-mitigate-owasps-top-10-web-application-vulnerabilities/) Template (2017-10-01).
 
-
 ## Setup
 
 ### Module
@@ -14,19 +13,25 @@ module "waf" {
   defaultAction = "${var.defaultAction}"
 
   ipAdminListId = "${aws_waf_ipset.admin.id}"
-  ipBlackListId = "${aws_waf_ipset.black.id}"
   ipWhiteListId = "${aws_waf_ipset.white.id}"
   
   providers = {
     aws = "aws.edge"
   }
 }
+resource "aws_ssm_parameter" "bad-bot" {
+  name        = "/config/waf/ipset/bad-bot"
+  description = "IP Set ID of the bad bot / honeypot blacklist"
+  type        = "SecureString"
+  value       = "${module.waf.ipset_bad-bot_id}"
+}
+
 ```
 
 ### IP Lists
 ```hcl-terraform
 resource "aws_waf_ipset" "white" {
-  name = "${var.name}-white-ipset"
+  name = "${var.name}-override-white-ipset"
 }
 ```
 
@@ -43,3 +48,10 @@ See `variables.tf` for extended list of OWASP inputs that can be configured.
 ## TODO
 - [ ] Easier ip list management (See CRC module)
 - [ ] Port of https://aws.amazon.com/solutions/aws-waf-security-automations/
+- [ ] serverless honeypot
+- [ ] Bug: terraform unable to att raterule to acl - add manually as workaround
+
+
+## Sources
+- [AWS WAF Sample](https://github.com/awslabs/aws-waf-sample)
+- [AWS WAF Security Automations](https://aws.amazon.com/solutions/aws-waf-security-automations)
