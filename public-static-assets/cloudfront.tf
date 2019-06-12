@@ -99,7 +99,7 @@ resource "aws_cloudfront_distribution" "main" {
 
   logging_config {
     include_cookies = false
-    bucket          = "${local.logging_bucket}"
+    bucket          = "${local.logging_bucket}.s3.amazonaws.com"
     prefix          = "AWSLogs/${data.aws_caller_identity.current.account_id}/CloudFront/${var.aliases[0]}/"
   }
 
