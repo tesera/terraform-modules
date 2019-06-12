@@ -19,93 +19,13 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     type = "${var.defaultAction}"
   }
 
+  # Max 10 Rules - https://docs.aws.amazon.com/waf/latest/developerguide/limits.html
   rules {
     action {
       type = "BLOCK"
     }
 
-    priority = 10
-    rule_id  = "${aws_waf_rule.wafSizeRestrictionRule.id}"
-  }
-
-  rules {
-    action {
-      type = "BLOCK"
-    }
-
-    priority = 20
-    rule_id  = "${aws_waf_rule.wafAuthTokenRule.id}"
-  }
-
-  rules {
-    action {
-      type = "BLOCK"
-    }
-
-    priority = 30
-    rule_id  = "${aws_waf_rule.wafSQLInjectionRule.id}"
-  }
-
-  rules {
-    action {
-      type = "BLOCK"
-    }
-
-    priority = 40
-    rule_id  = "${aws_waf_rule.wafXSSRule.id}"
-  }
-
-  rules {
-    action {
-      type = "BLOCK"
-    }
-
-    priority = 50
-    rule_id  = "${aws_waf_rule.wafPathsRule.id}"
-  }
-
-  rules {
-    action {
-      type = "BLOCK"
-    }
-
-    priority = 60
-    rule_id  = "${aws_waf_rule.wafCSRFRule.id}"
-  }
-
-  rules {
-    action {
-      type = "BLOCK"
-    }
-
-    priority = 70
-    rule_id  = "${aws_waf_rule.wafServerSideIncludeRule.id}"
-  }
-
-  rules {
-    action {
-      type = "BLOCK"
-    }
-
-    priority = 80
-    rule_id  = "${aws_waf_rule.wafAdminAccessRule.id}"
-  }
-
-  rules {
-    action {
-      type = "ALLOW"
-    }
-
-    priority = 100
-    rule_id  = "${aws_waf_rule.wafWhitelistRule.id}"
-  }
-
-  rules {
-    action {
-      type = "BLOCK"
-    }
-
-    priority = 900
+    priority = 1
     rule_id  = "${aws_waf_rule.wafBlacklistRule.id}"
   }
 
@@ -114,8 +34,8 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
       type = "BLOCK"
     }
 
-    priority = 910
-    rule_id  = "${aws_waf_rule.wafHTTPFloodRule.id}"
+    priority = 2
+    rule_id  = "${aws_waf_rate_based_rule.wafHTTPFloodRule.id}"
   }
 
   rules {
@@ -123,8 +43,8 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
       type = "BLOCK"
     }
 
-    priority = 920
-    rule_id  = "${aws_waf_rule.wafScannersProbesRule.id}"
+    priority = 3
+    rule_id  = "${aws_waf_rule.wafSizeRestrictionRule.id}"
   }
 
   rules {
@@ -132,8 +52,8 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
       type = "BLOCK"
     }
 
-    priority = 930
-    rule_id  = "${aws_waf_rule.wafReputationListRule.id}"
+    priority = 4
+    rule_id  = "${aws_waf_rule.wafAuthTokenRule.id}"
   }
 
   rules {
@@ -141,9 +61,90 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
       type = "BLOCK"
     }
 
-    priority = 940
-    rule_id  = "${aws_waf_rule.wafBadBotRule.id}"
+    priority = 5
+    rule_id  = "${aws_waf_rule.wafSQLInjectionRule.id}"
   }
+
+  rules {
+    action {
+      type = "BLOCK"
+    }
+
+    priority = 6
+    rule_id  = "${aws_waf_rule.wafXSSRule.id}"
+  }
+
+  rules {
+    action {
+      type = "BLOCK"
+    }
+
+    priority = 7
+    rule_id  = "${aws_waf_rule.wafPathsRule.id}"
+  }
+
+  rules {
+    action {
+      type = "BLOCK"
+    }
+
+    priority = 8
+    rule_id  = "${aws_waf_rule.wafCSRFRule.id}"
+  }
+
+//  rules {
+//    action {
+//      type = "BLOCK"
+//    }
+//
+//    priority = 9
+//    rule_id  = "${aws_waf_rule.wafServerSideIncludeRule.id}"
+//  }
+
+//  rules {
+//    action {
+//      type = "BLOCK"
+//    }
+//
+//    priority = 10
+//    rule_id  = "${aws_waf_rule.wafAdminAccessRule.id}"
+//  }
+
+  rules {
+    action {
+      type = "ALLOW"
+    }
+
+    priority = 10
+    rule_id  = "${aws_waf_rule.wafWhitelistRule.id}"
+  }
+
+//  rules {
+//    action {
+//      type = "BLOCK"
+//    }
+//
+//    priority = 920
+//    rule_id  = "${aws_waf_rule.wafScannersProbesRule.id}"
+//  }
+
+//  rules {
+//    action {
+//      type = "BLOCK"
+//    }
+//
+//    priority = 930
+//    rule_id  = "${aws_waf_rule.wafReputationListRule.id}"
+//  }
+
+//  rules {
+//    action {
+//      type = "BLOCK"
+//    }
+//
+//    priority = 940
+//    rule_id  = "${aws_waf_rule.wafBadBotRule.id}"
+//  }
 
 
 
