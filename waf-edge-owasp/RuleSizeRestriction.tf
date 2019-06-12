@@ -1,20 +1,20 @@
-resource "aws_waf_rule" "wafrSizeRestrictionRule" {
+resource "aws_waf_rule" "wafSizeRestrictionRule" {
   depends_on = [
-    "aws_waf_size_constraint_set.wafgSizeRestrictionSet",
+    "aws_waf_size_constraint_set.wafSizeRestrictionSet",
   ]
 
-  name        = "${local.name}wafrSizeRestrictionRule"
-  metric_name = "${local.name}wafrSizeRestrictionRule"
+  name        = "${local.name}wafSizeRestrictionRule"
+  metric_name = "${local.name}wafSizeRestrictionRule"
 
   predicates {
-    data_id = "${aws_waf_size_constraint_set.wafgSizeRestrictionSet.id}"
+    data_id = "${aws_waf_size_constraint_set.wafSizeRestrictionSet.id}"
     negated = false
     type    = "SizeConstraint"
   }
 }
 
-resource "aws_waf_size_constraint_set" "wafgSizeRestrictionSet" {
-  name = "${local.name}wafgSizeRestrictionSet"
+resource "aws_waf_size_constraint_set" "wafSizeRestrictionSet" {
+  name = "${local.name}wafSizeRestrictionSet"
 
   size_constraints {
     text_transformation = "NONE"

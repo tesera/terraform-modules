@@ -8,22 +8,18 @@ variable "defaultAction" {
   default = "DENY"
 }
 
-variable "ipWhiteListId" {
+variable "ipWhitelistId" {
   default = ""
 }
 
-variable "ipAdminListId" {
-  default = ""
-}
-
-variable "ipBlackListId" {
+variable "ipAdminlistId" {
   default = ""
 }
 
 variable "rateLimit" {
-  description = "This sets the max rate limit per 5 minute period. Default to `2000`"
+  description = "This sets the max rate limit per 5 minute period. Default to `10000`, min allowed: `2000`"
   type = "string"
-  default = "2000"
+  default = "10000"
 }
 
 # A4
@@ -79,6 +75,7 @@ variable "includesPrefix" {
 }
 
 
-variable "logging_bucket_arn" {
+variable "logging_bucket" {
   description = ""
+  default = ""
 }

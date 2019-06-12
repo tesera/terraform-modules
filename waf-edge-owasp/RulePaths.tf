@@ -1,20 +1,20 @@
-resource "aws_waf_rule" "wafgPathsRule" {
+resource "aws_waf_rule" "wafPathsRule" {
   depends_on = [
-    "aws_waf_byte_match_set.wafgPathsStringSet",
+    "aws_waf_byte_match_set.wafPathsStringSet",
   ]
 
   name        = "${local.name}wafgPathsRule"
   metric_name = "${local.name}wafgPathsRule"
 
   predicates {
-    data_id = "${aws_waf_byte_match_set.wafgPathsStringSet.id}"
+    data_id = "${aws_waf_byte_match_set.wafPathsStringSet.id}"
     negated = false
     type    = "ByteMatch"
   }
 }
 
-resource "aws_waf_byte_match_set" "wafgPathsStringSet" {
-  name = "${local.name}wafgPathsStringSet"
+resource "aws_waf_byte_match_set" "wafPathsStringSet" {
+  name = "${local.name}wafPathsStringSet"
 
   byte_match_tuples {
     text_transformation   = "URL_DECODE"

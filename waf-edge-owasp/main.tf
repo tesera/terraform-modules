@@ -1,15 +1,15 @@
 resource "aws_waf_web_acl" "wafrOwaspACL" {
   depends_on = [
     "aws_waf_rate_based_rule.wafHTTPFloodRule",
-    "aws_waf_rule.wafgSQLInjectionRule",
-    "aws_waf_rule.wafrXSSRule",
-    "aws_waf_rule.wafgAdminAccessRule",
-    "aws_waf_rule.wafgAuthTokenRule",
-    "aws_waf_rule.wafgCSRFRule",
-    "aws_waf_rule.wafgPathsRule",
-    "aws_waf_rule.wafgServerSideIncludeRule",
-    "aws_waf_rule.wafgIpBlackListRule",
-    "aws_waf_rule.wafgIpWhiteListRule",
+    "aws_waf_rule.wafSQLInjectionRule",
+    "aws_waf_rule.wafXSSRule",
+    "aws_waf_rule.wafAdminAccessRule",
+    "aws_waf_rule.wafAuthTokenRule",
+    "aws_waf_rule.wafCSRFRule",
+    "aws_waf_rule.wafPathsRule",
+    "aws_waf_rule.wafServerSideIncludeRule",
+    "aws_waf_rule.wafIpBlackListRule",
+    "aws_waf_rule.wafIpWhiteListRule",
   ]
 
   name        = "${local.name}wafrOwaspACL"
@@ -24,17 +24,8 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
       type = "BLOCK"
     }
 
-    priority = 5
-    rule_id  = "${aws_waf_rate_based_rule.wafHTTPFloodRule.id}"
-  }
-
-  rules {
-    action {
-      type = "BLOCK"
-    }
-
     priority = 10
-    rule_id  = "${aws_waf_rule.wafrSizeRestrictionRule.id}"
+    rule_id  = "${aws_waf_rule.wafSizeRestrictionRule.id}"
   }
 
   rules {
@@ -43,7 +34,7 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     }
 
     priority = 20
-    rule_id  = "${aws_waf_rule.wafgIpBlackListRule.id}"
+    rule_id  = "${aws_waf_rule.wafAuthTokenRule.id}"
   }
 
   rules {
@@ -52,7 +43,7 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     }
 
     priority = 30
-    rule_id  = "${aws_waf_rule.wafgAuthTokenRule.id}"
+    rule_id  = "${aws_waf_rule.wafSQLInjectionRule.id}"
   }
 
   rules {
@@ -61,7 +52,7 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     }
 
     priority = 40
-    rule_id  = "${aws_waf_rule.wafgSQLInjectionRule.id}"
+    rule_id  = "${aws_waf_rule.wafXSSRule.id}"
   }
 
   rules {
@@ -70,7 +61,7 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     }
 
     priority = 50
-    rule_id  = "${aws_waf_rule.wafrXSSRule.id}"
+    rule_id  = "${aws_waf_rule.wafPathsRule.id}"
   }
 
   rules {
@@ -79,7 +70,16 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     }
 
     priority = 60
-    rule_id  = "${aws_waf_rule.wafgPathsRule.id}"
+    rule_id  = "${aws_waf_rule.wafCSRFRule.id}"
+  }
+
+  rules {
+    action {
+      type = "BLOCK"
+    }
+
+    priority = 70
+    rule_id  = "${aws_waf_rule.wafServerSideIncludeRule.id}"
   }
 
   rules {
@@ -88,25 +88,7 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     }
 
     priority = 80
-    rule_id  = "${aws_waf_rule.wafgCSRFRule.id}"
-  }
-
-  rules {
-    action {
-      type = "BLOCK"
-    }
-
-    priority = 90
-    rule_id  = "${aws_waf_rule.wafgServerSideIncludeRule.id}"
-  }
-
-  rules {
-    action {
-      type = "BLOCK"
-    }
-
-    priority = 100
-    rule_id  = "${aws_waf_rule.wafgAdminAccessRule.id}"
+    rule_id  = "${aws_waf_rule.wafAdminAccessRule.id}"
   }
 
   rules {
@@ -114,9 +96,56 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
       type = "ALLOW"
     }
 
-    priority = 999
-    rule_id  = "${aws_waf_rule.wafgIpWhiteListRule.id}"
+    priority = 100
+    rule_id  = "${aws_waf_rule.wafWhitelistRule.id}"
   }
+
+  rules {
+    action {
+      type = "BLOCK"
+    }
+
+    priority = 900
+    rule_id  = "${aws_waf_rule.wafBlacklistRule.id}"
+  }
+
+  rules {
+    action {
+      type = "BLOCK"
+    }
+
+    priority = 910
+    rule_id  = "${aws_waf_rule.wafHTTPFloodRule.id}"
+  }
+
+  rules {
+    action {
+      type = "BLOCK"
+    }
+
+    priority = 920
+    rule_id  = "${aws_waf_rule.wafScannersProbesRule.id}"
+  }
+
+  rules {
+    action {
+      type = "BLOCK"
+    }
+
+    priority = 930
+    rule_id  = "${aws_waf_rule.wafReputationListRule.id}"
+  }
+
+  rules {
+    action {
+      type = "BLOCK"
+    }
+
+    priority = 940
+    rule_id  = "${aws_waf_rule.wafBadBotRule.id}"
+  }
+
+
 
   logging_configuration {
     log_destination = "${aws_kinesis_firehose_delivery_stream.logging.arn}"
@@ -125,19 +154,18 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
   }
 }
 
-data "aws_caller_identity" "current" {}
 resource "aws_kinesis_firehose_delivery_stream" "logging" {
   name        = "${local.name}-waf-stream"
   destination = "s3"
 
   s3_configuration {
-    role_arn   = "${aws_iam_role.logging.arn}"
-    bucket_arn = "${var.logging_bucket_arn}"
-    prefix     = "/AWSLogs/${data.aws_caller_identity.current.account_id}/WAF/us-east-1/"
+    role_arn   = "${aws_iam_role.firehose.arn}"
+    bucket_arn = "arn:aws:s3:::${local.logging_bucket}"
+    prefix     = "/AWSLogs/${local.account_id}/WAF/us-east-1/"
   }
 }
 
-resource "aws_iam_role" "logging" {
+resource "aws_iam_role" "firehose" {
   name = "${local.name}-waf-stream-role"
 
   assume_role_policy = <<EOF
@@ -155,4 +183,57 @@ resource "aws_iam_role" "logging" {
   ]
 }
 EOF
+}
+
+resource "aws_iam_policy" "firehose" {
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid":"CloudWatchAccess",
+      "Action": [
+        "logs:PutLogEvents"
+      ],
+      "Resource": [
+        "arn:aws:logs:${local.region}:${local.account_id}:log-group:/aws/kinesisfirehose/${local.name}-waf-stream:*"
+      ],
+      "Effect": "Allow"
+    },
+    {
+      "Sid":"KinesisAccess",
+      "Action": [
+        "kinesis:DescribeStream",
+        "kinesis:GetShardIterator",
+        "kinesis:GetRecords"
+      ],
+      "Resource": [
+        "${aws_kinesis_firehose_delivery_stream.logging.arn}"
+      ],
+      "Effect": "Allow"
+    },
+    {
+      "Sid":"S3Access",
+      "Action": [
+        "s3:AbortMultipartUpload",
+        "s3:GetBucketLocation",
+        "s3:GetObject",
+        "s3:ListBucket",
+        "s3:ListBucketMultipartUploads",
+        "s3:PutObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${local.logging_bucket}",
+        "arn:aws:s3:::${local.logging_bucket}/*"
+      ],
+      "Effect": "Allow"
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "firehose" {
+  role       = "${aws_iam_role.firehose.name}"
+  policy_arn = "${aws_iam_policy.firehose.arn}"
 }

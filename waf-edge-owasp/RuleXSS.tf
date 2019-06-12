@@ -1,19 +1,19 @@
-resource "aws_waf_rule" "wafrXSSRule" {
+resource "aws_waf_rule" "wafXSSRule" {
   depends_on = [
-    "aws_waf_xss_match_set.wafrXSSSet",
+    "aws_waf_xss_match_set.wafXSSSet",
   ]
 
-  name        = "${local.name}wafrXSSRule"
-  metric_name = "${local.name}wafrXSSRule"
+  name        = "${local.name}wafXSSRule"
+  metric_name = "${local.name}wafXSSRule"
 
   predicates {
-    data_id = "${aws_waf_xss_match_set.wafrXSSSet.id}"
+    data_id = "${aws_waf_xss_match_set.wafXSSSet.id}"
     negated = false
     type    = "XssMatch"
   }
 }
 
-resource "aws_waf_xss_match_set" "wafrXSSSet" {
+resource "aws_waf_xss_match_set" "wafXSSSet" {
   name = "${local.name}wafrXSSSet"
 
   xss_match_tuples {
