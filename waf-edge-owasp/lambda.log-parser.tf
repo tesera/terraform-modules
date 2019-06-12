@@ -104,22 +104,64 @@ resource "aws_lambda_function" "log-parser" {
   memory_size      = 512
   timeout          = 300
   publish          = true
-  environment = {
+  environment      = {
     variables = {
-      APP_ACCESS_LOG_BUCKET = "${local.logging_bucket}"
-      WAF_ACCESS_LOG_BUCKET = "${local.logging_bucket}"
-      IP_SET_ID_HTTP_FLOOD = "${aws_waf_ipset.http-flood.id}"
-      IP_SET_ID_SCANNERS_PROBES = "${aws_waf_ipset.scanners-probes.id}"
+      STACK_NAME                                     = "${local.name}"
+      APP_ACCESS_LOG_BUCKET                          = "${local.logging_bucket}"
+      WAF_ACCESS_LOG_BUCKET                          = "${local.logging_bucket}"
+      IP_SET_ID_HTTP_FLOOD                           = "${aws_waf_ipset.http-flood.id}"
+      IP_SET_ID_SCANNERS_PROBES                      = "${aws_waf_ipset.scanners-probes.id}"
       LIMIT_IP_ADDRESS_RANGES_PER_IP_MATCH_CONDITION = 10000
-      LOG_LEVEL = "INFO"
-      LOG_TYPE = "cloudfront" # waf, alb, cloudfront
-      MAX_AGE_TO_UPDATE = 30
-      METRIC_NAME_PREFIX = "${local.name}-waf"
-      REGION = "${local.region}"
+      LOG_LEVEL                                      = "INFO"
+      LOG_TYPE                                       = "cloudfront"
+      # waf, alb, cloudfront
+      MAX_AGE_TO_UPDATE                              = 30
+      METRIC_NAME_PREFIX                             = "${local.name}-waf"
+      REGION                                         = "${local.region}"
     }
   }
 }
 
+resource "aws_s3_bucket_notification" "log-parser" {
+  bucket = "${local.logging_bucket}"
 
+  lambda_function {
+    lambda_function_arn = "${aws_lambda_function.log-parser.arn}"
+    events              = [
+      "s3:ObjectCreated:*"]
+    filter_prefix       = "AWSLogs/${local.account_id}/"
+    filter_suffix       = ".gz"
+  }
+}
 
+# TODO don't update file if already exists
+resource "aws_s3_bucket_object" "app-log-parser" {
+  bucket = "${local.logging_bucket}"
+  key    = "/${local.name}-app_log_conf.json"
+  source = <<JSON
+{
+    "general": {
+        "errorThreshold": ${var.errorThreshold},
+        "blockPeriod": ${var.blockPeriod},
+        "errorCodes": ["400", "401", "403", "404", "405"]
+    },
+    "uriList": {}
+}
+JSON
+}
+
+resource "aws_s3_bucket_object" "waf-log-parser" {
+  bucket = "${local.logging_bucket}"
+  key    = "/${local.name}-waf_log_conf.json"
+  source = <<JSON
+{
+    "general": {
+        "errorThreshold": ${var.errorThreshold},
+        "blockPeriod": ${var.blockPeriod},
+        "ignoredSufixes": []
+    },
+    "uriList": {}
+}
+JSON
+}
 

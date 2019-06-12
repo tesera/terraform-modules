@@ -514,51 +514,34 @@ def lambda_handler(event, context):
         #----------------------------------------------------------
         logging.getLogger().info(event)
 
-        if "resourceType" in event:
-            process_athena_scheduler_event(event)
-            result['message'] = "[lambda_handler] Athena scheduler event processed."
-            logging.getLogger().debug(result['message'])
-
-        elif 'Records' in event:
+        if 'Records' in event:
             for r in event['Records']:
                 bucket_name = r['s3']['bucket']['name']
                 key_name = unquote_plus(r['s3']['object']['key'])
 
                 if 'APP_ACCESS_LOG_BUCKET' in environ and bucket_name == environ['APP_ACCESS_LOG_BUCKET']:
-                    if key_name.startswith('athena_results/'):
-                        process_athena_result(bucket_name, key_name, environ['IP_SET_ID_SCANNERS_PROBES'])
-                        result['message'] = "[lambda_handler] Athena app log query result processed."
-                        logging.getLogger().debug(result['message'])
 
-                    else:
-                        conf_filename = environ['STACK_NAME'] + '-app_log_conf.json'
-                        output_filename = environ['STACK_NAME'] + '-app_log_out.json'
-                        log_type = environ['LOG_TYPE']
-                        ip_set_id = environ['IP_SET_ID_SCANNERS_PROBES']
-                        process_log_file(bucket_name, key_name, conf_filename, output_filename, log_type, ip_set_id)
-                        result['message'] = "[lambda_handler] App access log file processed."
-                        logging.getLogger().debug(result['message'])
+                    conf_filename = environ['STACK_NAME'] + '-app_log_conf.json'
+                    output_filename = environ['STACK_NAME'] + '-app_log_out.json'
+                    log_type = environ['LOG_TYPE']
+                    ip_set_id = environ['IP_SET_ID_SCANNERS_PROBES']
+                    process_log_file(bucket_name, key_name, conf_filename, output_filename, log_type, ip_set_id)
+                    result['message'] = "[lambda_handler] App access log file processed."
+                    logging.getLogger().debug(result['message'])
 
                 elif 'WAF_ACCESS_LOG_BUCKET' in environ and bucket_name == environ['WAF_ACCESS_LOG_BUCKET']:
-                    if key_name.startswith('athena_results/'):
-                        process_athena_result(bucket_name, key_name, environ['IP_SET_ID_HTTP_FLOOD'])
-                        result['message'] = "[lambda_handler] Athena AWS WAF log query result processed."
-                        logging.getLogger().debug(result['message'])
 
-                    else:
-                        conf_filename = environ['STACK_NAME'] + '-waf_log_conf.json'
-                        output_filename = environ['STACK_NAME'] + '-waf_log_out.json'
-                        log_type = 'waf'
-                        ip_set_id = environ['IP_SET_ID_HTTP_FLOOD']
-                        process_log_file(bucket_name, key_name, conf_filename, output_filename, log_type, ip_set_id)
-                        result['message'] = "[lambda_handler] AWS WAF access log file processed."
-                        logging.getLogger().debug(result['message'])
+                    conf_filename = environ['STACK_NAME'] + '-waf_log_conf.json'
+                    output_filename = environ['STACK_NAME'] + '-waf_log_out.json'
+                    log_type = 'waf'
+                    ip_set_id = environ['IP_SET_ID_HTTP_FLOOD']
+                    process_log_file(bucket_name, key_name, conf_filename, output_filename, log_type, ip_set_id)
+                    result['message'] = "[lambda_handler] AWS WAF access log file processed."
+                    logging.getLogger().debug(result['message'])
 
                 else:
                     result['message'] = "[lambda_handler] undefined handler for bucket %s"%bucket_name
                     logging.getLogger().info(result['message'])
-
-                send_anonymous_usage_data()
 
         else:
             result['message'] = "[lambda_handler] undefined handler for this type of event"
