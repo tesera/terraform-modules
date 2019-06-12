@@ -1,4 +1,4 @@
-resource "aws_waf_web_acl" "wafrOwaspACL" {
+resource "aws_waf_web_acl" "wafOwaspACL" {
   depends_on = [
     "aws_waf_rate_based_rule.wafHTTPFloodRule",
     "aws_waf_rule.wafSQLInjectionRule",
@@ -12,8 +12,8 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     "aws_waf_rule.wafWhitelistRule",
   ]
 
-  name        = "${local.name}wafrOwaspACL"
-  metric_name = "${local.name}wafrOwaspACL"
+  name        = "${local.name}wafOwaspACL"
+  metric_name = "${local.name}wafOwaspACL"
 
   default_action {
     type = "${var.defaultAction}"
@@ -29,14 +29,15 @@ resource "aws_waf_web_acl" "wafrOwaspACL" {
     rule_id  = "${aws_waf_rule.wafBlacklistRule.id}"
   }
 
-  rules {
-    action {
-      type = "BLOCK"
-    }
-
-    priority = 2
-    rule_id  = "${aws_waf_rate_based_rule.wafHTTPFloodRule.id}"
-  }
+  // Breaks ACL :( TODO fix, manual attach
+//  rules {
+//    action {
+//      type = "BLOCK"
+//    }
+//
+//    priority = 2
+//    rule_id  = "${aws_waf_rate_based_rule.wafHTTPFloodRule.id}"
+//  }
 
   rules {
     action {
