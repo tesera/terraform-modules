@@ -13,6 +13,7 @@ resource "aws_lb" "main" {
 
   access_logs {
     bucket  = "${local.logging_bucket}"
+    prefix = "AWSLogs/${local.account_id}/ALB/${local.name}-alb/"
     enabled = true
   }
 
