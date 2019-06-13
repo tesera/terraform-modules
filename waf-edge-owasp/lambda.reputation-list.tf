@@ -108,12 +108,12 @@ resource "aws_cloudwatch_event_target" "reputation-list" {
 {
   "lists": [
     { "url":"https://www.spamhaus.org/drop/drop.txt" },
-    {"url":"https://www.spamhaus.org/drop/edrop.txt" },
-    {"url":"https://check.torproject.org/exit-addresses", "prefix":"ExitAddress"},
-    {"url":"https://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt"}
+    { "url":"https://www.spamhaus.org/drop/edrop.txt" },
+    { "url":"https://check.torproject.org/exit-addresses", "prefix":"ExitAddress"},
+    {  "url":"https://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt" }
   ],
   "region": "${local.region}",
-  "ipSetIds": ["${aws_waf_ipset.reputation-list.id}"]
+  "ipSetIds": [ "${aws_waf_ipset.reputation-list.id}" ]
 }
 JSON
 }
