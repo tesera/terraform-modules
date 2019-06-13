@@ -107,19 +107,3 @@ resource "aws_cloudfront_distribution" "main" {
     "Name", "${local.name} CloudFront"
   ))}"
 }
-
-resource "aws_s3_bucket" "main-cdn-logs" {
-  bucket = "${local.name}-${terraform.workspace}-cdn-access-logs"
-
-  lifecycle_rule {
-    enabled = true
-
-    expiration {
-      days = 30
-    }
-  }
-
-  tags = "${merge(local.tags, map(
-    "Name", "${local.name} CloudFront Access Logs"
-  ))}"
-}
