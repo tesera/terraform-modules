@@ -39,10 +39,10 @@ resource "aws_iam_policy" "log-parser" {
       "Sid":"S3AccessPut",
       "Action": "s3:PutObject",
       "Resource": [
-          "arn:aws:s3:::${local.logging_bucket}/AWSWAFSecurityAutomations-waf_log_out.json",
-          "arn:aws:s3:::${local.logging_bucket}/AWSWAFSecurityAutomations-waf_log_conf.json",
-          "arn:aws:s3:::${local.logging_bucket}/AWSWAFSecurityAutomations-app_log_out.json",
-          "arn:aws:s3:::${local.logging_bucket}/AWSWAFSecurityAutomations-app_log_conf.json"
+          "arn:aws:s3:::${local.logging_bucket}/${local.name}-waf_log_out.json",
+          "arn:aws:s3:::${local.logging_bucket}/${local.name}-waf_log_conf.json",
+          "arn:aws:s3:::${local.logging_bucket}/${local.name}-app_log_out.json",
+          "arn:aws:s3:::${local.logging_bucket}/${local.name}-app_log_conf.json"
       ],
       "Effect": "Allow"
     },
@@ -125,9 +125,9 @@ resource "aws_lambda_function" "log-parser" {
 resource "aws_lambda_permission" "log-parser" {
   statement_id  = "AllowExecutionFromS3Bucket"
   action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.log-parser.arn}"
+  function_name = "${aws_lambda_function.log-parser.function_name}"
   principal     = "s3.amazonaws.com"
-  source_arn    = "${local.logging_bucket}"
+  source_arn    = "arn:aws:s3:::${local.logging_bucket}"
 }
 
 resource "aws_s3_bucket_notification" "log-parser" {
