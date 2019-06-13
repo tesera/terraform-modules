@@ -137,7 +137,15 @@ resource "aws_s3_bucket_notification" "log-parser" {
     lambda_function_arn = "${aws_lambda_function.log-parser.arn}"
     events              = [
       "s3:ObjectCreated:*"]
-    filter_prefix       = "AWSLogs/${local.account_id}/"
+    filter_prefix       = "AWSLogs/${local.account_id}/CloudFront/*"
+    filter_suffix       = ".gz"
+  }
+
+  lambda_function {
+    lambda_function_arn = "${aws_lambda_function.log-parser.arn}"
+    events              = [
+      "s3:ObjectCreated:*"]
+    filter_prefix       = "AWSLogs/${local.account_id}/WAF/*"
     filter_suffix       = ".gz"
   }
 }
