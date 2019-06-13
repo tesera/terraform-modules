@@ -28,7 +28,7 @@ resource "aws_iam_policy" "log-parser" {
       "Effect": "Allow"
     },
     {
-      "Sid":"S3Access",
+      "Sid":"S3AccessGet",
       "Action": "s3:GetObject",
       "Resource": [
           "arn:aws:s3:::${local.logging_bucket}/*"
@@ -36,7 +36,7 @@ resource "aws_iam_policy" "log-parser" {
       "Effect": "Allow"
     },
     {
-      "Sid":"S3Access",
+      "Sid":"S3AccessPut",
       "Action": "s3:PutObject",
       "Resource": [
           "arn:aws:s3:::${local.logging_bucket}/AWSWAFSecurityAutomations-waf_log_out.json",
@@ -122,6 +122,14 @@ resource "aws_lambda_function" "log-parser" {
   }
 }
 
+resource "aws_lambda_permission" "log-parser" {
+  statement_id  = "AllowExecutionFromS3Bucket"
+  action        = "lambda:InvokeFunction"
+  function_name = "${aws_lambda_function.log-parser.arn}"
+  principal     = "s3.amazonaws.com"
+  source_arn    = "${local.logging_bucket}"
+}
+
 resource "aws_s3_bucket_notification" "log-parser" {
   bucket = "${local.logging_bucket}"
 
@@ -138,7 +146,7 @@ resource "aws_s3_bucket_notification" "log-parser" {
 resource "aws_s3_bucket_object" "app-log-parser" {
   bucket = "${local.logging_bucket}"
   key    = "/${local.name}-app_log_conf.json"
-  source = <<JSON
+  content = <<JSON
 {
     "general": {
         "errorThreshold": ${var.errorThreshold},
@@ -153,7 +161,7 @@ JSON
 resource "aws_s3_bucket_object" "waf-log-parser" {
   bucket = "${local.logging_bucket}"
   key    = "/${local.name}-waf_log_conf.json"
-  source = <<JSON
+  content = <<JSON
 {
     "general": {
         "errorThreshold": ${var.errorThreshold},

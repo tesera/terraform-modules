@@ -163,7 +163,7 @@ resource "aws_kinesis_firehose_delivery_stream" "logging" {
   s3_configuration {
     role_arn   = "${aws_iam_role.firehose.arn}"
     bucket_arn = "arn:aws:s3:::${local.logging_bucket}"
-    prefix     = "/AWSLogs/${local.account_id}/WAF/us-east-1/"
+    prefix     = "/AWSLogs/${local.account_id}/WAF/${local.region}/"
   }
 }
 
