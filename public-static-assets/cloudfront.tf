@@ -55,6 +55,8 @@ resource "aws_cloudfront_distribution" "main" {
     forwarded_values {
       query_string = true
 
+      # TODO add in headers here
+
       cookies {
         forward = "none"
       }
@@ -71,16 +73,16 @@ resource "aws_cloudfront_distribution" "main" {
     #  lambda_arn = "${local.lambda_origin_request_enabled ? aws_lambda_function.origin_request.qualified_arn : ""}"
     #}
 
-    lambda_function_association {
-      event_type = "viewer-response"
-      lambda_arn = "${local.lambda_viewer_response_enabled ? aws_lambda_function.viewer_response.qualified_arn : ""}"
-    }
+    #lambda_function_association {
+    #  event_type = "viewer-response"
+    #  lambda_arn = "${local.lambda_viewer_response_enabled ? aws_lambda_function.viewer_response.qualified_arn : ""}"
+    #}
 
     // TODO - https://stackoverflow.com/questions/46262030/single-page-application-with-lambdaedge
-    #lambda_function_association {
-    #  event_type = "origin-response"
-    #  lambda_arn = "${local.lambda_origin_response_enabled ? aws_lambda_function.origin_response.qualified_arn : ""}"
-    #}
+    lambda_function_association {
+      event_type = "origin-response"
+      lambda_arn = "${local.lambda_origin_response_enabled ? aws_lambda_function.origin_response.qualified_arn : ""}"
+    }
   }
 
   restrictions {

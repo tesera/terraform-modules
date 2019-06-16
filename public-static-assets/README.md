@@ -40,11 +40,6 @@ module "waf" {
 
 ### Module
 ```hcl-terraform
-provider "aws" {
-  profile = "app-${terraform.workspace}"
-  region  = "us-east-1"
-  alias   = "edge"
-}
 
 module "logs" {
   source = "git@github.com:willfarrell/terraform-s3-logs-module?ref=v0.3.0"
@@ -61,8 +56,7 @@ module "app" {
   aliases             = ["${var.env != "prod" ? "${var.env}-": ""}appname.example.com"]
   acm_certificate_arn = "${data.aws_acm_certificate.main.arn}"
   web_acl_id          = "${module.waf.id}"
-  lambda_viewer_response_default = true
-  lambda_viewer_response = "${file("${path.module}/viewer-response.js")}"
+  lambda_origin_response = "${file("${path.module}/viewer-response.js")}"
   logging_bucket         = "${local[terraform.workspace].name}-${terraform.workspace}-edge-logs"
   
   providers = {
