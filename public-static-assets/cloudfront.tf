@@ -53,7 +53,7 @@ resource "aws_cloudfront_distribution" "main" {
     compress = true
 
     forwarded_values {
-      query_string = true
+      query_string = false
 
       # TODO add in headers here
 

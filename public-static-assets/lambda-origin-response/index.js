@@ -35,8 +35,9 @@ const headers = {
       ' speaker \'none\'' +
       ' sync-xhr \'self\'',
     'X-Frame-Options': 'DENY',
-    'X-XSS-Protection': '1; mode=block'
-    //'X-UA-Compatible': 'ie=edge'
+    'X-XSS-Protection': '1; mode=block',
+    //'X-UA-Compatible': 'ie=edge',
+    //'Content-Encoding':'gzip'
   }
 }
 
@@ -60,7 +61,7 @@ function handler (event, context, callback) {
   const request = event.Records[0].cf.request
   const response = event.Records[0].cf.response
 
-  //console.log(JSON.stringify(request),JSON.stringify(response))
+  console.log(JSON.stringify(request),JSON.stringify(response))
 
   let responseHeaders = getHeaders('any')
 
@@ -76,13 +77,16 @@ function handler (event, context, callback) {
     Object.assign(responseHeaders, getHeaders('html'))
   }
 
+  // Compression
+  //if (response.headers['content-type'] && response.headers['content-type'][0].value.indexOf('text/html') !== -1) {
+  //  Object.assign(responseHeaders, getHeaders('html'))
+  //}
+
   Object.assign(response.headers, responseHeaders)
 
   return callback(null, response)
 }
 
 module.exports = {
-  makeHeaders,
-  headers,
   handler
 }
