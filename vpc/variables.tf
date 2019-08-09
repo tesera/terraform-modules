@@ -1,10 +1,10 @@
 variable "name" {
-  type    = "string"
+  type    = string
   default = ""
 }
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
@@ -13,7 +13,7 @@ variable "default_tags" {
 //}
 
 variable "az_count" {
-  type    = "string"
+  type    = string
   default = 2
 }
 
@@ -53,3 +53,4 @@ variable "volume_size" {
 variable "key_name" {
   default = ""
 }
+

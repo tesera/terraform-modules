@@ -1,57 +1,72 @@
 resource "aws_vpc" "main" {
-  cidr_block                       = "${local.cidr_block}"
+  cidr_block                       = local.cidr_block
   enable_dns_hostnames             = true
   assign_generated_ipv6_cidr_block = true
 
-  tags = "${merge(local.tags, map(
-    "Name", "${local.name}"
-  ))}"
+  tags = merge(
+    local.tags,
+    {
+      "Name" = local.name
+    },
+  )
 }
 
 # IPv4
 resource "aws_internet_gateway" "main" {
-  vpc_id = "${aws_vpc.main.id}"
+  vpc_id = aws_vpc.main.id
 
-  tags = "${merge(local.tags, map(
-    "Name", "${local.name}"
-  ))}"
+  tags = merge(
+    local.tags,
+    {
+      "Name" = local.name
+    },
+  )
 }
 
 # IPv6
 resource "aws_egress_only_internet_gateway" "main" {
-  vpc_id = "${aws_vpc.main.id}"
+  vpc_id = aws_vpc.main.id
 }
 
 # Override defaults
 resource "aws_default_route_table" "default" {
-  default_route_table_id = "${aws_vpc.main.default_route_table_id}"
+  default_route_table_id = aws_vpc.main.default_route_table_id
 
-  tags = "${merge(local.tags, map(
-    "Name", "${local.name}-default"
-  ))}"
+  tags = merge(
+    local.tags,
+    {
+      "Name" = "${local.name}-default"
+    },
+  )
 }
 
 resource "aws_default_network_acl" "default" {
-  default_network_acl_id = "${aws_vpc.main.default_network_acl_id}"
+  default_network_acl_id = aws_vpc.main.default_network_acl_id
 
-  tags = "${merge(local.tags, map(
-    "Name", "${local.name}-default"
-  ))}"
+  tags = merge(
+    local.tags,
+    {
+      "Name" = "${local.name}-default"
+    },
+  )
 }
 
 resource "aws_default_security_group" "default" {
-  vpc_id = "${aws_vpc.main.id}"
+  vpc_id = aws_vpc.main.id
 
-  tags = "${merge(local.tags, map(
-    "Name", "${local.name}-default"
-  ))}"
+  tags = merge(
+    local.tags,
+    {
+      "Name" = "${local.name}-default"
+    },
+  )
 }
 
 # Logs
 resource "aws_flow_log" "logs" {
-  log_destination = "${aws_cloudwatch_log_group.logs.arn}"
-  iam_role_arn    = "${aws_iam_role.logs.arn}"
-  vpc_id          = "${aws_vpc.main.id}"
+  log_destination = aws_cloudwatch_log_group.logs.arn
+  iam_role_arn    = aws_iam_role.logs.arn
+  vpc_id          = aws_vpc.main.id
   traffic_type    = "ALL"
 }
 
@@ -77,11 +92,12 @@ resource "aws_iam_role" "logs" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy" "logs" {
   name = "${local.name}-vpc-logs-policy"
-  role = "${aws_iam_role.logs.id}"
+  role = aws_iam_role.logs.id
 
   policy = <<EOF
 {
@@ -101,4 +117,6 @@ resource "aws_iam_role_policy" "logs" {
   ]
 }
 EOF
+
 }
+
