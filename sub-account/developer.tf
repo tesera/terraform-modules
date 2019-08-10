@@ -20,6 +20,7 @@ resource "aws_iam_role" "developer" {
   ]
 }
 EOF
+
 }
 
 # TODO lock down to read only?
@@ -39,9 +40,11 @@ resource "aws_iam_policy" "developer" {
   ]
 }
 POLICY
+
 }
 
 resource "aws_iam_role_policy_attachment" "developer" {
-  role       = "${aws_iam_role.developer.name}"
-  policy_arn = "${aws_iam_policy.developer.arn}"
+  role       = aws_iam_role.developer.name
+  policy_arn = aws_iam_policy.developer.arn
 }
+

@@ -20,9 +20,11 @@ resource "aws_iam_role" "administrator" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "administrator" {
-  role       = "${aws_iam_role.administrator.name}"
+  role       = aws_iam_role.administrator.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
+

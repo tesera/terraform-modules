@@ -3,7 +3,7 @@ variable "account_email" {
 }
 
 variable "sub_accounts" {
-  type = "list"
+  type = list(string)
 
   default = [
     "operations",
@@ -14,3 +14,4 @@ variable "sub_accounts" {
     "forensics",
   ]
 }
+

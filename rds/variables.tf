@@ -1,28 +1,30 @@
-variable "name" {}
+variable "name" {
+}
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
-variable "vpc_id" {}
+variable "vpc_id" {
+}
 
 variable "db_name" {
-  type    = "string"
+  type    = string
   default = ""
 }
 
 variable "username" {
-  type    = "string"
+  type    = string
   default = "admin"
 }
 
 variable "password" {
-  type = "string"
+  type = string
 }
 
 variable "private_subnet_ids" {
-  type = "list"
+  type = list(string)
 }
 
 variable "storage_type" {
@@ -74,7 +76,7 @@ variable "publicly_accessible" {
 }
 
 variable "security_group_ids" {
-  type    = "list"
+  type    = list(string)
   default = []
 }
 
@@ -141,3 +143,4 @@ variable "cluster_engine" {
 variable "iam_database_authentication_enabled" {
   default = "false"
 }
+

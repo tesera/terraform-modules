@@ -1,22 +1,22 @@
 resource "aws_waf_web_acl" "wafOwaspACL" {
   depends_on = [
-    "aws_waf_rate_based_rule.wafHTTPFloodRule",
-    "aws_waf_rule.wafSQLInjectionRule",
-    "aws_waf_rule.wafXSSRule",
-    "aws_waf_rule.wafAdminAccessRule",
-    "aws_waf_rule.wafAuthTokenRule",
-    "aws_waf_rule.wafCSRFRule",
-    "aws_waf_rule.wafPathsRule",
-    "aws_waf_rule.wafServerSideIncludeRule",
-    "aws_waf_rule.wafBlacklistRule",
-    "aws_waf_rule.wafWhitelistRule",
+    aws_waf_rate_based_rule.wafHTTPFloodRule,
+    aws_waf_rule.wafSQLInjectionRule,
+    aws_waf_rule.wafXSSRule,
+    aws_waf_rule.wafAdminAccessRule,
+    aws_waf_rule.wafAuthTokenRule,
+    aws_waf_rule.wafCSRFRule,
+    aws_waf_rule.wafPathsRule,
+    aws_waf_rule.wafServerSideIncludeRule,
+    aws_waf_rule.wafBlacklistRule,
+    aws_waf_rule.wafWhitelistRule,
   ]
 
   name        = "${local.name}wafOwaspACL"
   metric_name = "${local.name}wafOwaspACL"
 
   default_action {
-    type = "${var.defaultAction}"
+    type = var.defaultAction
   }
 
   # Max 10 Rules - https://docs.aws.amazon.com/waf/latest/developerguide/limits.html
@@ -26,18 +26,18 @@ resource "aws_waf_web_acl" "wafOwaspACL" {
     }
 
     priority = 1
-    rule_id  = "${aws_waf_rule.wafBlacklistRule.id}"
+    rule_id  = aws_waf_rule.wafBlacklistRule.id
   }
 
   // Breaks ACL :( TODO fix, manual attach
-//  rules {
-//    action {
-//      type = "BLOCK"
-//    }
-//
-//    priority = 2
-//    rule_id  = "${aws_waf_rate_based_rule.wafHTTPFloodRule.id}"
-//  }
+  //  rules {
+  //    action {
+  //      type = "BLOCK"
+  //    }
+  //
+  //    priority = 2
+  //    rule_id  = "${aws_waf_rate_based_rule.wafHTTPFloodRule.id}"
+  //  }
 
   rules {
     action {
@@ -45,7 +45,7 @@ resource "aws_waf_web_acl" "wafOwaspACL" {
     }
 
     priority = 3
-    rule_id  = "${aws_waf_rule.wafSizeRestrictionRule.id}"
+    rule_id  = aws_waf_rule.wafSizeRestrictionRule.id
   }
 
   rules {
@@ -54,7 +54,7 @@ resource "aws_waf_web_acl" "wafOwaspACL" {
     }
 
     priority = 4
-    rule_id  = "${aws_waf_rule.wafAuthTokenRule.id}"
+    rule_id  = aws_waf_rule.wafAuthTokenRule.id
   }
 
   rules {
@@ -63,7 +63,7 @@ resource "aws_waf_web_acl" "wafOwaspACL" {
     }
 
     priority = 5
-    rule_id  = "${aws_waf_rule.wafSQLInjectionRule.id}"
+    rule_id  = aws_waf_rule.wafSQLInjectionRule.id
   }
 
   rules {
@@ -72,7 +72,7 @@ resource "aws_waf_web_acl" "wafOwaspACL" {
     }
 
     priority = 6
-    rule_id  = "${aws_waf_rule.wafXSSRule.id}"
+    rule_id  = aws_waf_rule.wafXSSRule.id
   }
 
   rules {
@@ -81,7 +81,7 @@ resource "aws_waf_web_acl" "wafOwaspACL" {
     }
 
     priority = 7
-    rule_id  = "${aws_waf_rule.wafPathsRule.id}"
+    rule_id  = aws_waf_rule.wafPathsRule.id
   }
 
   rules {
@@ -90,26 +90,26 @@ resource "aws_waf_web_acl" "wafOwaspACL" {
     }
 
     priority = 8
-    rule_id  = "${aws_waf_rule.wafCSRFRule.id}"
+    rule_id  = aws_waf_rule.wafCSRFRule.id
   }
 
-//  rules {
-//    action {
-//      type = "BLOCK"
-//    }
-//
-//    priority = 9
-//    rule_id  = "${aws_waf_rule.wafServerSideIncludeRule.id}"
-//  }
+  //  rules {
+  //    action {
+  //      type = "BLOCK"
+  //    }
+  //
+  //    priority = 9
+  //    rule_id  = "${aws_waf_rule.wafServerSideIncludeRule.id}"
+  //  }
 
-//  rules {
-//    action {
-//      type = "BLOCK"
-//    }
-//
-//    priority = 10
-//    rule_id  = "${aws_waf_rule.wafAdminAccessRule.id}"
-//  }
+  //  rules {
+  //    action {
+  //      type = "BLOCK"
+  //    }
+  //
+  //    priority = 10
+  //    rule_id  = "${aws_waf_rule.wafAdminAccessRule.id}"
+  //  }
 
   rules {
     action {
@@ -117,40 +117,38 @@ resource "aws_waf_web_acl" "wafOwaspACL" {
     }
 
     priority = 10
-    rule_id  = "${aws_waf_rule.wafWhitelistRule.id}"
+    rule_id  = aws_waf_rule.wafWhitelistRule.id
   }
 
-//  rules {
-//    action {
-//      type = "BLOCK"
-//    }
-//
-//    priority = 920
-//    rule_id  = "${aws_waf_rule.wafScannersProbesRule.id}"
-//  }
+  //  rules {
+  //    action {
+  //      type = "BLOCK"
+  //    }
+  //
+  //    priority = 920
+  //    rule_id  = "${aws_waf_rule.wafScannersProbesRule.id}"
+  //  }
 
-//  rules {
-//    action {
-//      type = "BLOCK"
-//    }
-//
-//    priority = 930
-//    rule_id  = "${aws_waf_rule.wafReputationListRule.id}"
-//  }
+  //  rules {
+  //    action {
+  //      type = "BLOCK"
+  //    }
+  //
+  //    priority = 930
+  //    rule_id  = "${aws_waf_rule.wafReputationListRule.id}"
+  //  }
 
-//  rules {
-//    action {
-//      type = "BLOCK"
-//    }
-//
-//    priority = 940
-//    rule_id  = "${aws_waf_rule.wafBadBotRule.id}"
-//  }
-
-
+  //  rules {
+  //    action {
+  //      type = "BLOCK"
+  //    }
+  //
+  //    priority = 940
+  //    rule_id  = "${aws_waf_rule.wafBadBotRule.id}"
+  //  }
 
   logging_configuration {
-    log_destination = "${aws_kinesis_firehose_delivery_stream.logging.arn}"
+    log_destination = aws_kinesis_firehose_delivery_stream.logging.arn
     // TODO redacte `password`, `mfa/otp`, tokens
     //redacted_fields = {}
   }
@@ -161,7 +159,7 @@ resource "aws_kinesis_firehose_delivery_stream" "logging" {
   destination = "s3"
 
   s3_configuration {
-    role_arn   = "${aws_iam_role.firehose.arn}"
+    role_arn   = aws_iam_role.firehose.arn
     bucket_arn = "arn:aws:s3:::${local.logging_bucket}"
     prefix     = "/AWSLogs/${local.account_id}/WAF/${local.region}/"
   }
@@ -185,6 +183,7 @@ resource "aws_iam_role" "firehose" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_policy" "firehose" {
@@ -233,9 +232,11 @@ resource "aws_iam_policy" "firehose" {
   ]
 }
 POLICY
+
 }
 
 resource "aws_iam_role_policy_attachment" "firehose" {
-  role       = "${aws_iam_role.firehose.name}"
-  policy_arn = "${aws_iam_policy.firehose.arn}"
+  role       = aws_iam_role.firehose.name
+  policy_arn = aws_iam_policy.firehose.arn
 }
+

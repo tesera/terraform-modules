@@ -1,21 +1,22 @@
-variable "name" {}
+variable "name" {
+}
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
 variable "vpc_id" {
-  type = "string"
+  type = string
 }
 
 variable "private_subnet_ids" {
-  type    = "list"
+  type    = list(string)
   default = []
 }
 
 variable "waf_acl_id" {
-  type    = "string"
+  type    = string
   default = ""
 }
 
@@ -28,29 +29,30 @@ variable "https_only" {
 # ELBSecurityPolicy-TLS-1-1-2017-01 => Most accessible, >=TLS 1.1
 # ELBSecurityPolicy-TLS-1-2-2017-01 => Most secure, >=TLS 1.2, !SHA
 variable "ssl_policy" {
-  type    = "string"
+  type    = string
   default = "ELBSecurityPolicy-TLS-1-1-2017-01"
 }
 
 variable "certificate_arn" {
-  type = "string"
+  type = string
 }
 
 # ECS
 variable "port" {
-  type    = "string"
+  type    = string
   default = 80
 }
 
 variable "autoscaling_group_name" {
-  type = "string"
+  type = string
 }
 
 variable "security_group_id" {
-  type = "string"
+  type = string
 }
 
 variable "logging_bucket" {
-  type = "string"
+  type    = string
   default = ""
 }
+

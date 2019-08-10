@@ -1,15 +1,13 @@
 # OWASP A1-2017
 
 resource "aws_waf_rule" "wafSQLInjectionRule" {
-  depends_on = [
-    "aws_waf_sql_injection_match_set.wafSQLInjectionSet",
-  ]
+  depends_on = [aws_waf_sql_injection_match_set.wafSQLInjectionSet]
 
   name        = "${local.name}wafSQLInjectionRule"
   metric_name = "${local.name}wafSQLInjectionRule"
 
   predicates {
-    data_id = "${aws_waf_sql_injection_match_set.wafSQLInjectionSet.id}"
+    data_id = aws_waf_sql_injection_match_set.wafSQLInjectionSet.id
     negated = false
     type    = "SqlInjectionMatch"
   }
@@ -102,3 +100,4 @@ resource "aws_waf_sql_injection_match_set" "wafSQLInjectionSet" {
     }
   }
 }
+

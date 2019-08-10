@@ -1,14 +1,16 @@
-variable "name" {}
+variable "name" {
+}
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
-variable "vpc_id" {}
+variable "vpc_id" {
+}
 
 variable "private_subnet_ids" {
-  type = "list"
+  type = list(string)
 }
 
 # EC2
@@ -41,15 +43,16 @@ variable "desired_capacity" {
 }
 
 variable "efs_ids" {
-  type    = "list"
+  type    = list(string)
   default = []
 }
 
 variable "efs_security_group_ids" {
-  type    = "list"
+  type    = list(string)
   default = []
 }
 
 variable "key_name" {
   default = ""
 }
+

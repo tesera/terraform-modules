@@ -1,19 +1,23 @@
-variable "name" {}
+variable "name" {
+}
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
-variable "vpc_id" {}
-variable "network_acl_id" {}
+variable "vpc_id" {
+}
+
+variable "network_acl_id" {
+}
 
 variable "acl_rule_number" {
   default = 998
 }
 
 variable "public_subnet_ids" {
-  type = "list"
+  type = list(string)
 }
 
 variable "image_id" {
@@ -48,8 +52,10 @@ variable "proxy_name" {
   default = "proxy"
 }
 
-variable "proxy_endpoint" {}
+variable "proxy_endpoint" {
+}
 
 variable "proxy_port" {
   default = "443"
 }
+

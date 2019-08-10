@@ -1,12 +1,13 @@
-variable "name" {}
+variable "name" {
+}
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
 variable "subnet_ids" {
-  type = "list"
+  type = list(string)
 }
 
 variable "kms_key_id" {
@@ -24,3 +25,4 @@ variable "provisioned_throughput_in_mibps" {
 variable "throughput_mode" {
   default = "bursting"
 }
+

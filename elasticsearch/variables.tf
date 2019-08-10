@@ -1,7 +1,8 @@
-variable "name" {}
+variable "name" {
+}
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
@@ -15,16 +16,16 @@ variable "engine_version" {
 }
 
 variable "vpc_id" {
-  type = "string"
+  type = string
 }
 
 variable "security_group_ids" {
-  type    = "list"
+  type    = list(string)
   default = []
 }
 
 variable "private_subnet_ids" {
-  type = "list"
+  type = list(string)
 }
 
 variable "type" {
@@ -74,12 +75,12 @@ variable "ebs_iops" {
 }
 
 variable "log_publishing_options" {
-  type    = "list"
+  type    = list(string)
   default = []
 }
 
 variable "cognito_options" {
-  type    = "list"
+  type    = list(string)
   default = []
 }
 
@@ -98,3 +99,4 @@ variable "ssh_username" {
 variable "bastion_ip" {
   default = ""
 }
+

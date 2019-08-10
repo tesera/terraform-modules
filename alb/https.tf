@@ -1,14 +1,14 @@
 # HTTPS
 resource "aws_lb_listener" "https" {
-  load_balancer_arn = "${aws_lb.main.arn}"
+  load_balancer_arn = aws_lb.main.arn
   protocol          = "HTTPS"
   port              = "443"
 
-  ssl_policy      = "${var.ssl_policy}"
-  certificate_arn = "${var.certificate_arn}"
+  ssl_policy      = var.ssl_policy
+  certificate_arn = var.certificate_arn
 
   default_action {
-    target_group_arn = "${aws_lb_target_group.main.arn}"
+    target_group_arn = aws_lb_target_group.main.arn
     type             = "forward"
   }
 }
@@ -20,7 +20,7 @@ resource "aws_lb_listener" "https" {
 //}
 
 resource "aws_security_group_rule" "https" {
-  security_group_id = "${aws_security_group.main.id}"
+  security_group_id = aws_security_group.main.id
 
   cidr_blocks = [
     "0.0.0.0/0",
@@ -31,3 +31,4 @@ resource "aws_security_group_rule" "https" {
   to_port   = "443"
   from_port = "443"
 }
+

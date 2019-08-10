@@ -1,6 +1,6 @@
 resource "aws_iam_account_alias" "alias" {
-  count         = "${var.account_alias == "" ? 0 : 1}"
-  account_alias = "${var.account_alias}"
+  count         = var.account_alias == "" ? 0 : 1
+  account_alias = var.account_alias
 }
 
 # Entropy FTW - https://xkcd.com/936/
@@ -15,8 +15,6 @@ resource "aws_iam_account_alias" "alias" {
   require_numbers                = false
   require_symbols                = false
 }*/
-
-
 # PGP
 //resource "local_file" "pubkey" {
 //  content  = ""
@@ -34,4 +32,3 @@ resource "aws_iam_account_alias" "alias" {
 //    command = "gpg --export ${local.account_id} | base64 > ${path.module}/terraform.pub"
 //  }
 //}
-

@@ -8,7 +8,7 @@ data "aws_iam_policy_document" "log-parser" {
       type = "Service"
 
       identifiers = [
-        "lambda.amazonaws.com"
+        "lambda.amazonaws.com",
       ]
     }
   }
@@ -70,17 +70,17 @@ resource "aws_iam_policy" "log-parser" {
   ]
 }
 POLICY
-}
 
+}
 
 resource "aws_iam_role" "log-parser" {
   name               = "${local.name}-waf-log-parser"
-  assume_role_policy = "${data.aws_iam_policy_document.log-parser.json}"
+  assume_role_policy = data.aws_iam_policy_document.log-parser.json
 }
 
 resource "aws_iam_role_policy_attachment" "log-parser" {
-  role       = "${aws_iam_role.log-parser.name}"
-  policy_arn = "${aws_iam_policy.log-parser.arn}"
+  role       = aws_iam_role.log-parser.name
+  policy_arn = aws_iam_policy.log-parser.arn
 }
 
 data "archive_file" "log-parser" {
@@ -89,35 +89,35 @@ data "archive_file" "log-parser" {
 
   source {
     filename = "index.py"
-    content  = "${file("${path.module}/lambda/log-parser/index.py") }"
+    content  = file("${path.module}/lambda/log-parser/index.py")
   }
 }
 
 resource "aws_lambda_function" "log-parser" {
   function_name = "${local.name}-waf-log-parser"
-  filename      = "${data.archive_file.log-parser.output_path}"
+  filename      = data.archive_file.log-parser.output_path
 
-  source_code_hash = "${data.archive_file.log-parser.output_base64sha256}"
-  role             = "${aws_iam_role.log-parser.arn}"
+  source_code_hash = data.archive_file.log-parser.output_base64sha256
+  role             = aws_iam_role.log-parser.arn
   handler          = "index.lambda_handler"
   runtime          = "python3.7"
   memory_size      = 512
   timeout          = 300
   publish          = true
-  environment      = {
+  environment {
     variables = {
-      STACK_NAME                                     = "${local.name}"
-      APP_ACCESS_LOG_BUCKET                          = "${local.logging_bucket}"
-      WAF_ACCESS_LOG_BUCKET                          = "${local.logging_bucket}"
-      IP_SET_ID_HTTP_FLOOD                           = "${aws_waf_ipset.http-flood.id}"
-      IP_SET_ID_SCANNERS_PROBES                      = "${aws_waf_ipset.scanners-probes.id}"
+      STACK_NAME                                     = local.name
+      APP_ACCESS_LOG_BUCKET                          = local.logging_bucket
+      WAF_ACCESS_LOG_BUCKET                          = local.logging_bucket
+      IP_SET_ID_HTTP_FLOOD                           = aws_waf_ipset.http-flood.id
+      IP_SET_ID_SCANNERS_PROBES                      = aws_waf_ipset.scanners-probes.id
       LIMIT_IP_ADDRESS_RANGES_PER_IP_MATCH_CONDITION = 10000
       LOG_LEVEL                                      = "INFO"
       LOG_TYPE                                       = "cloudfront"
       # waf, alb, cloudfront
-      MAX_AGE_TO_UPDATE                              = 30
-      METRIC_NAME_PREFIX                             = "${local.name}-waf"
-      REGION                                         = "${local.region}"
+      MAX_AGE_TO_UPDATE  = 30
+      METRIC_NAME_PREFIX = "${local.name}-waf"
+      REGION             = local.region
     }
   }
 }
@@ -125,43 +125,46 @@ resource "aws_lambda_function" "log-parser" {
 resource "aws_lambda_permission" "log-parser" {
   statement_id  = "AllowExecutionFromS3Bucket"
   action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.log-parser.function_name}"
+  function_name = aws_lambda_function.log-parser.function_name
   principal     = "s3.amazonaws.com"
   source_arn    = "arn:aws:s3:::${local.logging_bucket}"
 }
 
 resource "aws_s3_bucket_notification" "log-parser" {
-  bucket = "${local.logging_bucket}"
+  bucket = local.logging_bucket
 
   lambda_function {
-    lambda_function_arn = "${aws_lambda_function.log-parser.arn}"
-    events              = [
-      "s3:ObjectCreated:*"]
-    filter_prefix       = "AWSLogs/${local.account_id}/CloudFront/*"
-    filter_suffix       = ".gz"
+    lambda_function_arn = aws_lambda_function.log-parser.arn
+    events = [
+      "s3:ObjectCreated:*",
+    ]
+    filter_prefix = "AWSLogs/${local.account_id}/CloudFront/*"
+    filter_suffix = ".gz"
   }
 
   lambda_function {
-    lambda_function_arn = "${aws_lambda_function.log-parser.arn}"
-    events              = [
-      "s3:ObjectCreated:*"]
-    filter_prefix       = "AWSLogs/${local.account_id}/ALB/*"
-    filter_suffix       = ".gz"
+    lambda_function_arn = aws_lambda_function.log-parser.arn
+    events = [
+      "s3:ObjectCreated:*",
+    ]
+    filter_prefix = "AWSLogs/${local.account_id}/ALB/*"
+    filter_suffix = ".gz"
   }
 
   lambda_function {
-    lambda_function_arn = "${aws_lambda_function.log-parser.arn}"
-    events              = [
-      "s3:ObjectCreated:*"]
-    filter_prefix       = "AWSLogs/${local.account_id}/WAF/*"
-    filter_suffix       = ".gz"
+    lambda_function_arn = aws_lambda_function.log-parser.arn
+    events = [
+      "s3:ObjectCreated:*",
+    ]
+    filter_prefix = "AWSLogs/${local.account_id}/WAF/*"
+    filter_suffix = ".gz"
   }
 }
 
 # TODO don't update file if already exists
 resource "aws_s3_bucket_object" "app-log-parser" {
-  bucket = "${local.logging_bucket}"
-  key    = "/${local.name}-app_log_conf.json"
+  bucket  = local.logging_bucket
+  key     = "/${local.name}-app_log_conf.json"
   content = <<JSON
 {
     "general": {
@@ -172,11 +175,12 @@ resource "aws_s3_bucket_object" "app-log-parser" {
     "uriList": {}
 }
 JSON
+
 }
 
 resource "aws_s3_bucket_object" "waf-log-parser" {
-  bucket = "${local.logging_bucket}"
-  key    = "/${local.name}-waf_log_conf.json"
+  bucket  = local.logging_bucket
+  key     = "/${local.name}-waf_log_conf.json"
   content = <<JSON
 {
     "general": {
@@ -187,5 +191,6 @@ resource "aws_s3_bucket_object" "waf-log-parser" {
     "uriList": {}
 }
 JSON
+
 }
 

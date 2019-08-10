@@ -1,14 +1,16 @@
-variable "name" {}
+variable "name" {
+}
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
-variable "vpc_id" {}
+variable "vpc_id" {
+}
 
 variable "private_subnet_ids" {
-  type = "list"
+  type = list(string)
 }
 
 # EC2
@@ -57,3 +59,4 @@ variable "bastion_security_group_id" {
 variable "key_name" {
   default = ""
 }
+

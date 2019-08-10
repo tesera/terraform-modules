@@ -8,16 +8,16 @@ resource "aws_cloudwatch_metric_alarm" "rds-cpu-alarm" {
   namespace         = "AWS/RDS"
   metric_name       = "CPUUtilization"
 
-  dimensions {
-    DBInstanceIdentifier = "${local.identifier}"
+  dimensions = {
+    DBInstanceIdentifier = local.identifier
   }
 
   statistic           = "Average"
-  evaluation_periods  = "${var.cpu_alarm_evaluation_periods}"
+  evaluation_periods  = var.cpu_alarm_evaluation_periods
   period              = 300
-  threshold           = "${var.cpu_alarm_threshold}"
+  threshold           = var.cpu_alarm_threshold
   comparison_operator = "GreaterThanThreshold"
-  alarm_actions       = ["${aws_sns_topic.rds-sns-topic.arn}"]
+  alarm_actions       = [aws_sns_topic.rds-sns-topic.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "rds-free-space" {
@@ -26,16 +26,16 @@ resource "aws_cloudwatch_metric_alarm" "rds-free-space" {
   namespace         = "AWS/RDS"
   metric_name       = "FreeStorageSpace"
 
-  dimensions {
-    DBInstanceIdentifier = "${local.identifier}"
+  dimensions = {
+    DBInstanceIdentifier = local.identifier
   }
 
   statistic           = "Average"
   evaluation_periods  = 1
   period              = 300
-  threshold           = "${var.free_space_alarm_threshold}"
+  threshold           = var.free_space_alarm_threshold
   comparison_operator = "LessThanThreshold"
-  alarm_actions       = ["${aws_sns_topic.rds-sns-topic.arn}"]
+  alarm_actions       = [aws_sns_topic.rds-sns-topic.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "rds-swap-usage" {
@@ -44,16 +44,16 @@ resource "aws_cloudwatch_metric_alarm" "rds-swap-usage" {
   namespace         = "AWS/RDS"
   metric_name       = "SwapUsage"
 
-  dimensions {
-    DBInstanceIdentifier = "${local.identifier}"
+  dimensions = {
+    DBInstanceIdentifier = local.identifier
   }
 
   statistic           = "Average"
   evaluation_periods  = 1
   period              = 300
-  threshold           = "${var.swap_alarm_threshold}"
+  threshold           = var.swap_alarm_threshold
   comparison_operator = "GreaterThanThreshold"
-  alarm_actions       = ["${aws_sns_topic.rds-sns-topic.arn}"]
+  alarm_actions       = [aws_sns_topic.rds-sns-topic.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "rds-read-latency" {
@@ -62,16 +62,16 @@ resource "aws_cloudwatch_metric_alarm" "rds-read-latency" {
   namespace         = "AWS/RDS"
   metric_name       = "ReadLatency"
 
-  dimensions {
-    DBInstanceIdentifier = "${local.identifier}"
+  dimensions = {
+    DBInstanceIdentifier = local.identifier
   }
 
   statistic           = "Average"
   evaluation_periods  = 1
   period              = 300
-  threshold           = "${var.read_latency_alarm_threshold}"
+  threshold           = var.read_latency_alarm_threshold
   comparison_operator = "GreaterThanThreshold"
-  alarm_actions       = ["${aws_sns_topic.rds-sns-topic.arn}"]
+  alarm_actions       = [aws_sns_topic.rds-sns-topic.arn]
 }
 
 resource "aws_cloudwatch_metric_alarm" "rds-write-latency" {
@@ -80,14 +80,15 @@ resource "aws_cloudwatch_metric_alarm" "rds-write-latency" {
   namespace         = "AWS/RDS"
   metric_name       = "WriteLatency"
 
-  dimensions {
-    DBInstanceIdentifier = "${local.identifier}"
+  dimensions = {
+    DBInstanceIdentifier = local.identifier
   }
 
   statistic           = "Average"
   evaluation_periods  = 1
   period              = 300
-  threshold           = "${var.write_latency_alarm_threshold}"
+  threshold           = var.write_latency_alarm_threshold
   comparison_operator = "GreaterThanThreshold"
-  alarm_actions       = ["${aws_sns_topic.rds-sns-topic.arn}"]
+  alarm_actions       = [aws_sns_topic.rds-sns-topic.arn]
 }
+

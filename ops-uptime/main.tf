@@ -1,5 +1,5 @@
 resource "aws_sns_topic" "main" {
-  name     = "${local.name}-alarm"
+  name = "${local.name}-alarm"
 
   provisioner "local-exec" {
     command = "aws sns subscribe --profile ${local.profile} --topic-arn ${self.arn} --region ${local.region} --protocol email --notification-endpoint ${var.sns_subscribe_primary}"
@@ -7,12 +7,12 @@ resource "aws_sns_topic" "main" {
 }
 
 resource "aws_route53_health_check" "main" {
-  fqdn              = "${var.fqdn}"
+  fqdn              = var.fqdn
   port              = 443
   type              = "HTTPS"
-  resource_path     = "${var.resource_path}"
-  failure_threshold = "${failure_threshold}"
-  request_interval  = "${request_interval}"
+  resource_path     = var.resource_path
+  failure_threshold = failure_threshold
+  request_interval  = request_interval
   measure_latency   = true
 
   regions = [
@@ -21,9 +21,12 @@ resource "aws_route53_health_check" "main" {
     "us-west-2",
   ]
 
-  tags = "${merge(local.tags, map(
-    "Name", "${local.name}-health-check"
-  ))}"
+  tags = merge(
+    local.tags,
+    {
+      "Name" = "${local.name}-health-check"
+    },
+  )
 }
 
 resource "aws_cloudwatch_metric_alarm" "main" {
@@ -38,9 +41,10 @@ resource "aws_cloudwatch_metric_alarm" "main" {
   unit                = "None"
 
   dimensions = {
-    HealthCheckId = "${aws_route53_health_check.main.id}"
+    HealthCheckId = aws_route53_health_check.main.id
   }
 
-  alarm_actions = ["${aws_sns_topic.main.arn}"]
-  ok_actions    = ["${aws_sns_topic.main.arn}"]
+  alarm_actions = [aws_sns_topic.main.arn]
+  ok_actions    = [aws_sns_topic.main.arn]
 }
+

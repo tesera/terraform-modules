@@ -1,7 +1,8 @@
-variable "name" {}
+variable "name" {
+}
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
@@ -21,10 +22,11 @@ variable "parameter_group_name" {
   default = ""
 }
 
-variable "vpc_id" {}
+variable "vpc_id" {
+}
 
 variable "private_subnet_ids" {
-  type = "list"
+  type = list(string)
 }
 
 variable "instance_type" {
@@ -56,6 +58,7 @@ variable "type" {
 }
 
 variable "security_group_ids" {
-  type    = "list"
+  type    = list(string)
   default = []
 }
+

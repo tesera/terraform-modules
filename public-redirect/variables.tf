@@ -1,21 +1,24 @@
-variable "name" {}
+variable "name" {
+}
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
 variable "aliases" {
-  type = "list"
+  type = list(string)
 }
 
-variable "redirect" {}
+variable "redirect" {
+}
 
 variable "acm_certificate_arn" {
-  "type" = "string"
+  type = string
 }
 
 variable "logging_bucket" {
-  type = "string"
+  type    = string
   default = ""
 }
+

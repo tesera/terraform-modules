@@ -1,20 +1,20 @@
 resource "aws_wafregional_web_acl" "wafrOwaspACL" {
   depends_on = [
-    "aws_wafregional_rule.wafgAdminAccessRule",
-    "aws_wafregional_rule.wafgAuthTokenRule",
-    "aws_wafregional_rule.wafgCSRFRule",
-    "aws_wafregional_rule.wafgPathsRule",
-    "aws_wafregional_rule.wafgServerSideIncludeRule",
-    "aws_wafregional_rule.wafrXSSRule",
-    "aws_wafregional_rule.wafgIpBlackListRule",
-    "aws_wafregional_rule.wafgIpWhiteListRule",
+    aws_wafregional_rule.wafgAdminAccessRule,
+    aws_wafregional_rule.wafgAuthTokenRule,
+    aws_wafregional_rule.wafgCSRFRule,
+    aws_wafregional_rule.wafgPathsRule,
+    aws_wafregional_rule.wafgServerSideIncludeRule,
+    aws_wafregional_rule.wafrXSSRule,
+    aws_wafregional_rule.wafgIpBlackListRule,
+    aws_wafregional_rule.wafgIpWhiteListRule,
   ]
 
   name        = "${local.name}wafrOwaspACL"
   metric_name = "${local.name}wafrOwaspACL"
 
   default_action {
-    type = "${var.defaultAction}"
+    type = var.defaultAction
   }
 
   rule {
@@ -23,7 +23,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     }
 
     priority = 10
-    rule_id  = "${aws_wafregional_rule.wafrSizeRestrictionRule.id}"
+    rule_id  = aws_wafregional_rule.wafrSizeRestrictionRule.id
   }
 
   rule {
@@ -32,7 +32,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     }
 
     priority = 20
-    rule_id  = "${aws_wafregional_rule.wafgIpBlackListRule.id}"
+    rule_id  = aws_wafregional_rule.wafgIpBlackListRule.id
   }
 
   rule {
@@ -41,7 +41,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     }
 
     priority = 30
-    rule_id  = "${aws_wafregional_rule.wafgAuthTokenRule.id}"
+    rule_id  = aws_wafregional_rule.wafgAuthTokenRule.id
   }
 
   rule {
@@ -50,7 +50,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     }
 
     priority = 40
-    rule_id  = "${aws_wafregional_rule.wafgSQLiRule.id}"
+    rule_id  = aws_wafregional_rule.wafgSQLiRule.id
   }
 
   rule {
@@ -59,7 +59,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     }
 
     priority = 50
-    rule_id  = "${aws_wafregional_rule.wafrXSSRule.id}"
+    rule_id  = aws_wafregional_rule.wafrXSSRule.id
   }
 
   rule {
@@ -68,7 +68,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     }
 
     priority = 60
-    rule_id  = "${aws_wafregional_rule.wafgPathsRule.id}"
+    rule_id  = aws_wafregional_rule.wafgPathsRule.id
   }
 
   rule {
@@ -77,7 +77,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     }
 
     priority = 80
-    rule_id  = "${aws_wafregional_rule.wafgCSRFRule.id}"
+    rule_id  = aws_wafregional_rule.wafgCSRFRule.id
   }
 
   rule {
@@ -86,7 +86,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     }
 
     priority = 90
-    rule_id  = "${aws_wafregional_rule.wafgServerSideIncludeRule.id}"
+    rule_id  = aws_wafregional_rule.wafgServerSideIncludeRule.id
   }
 
   rule {
@@ -95,7 +95,7 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     }
 
     priority = 100
-    rule_id  = "${aws_wafregional_rule.wafgAdminAccessRule.id}"
+    rule_id  = aws_wafregional_rule.wafgAdminAccessRule.id
   }
 
   rule {
@@ -104,26 +104,29 @@ resource "aws_wafregional_web_acl" "wafrOwaspACL" {
     }
 
     priority = 999
-    rule_id  = "${aws_wafregional_rule.wafgIpWhiteListRule.id}"
+    rule_id  = aws_wafregional_rule.wafgIpWhiteListRule.id
   }
 
   logging_configuration {
-    log_destination = "${aws_kinesis_firehose_delivery_stream.logging.arn}"
+    log_destination = aws_kinesis_firehose_delivery_stream.logging.arn
     // TODO redacte `password`, `mfa/otp`, tokens
     //redacted_fields = {}
   }
 }
 
+data "aws_caller_identity" "current" {
+}
 
-data "aws_caller_identity" "current" {}
-data "aws_region" "current" {}
+data "aws_region" "current" {
+}
+
 resource "aws_kinesis_firehose_delivery_stream" "logging" {
   name        = "${local.name}-waf-stream"
   destination = "s3"
 
   s3_configuration {
-    role_arn   = "${aws_iam_role.logging.arn}"
-    bucket_arn = "${var.logging_bucket_arn}"
+    role_arn   = aws_iam_role.logging.arn
+    bucket_arn = var.logging_bucket_arn
     prefix     = "/AWSLogs/${data.aws_caller_identity.current.account_id}/WAF/${data.aws_region.current.name}/"
   }
 }
@@ -146,4 +149,6 @@ resource "aws_iam_role" "logging" {
   ]
 }
 EOF
+
 }
+

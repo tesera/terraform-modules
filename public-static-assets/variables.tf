@@ -1,27 +1,27 @@
 // Suggested:
 // ${env}-${subdomain}-${domain}-${tld}
 variable "name" {
-  type        = "string"
+  type        = string
   description = "AWS S3 Bucket. {env}-{name}"
 }
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
 variable "aliases" {
-  type        = "list"
+  type        = list(string)
   description = "Cloudfront Aliases"
 }
 
 variable "acm_certificate_arn" {
-  "type" = "string"
+  type    = string
   default = ""
 }
 
 variable "web_acl_id" {
-  type        = "string"
+  type        = string
   default     = ""
   description = "WAF ACL ID"
 }
@@ -32,7 +32,7 @@ variable "lambda_viewer_request_default" {
 }
 
 variable "lambda_viewer_request" {
-  type    = "string"
+  type    = string
   default = ""
 }
 
@@ -41,7 +41,7 @@ variable "lambda_origin_request_default" {
 }
 
 variable "lambda_origin_request" {
-  type    = "string"
+  type    = string
   default = ""
 }
 
@@ -50,7 +50,7 @@ variable "lambda_viewer_response_default" {
 }
 
 variable "lambda_viewer_response" {
-  type    = "string"
+  type    = string
   default = ""
 }
 
@@ -59,12 +59,12 @@ variable "lambda_origin_response_default" {
 }
 
 variable "lambda_origin_response" {
-  type    = "string"
+  type    = string
   default = ""
 }
-
 
 variable "logging_bucket" {
-  type = "string"
+  type    = string
   default = ""
 }
+

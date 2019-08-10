@@ -1,5 +1,5 @@
 variable "sub_accounts" {
-  type = "map"
+  type = map(string)
 
   default = {
     operations  = ""
@@ -9,3 +9,4 @@ variable "sub_accounts" {
     development = ""
   }
 }
+

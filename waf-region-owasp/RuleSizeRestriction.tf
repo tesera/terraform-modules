@@ -1,13 +1,11 @@
 resource "aws_wafregional_rule" "wafrSizeRestrictionRule" {
-  depends_on = [
-    "aws_wafregional_size_constraint_set.wafgSizeRestrictionSet",
-  ]
+  depends_on = [aws_wafregional_size_constraint_set.wafgSizeRestrictionSet]
 
   name        = "${local.name}wafrSizeRestrictionRule"
   metric_name = "${local.name}wafrSizeRestrictionRule"
 
   predicate {
-    data_id = "${aws_wafregional_size_constraint_set.wafgSizeRestrictionSet.id}"
+    data_id = aws_wafregional_size_constraint_set.wafgSizeRestrictionSet.id
     negated = false
     type    = "SizeConstraint"
   }
@@ -19,7 +17,7 @@ resource "aws_wafregional_size_constraint_set" "wafgSizeRestrictionSet" {
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "GT"
-    size                = "${var.maxExpectedURISize}"
+    size                = var.maxExpectedURISize
 
     field_to_match {
       type = "URI"
@@ -29,7 +27,7 @@ resource "aws_wafregional_size_constraint_set" "wafgSizeRestrictionSet" {
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "GT"
-    size                = "${var.maxExpectedQueryStringSize}"
+    size                = var.maxExpectedQueryStringSize
 
     field_to_match {
       type = "QUERY_STRING"
@@ -39,7 +37,7 @@ resource "aws_wafregional_size_constraint_set" "wafgSizeRestrictionSet" {
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "GT"
-    size                = "${var.maxExpectedBodySize}"
+    size                = var.maxExpectedBodySize
 
     field_to_match {
       type = "BODY"
@@ -49,7 +47,7 @@ resource "aws_wafregional_size_constraint_set" "wafgSizeRestrictionSet" {
   size_constraints {
     text_transformation = "NONE"
     comparison_operator = "GT"
-    size                = "${var.maxExpectedCookieSize}"
+    size                = var.maxExpectedCookieSize
 
     field_to_match {
       type = "HEADER"
@@ -57,3 +55,4 @@ resource "aws_wafregional_size_constraint_set" "wafgSizeRestrictionSet" {
     }
   }
 }
+

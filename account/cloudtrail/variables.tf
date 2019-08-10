@@ -1,11 +1,13 @@
-variable "name" {}
+variable "name" {
+}
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
 variable "logging_bucket" {
-  type = "string"
+  type    = string
   default = ""
 }
+

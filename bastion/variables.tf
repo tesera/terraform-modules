@@ -1,19 +1,23 @@
-variable "name" {}
+variable "name" {
+}
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
-variable "vpc_id" {}
-variable "network_acl_id" {}
+variable "vpc_id" {
+}
+
+variable "network_acl_id" {
+}
 
 variable "acl_rule_number" {
   default = 22
 }
 
 variable "public_subnet_ids" {
-  type = "list"
+  type = list(string)
 }
 
 variable "account_id" {
@@ -44,4 +48,6 @@ variable "iam_sudo_groups" {
   default = ""
 }
 
-variable "assume_role_arn" {}
+variable "assume_role_arn" {
+}
+

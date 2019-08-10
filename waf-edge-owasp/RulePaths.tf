@@ -1,13 +1,11 @@
 resource "aws_waf_rule" "wafPathsRule" {
-  depends_on = [
-    "aws_waf_byte_match_set.wafPathsStringSet",
-  ]
+  depends_on = [aws_waf_byte_match_set.wafPathsStringSet]
 
   name        = "${local.name}wafgPathsRule"
   metric_name = "${local.name}wafgPathsRule"
 
   predicates {
-    data_id = "${aws_waf_byte_match_set.wafPathsStringSet.id}"
+    data_id = aws_waf_byte_match_set.wafPathsStringSet.id
     negated = false
     type    = "ByteMatch"
   }
@@ -96,3 +94,4 @@ resource "aws_waf_byte_match_set" "wafPathsStringSet" {
     }
   }
 }
+

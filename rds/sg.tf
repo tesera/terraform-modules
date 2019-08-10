@@ -1,6 +1,6 @@
 resource "aws_security_group" "main" {
   name   = "${local.identifier}-security-group"
-  vpc_id = "${var.vpc_id}"
+  vpc_id = var.vpc_id
 
   # Allow all outbound traffic.
   egress {
@@ -10,18 +10,22 @@ resource "aws_security_group" "main" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = "${merge(local.tags, map(
-    "Name", "${local.identifier}",
-    "Description", "SecurityGroup for ${local.identifier}"
-  ))}"
+  tags = merge(
+    local.tags,
+    {
+      "Name"        = local.identifier
+      "Description" = "SecurityGroup for ${local.identifier}"
+    },
+  )
 }
 
 resource "aws_security_group_rule" "rds_access" {
-  count                    = "${length(var.security_group_ids)}"
-  security_group_id        = "${aws_security_group.main.id}"
+  count                    = length(var.security_group_ids)
+  security_group_id        = aws_security_group.main.id
   type                     = "ingress"
   from_port                = "5432"
   to_port                  = "5432"
   protocol                 = "tcp"
-  source_security_group_id = "${var.security_group_ids[count.index]}"
+  source_security_group_id = var.security_group_ids[count.index]
 }
+

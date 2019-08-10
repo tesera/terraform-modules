@@ -1,24 +1,24 @@
 variable "name" {
-  type        = "string"
+  type        = string
   description = "AWS S3 Bucket. {env}-{name}"
 }
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
 variable "aliases" {
-  type        = "list"
+  type        = list(string)
   description = "Cloudfront Aliases"
 }
 
 variable "acm_certificate_arn" {
-  "type" = "string"
+  type = string
 }
 
 variable "web_acl_id" {
-  type        = "string"
+  type        = string
   default     = ""
   description = "WAF ACL ID"
 }
@@ -27,8 +27,11 @@ variable "authorizer_dir" {
   default = ""
 }
 
-variable "lambda_dir" {}
-variable "lambda_config_path" {}
+variable "lambda_dir" {
+}
+
+variable "lambda_config_path" {
+}
 
 variable "handler" {
   default = "index.handler"
@@ -47,7 +50,7 @@ variable "timeout" {
 }
 
 variable "xray" {
-  type    = "string"
+  type    = string
   default = "false"
 }
 
@@ -55,6 +58,7 @@ variable "xray" {
 //variable "authorizer_client_secret" {}
 
 variable "logging_bucket" {
-  type = "string"
+  type    = string
   default = ""
 }
+

@@ -1,21 +1,22 @@
 variable "account_alias" {
-  type    = "string"
+  type    = string
   default = ""
 }
 
 variable "groups" {
-  type    = "list"
+  type    = list(string)
   default = []
 }
 
 variable "email" {
-  type = "string"
+  type = string
 }
 
 variable "pgp_key_path" {
-  type = "string"
+  type = string
 }
 
 variable "account_email" {
   description = "Organization account email"
 }
+

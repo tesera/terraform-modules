@@ -1,4 +1,3 @@
-
 resource "aws_s3_bucket" "main" {
   bucket              = "${local.name}-${terraform.workspace}-static-assets"
   acl                 = "private"
@@ -9,7 +8,7 @@ resource "aws_s3_bucket" "main" {
   }
 
   logging {
-    target_bucket = "${local.logging_bucket}"
+    target_bucket = local.logging_bucket
     target_prefix = "AWSLogs/${local.account_id}/S3/${local.name}-${terraform.workspace}-static-assets/"
   }
 
@@ -29,10 +28,13 @@ resource "aws_s3_bucket" "main" {
       }
     }
   }
-  tags = "${merge(local.tags, map(
-    "Name", "${local.name} Static Assets",
-    "Security", "SSE:AWS"
-  ))}"
+  tags = merge(
+    local.tags,
+    {
+      "Name"     = "${local.name} Static Assets"
+      "Security" = "SSE:AWS"
+    },
+  )
 }
 
 data "aws_iam_policy_document" "s3" {
@@ -43,30 +45,31 @@ data "aws_iam_policy_document" "s3" {
     ]
 
     resources = [
-      "${aws_s3_bucket.main.arn}",
+      aws_s3_bucket.main.arn,
       "${aws_s3_bucket.main.arn}/*",
     ]
 
-    principals = {
+    principals {
       type = "AWS"
 
       identifiers = [
-        "${aws_cloudfront_origin_access_identity.main.iam_arn}",
+        aws_cloudfront_origin_access_identity.main.iam_arn,
       ]
     }
   }
 }
 
 resource "aws_s3_bucket_policy" "main" {
-  bucket   = "${aws_s3_bucket.main.id}"
-  policy   = "${data.aws_iam_policy_document.s3.json}"
+  bucket = aws_s3_bucket.main.id
+  policy = data.aws_iam_policy_document.s3.json
 }
 
 resource "aws_s3_bucket_public_access_block" "main" {
-  bucket = "${aws_s3_bucket.main.id}"
+  bucket = aws_s3_bucket.main.id
 
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+

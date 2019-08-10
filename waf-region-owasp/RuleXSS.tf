@@ -1,13 +1,11 @@
 resource "aws_wafregional_rule" "wafrXSSRule" {
-  depends_on = [
-    "aws_wafregional_xss_match_set.wafrXSSSet",
-  ]
+  depends_on = [aws_wafregional_xss_match_set.wafrXSSSet]
 
   name        = "${local.name}wafrXSSRule"
   metric_name = "${local.name}wafrXSSRule"
 
   predicate {
-    data_id = "${aws_wafregional_xss_match_set.wafrXSSSet.id}"
+    data_id = aws_wafregional_xss_match_set.wafrXSSSet.id
     negated = false
     type    = "XssMatch"
   }
@@ -82,3 +80,4 @@ resource "aws_wafregional_xss_match_set" "wafrXSSSet" {
     }
   }
 }
+

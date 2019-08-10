@@ -1,13 +1,11 @@
 resource "aws_waf_rule" "wafServerSideIncludeRule" {
-  depends_on = [
-    "aws_waf_byte_match_set.wafServerSideIncludeStringSet",
-  ]
+  depends_on = [aws_waf_byte_match_set.wafServerSideIncludeStringSet]
 
   name        = "${local.name}wafServerSideIncludeRule"
   metric_name = "${local.name}wafServerSideIncludeRule"
 
   predicates {
-    data_id = "${aws_waf_byte_match_set.wafServerSideIncludeStringSet.id}"
+    data_id = aws_waf_byte_match_set.wafServerSideIncludeStringSet.id
     negated = false
     type    = "ByteMatch"
   }
@@ -18,7 +16,7 @@ resource "aws_waf_byte_match_set" "wafServerSideIncludeStringSet" {
 
   byte_match_tuples {
     text_transformation   = "URL_DECODE"
-    target_string         = "${var.includesPrefix}"
+    target_string         = var.includesPrefix
     positional_constraint = "STARTS_WITH"
 
     field_to_match {
@@ -86,3 +84,4 @@ resource "aws_waf_byte_match_set" "wafServerSideIncludeStringSet" {
     }
   }
 }
+

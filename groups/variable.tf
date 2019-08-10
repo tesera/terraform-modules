@@ -1,6 +1,6 @@
 //
 variable "roles" {
-  type    = "list"
+  type    = list(string)
   default = ["admin"]
 }
 
@@ -17,7 +17,7 @@ variable "roles" {
 //}
 
 variable "sub_accounts" {
-  type = "map"
+  type = map(string)
 
   default = {
     operations  = ""
@@ -29,6 +29,7 @@ variable "sub_accounts" {
 }
 
 variable "role_mfa" {
-  type    = "string"
+  type    = string
   default = "false"
 }
+

@@ -1,13 +1,11 @@
 resource "aws_wafregional_rule" "wafgSQLiRule" {
-  depends_on = [
-    "aws_wafregional_sql_injection_match_set.wafrSQLiSet",
-  ]
+  depends_on = [aws_wafregional_sql_injection_match_set.wafrSQLiSet]
 
   name        = "${local.name}wafgSQLiRule"
   metric_name = "${local.name}wafgSQLiRule"
 
   predicate {
-    data_id = "${aws_wafregional_sql_injection_match_set.wafrSQLiSet.id}"
+    data_id = aws_wafregional_sql_injection_match_set.wafrSQLiSet.id
     negated = false
     type    = "SqlInjectionMatch"
   }
@@ -82,3 +80,4 @@ resource "aws_wafregional_sql_injection_match_set" "wafrSQLiSet" {
     }
   }
 }
+

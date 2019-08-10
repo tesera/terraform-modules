@@ -1,13 +1,11 @@
 resource "aws_waf_rule" "wafXSSRule" {
-  depends_on = [
-    "aws_waf_xss_match_set.wafXSSSet",
-  ]
+  depends_on = [aws_waf_xss_match_set.wafXSSSet]
 
   name        = "${local.name}wafXSSRule"
   metric_name = "${local.name}wafXSSRule"
 
   predicates {
-    data_id = "${aws_waf_xss_match_set.wafXSSSet.id}"
+    data_id = aws_waf_xss_match_set.wafXSSSet.id
     negated = false
     type    = "XssMatch"
   }
@@ -82,3 +80,4 @@ resource "aws_waf_xss_match_set" "wafXSSSet" {
     }
   }
 }
+

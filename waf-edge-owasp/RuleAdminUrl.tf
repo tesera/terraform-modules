@@ -6,21 +6,19 @@ resource "aws_waf_ipset" "adminlist" {
 }
 
 resource "aws_waf_rule" "wafAdminAccessRule" {
-  depends_on = [
-    "aws_waf_byte_match_set.wafAdminUrlStringSet",
-  ]
+  depends_on = [aws_waf_byte_match_set.wafAdminUrlStringSet]
 
   name        = "${local.name}wafAdminAccessRule"
   metric_name = "${local.name}wafAdminAccessRule"
 
   predicates {
-    data_id = "${aws_waf_byte_match_set.wafAdminUrlStringSet.id}"
+    data_id = aws_waf_byte_match_set.wafAdminUrlStringSet.id
     negated = false
     type    = "ByteMatch"
   }
 
   predicates {
-    data_id = "${var.ipAdminlistId != "" ? var.ipAdminlistId : aws_waf_ipset.adminlist.id}"
+    data_id = var.ipAdminlistId != "" ? var.ipAdminlistId : aws_waf_ipset.adminlist.id
     negated = false
     type    = "IPMatch"
   }
@@ -32,7 +30,7 @@ resource "aws_waf_byte_match_set" "wafAdminUrlStringSet" {
   // TODO N/A
   byte_match_tuples {
     text_transformation   = "URL_DECODE"
-    target_string         = "${var.adminUrlPrefix}"
+    target_string         = var.adminUrlPrefix
     positional_constraint = "STARTS_WITH"
 
     field_to_match {
@@ -40,3 +38,4 @@ resource "aws_waf_byte_match_set" "wafAdminUrlStringSet" {
     }
   }
 }
+

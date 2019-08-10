@@ -1,11 +1,13 @@
-variable "name" {}
+variable "name" {
+}
 
 variable "default_tags" {
-  type    = "map"
+  type    = map(string)
   default = {}
 }
 
-variable "hash_key" {}
+variable "hash_key" {
+}
 
 # variable "range_key" {
 #   default = ""
@@ -42,3 +44,4 @@ variable "read_target_value" {
 variable "write_target_value" {
   default = "50"
 }
+

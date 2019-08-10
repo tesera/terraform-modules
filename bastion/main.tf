@@ -1,41 +1,44 @@
 resource "aws_eip" "main" {
   vpc = "true"
 
-  tags = "${merge(local.tags, map(
-    "Name", "${local.name}"
-  ))}"
+  tags = merge(
+    local.tags,
+    {
+      "Name" = local.name
+    },
+  )
 }
 
 data "template_file" "userdata" {
-  template = "${file("${path.module}/user_data.sh")}"
+  template = file("${path.module}/user_data.sh")
 
-  vars {
-    EIP_ID                = "${aws_eip.main.id}"
-    IAM_AUTHORIZED_GROUPS = "${var.iam_user_groups}"
-    SUDOERS_GROUPS        = "${var.iam_sudo_groups}"
-    ASSUMEROLE            = "${var.assume_role_arn}"
+  vars = {
+    EIP_ID                = aws_eip.main.id
+    IAM_AUTHORIZED_GROUPS = var.iam_user_groups
+    SUDOERS_GROUPS        = var.iam_sudo_groups
+    ASSUMEROLE            = var.assume_role_arn
   }
 }
 
 module "ec2" {
   source           = "../ec2-base"
-  name             = "${local.name}"
-  vpc_id           = "${var.vpc_id}"
-  subnet_ids       = ["${var.public_subnet_ids}"]
+  name             = local.name
+  vpc_id           = var.vpc_id
+  subnet_ids       = [var.public_subnet_ids]
   subnet_public    = "true"
-  image_id         = "${local.image_id}"
-  instance_type    = "${var.instance_type}"
-  user_data        = "${data.template_file.userdata.rendered}"
-  min_size         = "${local.min_size}"
-  max_size         = "${local.max_size}"
-  desired_capacity = "${local.desired_capacity}"
+  image_id         = local.image_id
+  instance_type    = var.instance_type
+  user_data        = data.template_file.userdata.rendered
+  min_size         = local.min_size
+  max_size         = local.max_size
+  desired_capacity = local.desired_capacity
 }
 
 # extend sg
 resource "aws_security_group_rule" "pubic-ssh" {
   from_port         = 22
   protocol          = "tcp"
-  security_group_id = "${module.ec2.security_group_id}"
+  security_group_id = module.ec2.security_group_id
 
   cidr_blocks = [
     "0.0.0.0/0",
@@ -67,11 +70,12 @@ resource "aws_iam_policy" "main-ip" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "main-ip" {
-  role       = "${module.ec2.iam_role_name}"
-  policy_arn = "${aws_iam_policy.main-ip.arn}"
+  role       = module.ec2.iam_role_name
+  policy_arn = aws_iam_policy.main-ip.arn
 }
 
 resource "aws_iam_policy" "main-iam" {
@@ -97,17 +101,18 @@ resource "aws_iam_policy" "main-iam" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "main-iam" {
-  role       = "${module.ec2.iam_role_name}"
-  policy_arn = "${aws_iam_policy.main-iam.arn}"
+  role       = module.ec2.iam_role_name
+  policy_arn = aws_iam_policy.main-iam.arn
 }
 
 # ACL
 resource "aws_network_acl_rule" "ingress_ssh_public_ipv4" {
-  network_acl_id = "${var.network_acl_id}"
-  rule_number    = "${var.acl_rule_number}"
+  network_acl_id = var.network_acl_id
+  rule_number    = var.acl_rule_number
   egress         = false
   protocol       = "tcp"
   rule_action    = "allow"
@@ -117,8 +122,8 @@ resource "aws_network_acl_rule" "ingress_ssh_public_ipv4" {
 }
 
 resource "aws_network_acl_rule" "ingress_ssh_public_ipv6" {
-  network_acl_id  = "${var.network_acl_id}"
-  rule_number     = "${var.acl_rule_number+1}"
+  network_acl_id  = var.network_acl_id
+  rule_number     = var.acl_rule_number + 1
   egress          = false
   protocol        = "tcp"
   rule_action     = "allow"
@@ -128,8 +133,8 @@ resource "aws_network_acl_rule" "ingress_ssh_public_ipv6" {
 }
 
 resource "aws_network_acl_rule" "egress_ssh_public_ipv4" {
-  network_acl_id = "${var.network_acl_id}"
-  rule_number    = "${var.acl_rule_number}"
+  network_acl_id = var.network_acl_id
+  rule_number    = var.acl_rule_number
   egress         = true
   protocol       = "tcp"
   rule_action    = "allow"
@@ -139,8 +144,8 @@ resource "aws_network_acl_rule" "egress_ssh_public_ipv4" {
 }
 
 resource "aws_network_acl_rule" "egress_ssh_public_ipv6" {
-  network_acl_id  = "${var.network_acl_id}"
-  rule_number     = "${var.acl_rule_number+1}"
+  network_acl_id  = var.network_acl_id
+  rule_number     = var.acl_rule_number + 1
   egress          = true
   protocol        = "tcp"
   rule_action     = "allow"
@@ -148,3 +153,4 @@ resource "aws_network_acl_rule" "egress_ssh_public_ipv6" {
   from_port       = 22
   to_port         = 22
 }
+

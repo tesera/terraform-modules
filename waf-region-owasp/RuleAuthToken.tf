@@ -2,15 +2,13 @@
 # https://github.com/awslabs/aws-waf-sample/blob/master/waf-owasp-top-10/owasp_10_base.yml#L244
 
 resource "aws_wafregional_rule" "wafgAuthTokenRule" {
-  depends_on = [
-    "aws_wafregional_byte_match_set.wafrAuthTokenStringSet",
-  ]
+  depends_on = [aws_wafregional_byte_match_set.wafrAuthTokenStringSet]
 
   name        = "${local.name}wafgAuthTokenRule"
   metric_name = "${local.name}wafgAuthTokenRule"
 
   predicate {
-    data_id = "${aws_wafregional_byte_match_set.wafrAuthTokenStringSet.id}"
+    data_id = aws_wafregional_byte_match_set.wafrAuthTokenStringSet.id
     negated = false
     type    = "ByteMatch"
   }
@@ -42,3 +40,4 @@ resource "aws_wafregional_byte_match_set" "wafrAuthTokenStringSet" {
     }
   }
 }
+

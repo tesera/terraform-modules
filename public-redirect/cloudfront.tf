@@ -7,11 +7,11 @@ resource "aws_cloudfront_distribution" "main" {
   http_version    = "http2"
   is_ipv6_enabled = true
 
-  aliases = "${var.aliases}"
+  aliases = var.aliases
 
   origin {
     origin_id   = "${local.name}-redirect"
-    domain_name = "${aws_s3_bucket.main.website_endpoint}"
+    domain_name = aws_s3_bucket.main.website_endpoint
 
     # Workaround: https://github.com/terraform-providers/terraform-provider-aws/issues/4757
     #s3_origin_config {
@@ -46,7 +46,7 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = "${var.acm_certificate_arn}"
+    acm_certificate_arn      = var.acm_certificate_arn
     minimum_protocol_version = "TLSv1.2_2018"
     ssl_support_method       = "sni-only"
   }
@@ -59,13 +59,16 @@ resource "aws_cloudfront_distribution" "main" {
 
   logging_config {
     include_cookies = false
-    bucket          = "${local.logging_bucket}"
+    bucket          = local.logging_bucket
     prefix          = "CloudFront/${var.aliases[0]}/"
   }
 
-  tags = "${merge(local.tags, map(
-    "Name", "${local.name} Domain Redirection"
-  ))}"
+  tags = merge(
+    local.tags,
+    {
+      "Name" = "${local.name} Domain Redirection"
+    },
+  )
 }
 
 resource "aws_s3_bucket" "main-logs" {
@@ -79,3 +82,4 @@ resource "aws_s3_bucket" "main-logs" {
     }
   }
 }
+

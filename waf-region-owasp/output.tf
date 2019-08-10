@@ -1,3 +1,4 @@
 output "id" {
-  value = "${aws_wafregional_web_acl.wafrOwaspACL.id}"
+  value = aws_wafregional_web_acl.wafrOwaspACL.id
 }
+
