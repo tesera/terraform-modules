@@ -11,7 +11,6 @@ Collection of module defaults
 - **name:** Sanitized `name`
 - **name_alphanumeric:** Sanitized `name` that is only `[a-zA-Z0-9]` (ie for AWS WAF)
 - **tags:** tags merged with defaults
-- **tags_as_list_of_maps:** Tags mapped to a list (ie for `aws_security_group`)
 
 ## Use
 ```hcl-terraform
@@ -43,18 +42,25 @@ resource "****" "main" {
 
 ```
 
-### Error: ... tags: should be a list
 ```hcl-terraform
-resource "aws_security_group" "main" {
+resource "aws_autoscaling_group" "asg_ec2" {
   ...
-  tags = ["${module.defaults.tags_as_list_of_maps}"]
-}
+  dynamic "tag" {
+    for_each = local.tags
 
+    content {
+      key                 = tag.key
+      value               = tag.value
+      propagate_at_launch = true
+    }
+  }
+}
 ```
 
 ## Refs
 - https://github.com/jonbrouse/terraform-style-guide/blob/master/README.md#naming-conventions
 - https://github.com/cloudposse/terraform-null-label
+- https://stackoverflow.com/questions/53698758/how-do-i-apply-a-map-of-tags-to-aws-autoscaling-group
 
 ## TODO
 - [ ] Add in Cost Center tags
