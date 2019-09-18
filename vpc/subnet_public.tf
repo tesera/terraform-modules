@@ -9,8 +9,8 @@ resource "aws_route_table" "public" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${local.name}-public"
-    },
+      Name = "${local.name}-public"
+    }
   )
 }
 
@@ -23,8 +23,8 @@ resource "aws_subnet" "public" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${local.name}-${local.az_name[count.index]}-public"
-    },
+      Name = "${local.name}-${local.az_name[count.index]}-public"
+    }
   )
 }
 

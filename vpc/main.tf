@@ -6,8 +6,8 @@ resource "aws_vpc" "main" {
   tags = merge(
     local.tags,
     {
-      "Name" = local.name
-    },
+      Name = local.name
+    }
   )
 }
 
@@ -18,8 +18,8 @@ resource "aws_internet_gateway" "main" {
   tags = merge(
     local.tags,
     {
-      "Name" = local.name
-    },
+      Name = local.name
+    }
   )
 }
 
@@ -35,8 +35,8 @@ resource "aws_default_route_table" "default" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${local.name}-default"
-    },
+      Name = "${local.name}-default"
+    }
   )
 }
 
@@ -46,8 +46,8 @@ resource "aws_default_network_acl" "default" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${local.name}-default"
-    },
+      Name = "${local.name}-default"
+    }
   )
 }
 
@@ -57,8 +57,8 @@ resource "aws_default_security_group" "default" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${local.name}-default"
-    },
+      Name = "${local.name}-default"
+    }
   )
 }
 

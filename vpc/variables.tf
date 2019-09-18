@@ -23,7 +23,7 @@ variable "cidr_block" {
 
 # NAT vars
 variable "nat_type" {
-  default = "gateway"
+  default = "none"
 }
 
 variable "iam_user_groups" {
@@ -39,7 +39,7 @@ variable "bastion_security_group_id" {
 }
 
 variable "instance_type" {
-  default = "t3.micro"
+  default = "t3a.nano"
 }
 
 variable "volume_type" {
@@ -54,3 +54,7 @@ variable "key_name" {
   default = ""
 }
 
+variable "ami_account_id" {
+  type    = string
+  default = "self"
+}
