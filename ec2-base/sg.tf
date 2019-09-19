@@ -16,7 +16,7 @@ resource "aws_security_group" "main" {
     local.tags,
     {
       "Name" = local.name
-    },
+    }
   )
 }
 

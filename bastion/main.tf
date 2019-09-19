@@ -4,31 +4,25 @@ resource "aws_eip" "main" {
   tags = merge(
     local.tags,
     {
-      "Name" = local.name
-    },
+      Name = local.name
+    }
   )
 }
 
-data "template_file" "userdata" {
-  template = file("${path.module}/user_data.sh")
-
-  vars = {
+module "ec2" {
+  source        = "../ec2-base"
+  name          = local.name
+  vpc_id        = var.vpc_id
+  subnet_ids    = var.public_subnet_ids
+  subnet_public = "true"
+  image_id      = local.image_id
+  instance_type = var.instance_type
+  user_data = templatefile("${path.module}/user_data.sh", {
     EIP_ID                = aws_eip.main.id
     IAM_AUTHORIZED_GROUPS = var.iam_user_groups
     SUDOERS_GROUPS        = var.iam_sudo_groups
-    ASSUMEROLE            = var.assume_role_arn
-  }
-}
-
-module "ec2" {
-  source           = "../ec2-base"
-  name             = local.name
-  vpc_id           = var.vpc_id
-  subnet_ids       = [var.public_subnet_ids]
-  subnet_public    = "true"
-  image_id         = local.image_id
-  instance_type    = var.instance_type
-  user_data        = data.template_file.userdata.rendered
+    ASSUMEROLE            = local.assume_role_arn
+  })
   min_size         = local.min_size
   max_size         = local.max_size
   desired_capacity = local.desired_capacity
@@ -91,7 +85,7 @@ resource "aws_iam_policy" "main-iam" {
       "Effect": "Allow",
       "Action": "sts:AssumeRole",
       "Resource": [
-        "${var.assume_role_arn}"
+        "${local.assume_role_arn}"
       ]
     }, {
       "Effect": "Allow",

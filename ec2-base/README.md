@@ -13,23 +13,14 @@ Auto-scalling cluster of EC2
 ### Module
 ```hcl-terraform
 module "ec2-base" {
-  source            = "git@github.com:tesera/terraform-modules//ec2-base"
+  source            = "./terraform-modules//base"
   name              = "${local.name}-usecase"
   vpc_id            = "${module.vpc.id}"
   subnet_ids        = "${module.vpc.private_subnet_ids}"
   image_id          = "${local.image_id}"
-  user_data          = "${data.template_file.main-userdata.rendered}"
-}
-```
-
-### Create custom userdata
-```hcl-terraform
-data "template_file" "main-userdata" {
-  template = "${file("${path.module}/userdata.sh")}"
-
-  vars {
+  user_data         = templatefile("${path.module}/userdata.sh", {
     REGION          = "${local.region}"
-  }
+  })
 }
 ```
 
@@ -60,8 +51,8 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "main-usecase" {
-  role       = "${module.ec2-base.iam_role_name}"
-  policy_arn = "${aws_iam_policy.main-ecs.arn}"
+  role       = module.ec2-base.iam_role_name
+  policy_arn = aws_iam_policy.main-ecs.arn
 }
 ```
 
@@ -108,6 +99,7 @@ session_name = ${name}-${workspace}
 - **max_size:** auto-scaling - max instance count [Default: 1]
 - **desired_capacity:** auto-scaling - desired instance count [Default: 1]
 - **key_name:** name of root ssh key, for testing only [Default: none]
+- **ami_account_id:** account id of the AMI [Default: self]
 
 ## Output
 - **security_group_id:** security group applied, add to ingress on private instance security group

@@ -1,23 +1,18 @@
 resource "aws_iam_role" "main" {
   name = "${local.name}-role"
 
-  assume_role_policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": [
-          "${var.iam_service}.amazonaws.com"
-        ]
-      },
-      "Action": "sts:AssumeRole"
-    }
-  ]
+  assume_role_policy = data.aws_iam_policy_document.main.json
 }
-POLICY
 
+data "aws_iam_policy_document" "main" {
+  statement {
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
+    principals {
+      type        = "Service"
+      identifiers = local.services
+    }
+  }
 }
 
 resource "aws_iam_instance_profile" "main" {

@@ -17,16 +17,7 @@ data "aws_ami" "main" {
     ]
   }
 
-  owners = ["137112412989"]
-}
-
-data "template_file" "userdata" {
-  template = file("${path.module}/user_data.sh")
-
-  vars = {
-    EFS_IDS   = join(",", var.efs_ids)
-    USER_DATA = var.user_data
-  }
+  owners = [var.ami_account_id]
 }
 
 module "defaults" {
@@ -36,14 +27,18 @@ module "defaults" {
 }
 
 locals {
-  account_id       = module.defaults.account_id
-  region           = module.defaults.region
-  name             = module.defaults.name
-  tags             = module.defaults.tags
-  image_id         = var.image_id != "" ? var.image_id : data.aws_ami.main.image_id
-  user_data        = data.template_file.userdata.rendered
+  account_id = module.defaults.account_id
+  region     = module.defaults.region
+  name       = module.defaults.name
+  tags       = module.defaults.tags
+  image_id   = var.image_id != "" ? var.image_id : data.aws_ami.main.image_id
+  user_data = templatefile("${path.module}/user_data.sh", {
+    EFS_IDS   = join(",", var.efs_ids),
+    USER_DATA = var.user_data
+  })
   max_size         = var.max_size
   min_size         = var.min_size
   desired_capacity = var.desired_capacity
+  services         = split(",", "${join(".amazonaws.com,", var.iam_service)}.amazonaws.com")
 }
 

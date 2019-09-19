@@ -18,7 +18,7 @@ data "aws_ami" "main" {
   }
 
   owners = [
-    "self",
+    var.ami_account_id
   ]
 }
 
@@ -37,5 +37,6 @@ locals {
   max_size         = "1"
   min_size         = "1"
   desired_capacity = "1"
+  assume_role_arn  = var.assume_role_arn == "" ? aws_iam_role.ssh[0].arn : var.assume_role_arn
 }
 
