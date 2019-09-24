@@ -1,5 +1,5 @@
 resource "aws_efs_file_system" "main" {
-  encrypted                       = "true"
+  encrypted                       = true
   kms_key_id                      = var.kms_key_id
   performance_mode                = var.performance_mode
   provisioned_throughput_in_mibps = var.provisioned_throughput_in_mibps
@@ -8,8 +8,8 @@ resource "aws_efs_file_system" "main" {
   tags = merge(
     local.tags,
     {
-      "Name" = local.name
-    },
+      Name = local.name
+    }
   )
 }
 

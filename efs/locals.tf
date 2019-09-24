@@ -1,6 +1,6 @@
 module "defaults" {
   source = "../defaults"
-  name   = "${var.name}-${var.performance_mode}"
+  name   = var.name
   tags   = var.default_tags
 }
 

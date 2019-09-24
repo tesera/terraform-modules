@@ -5,8 +5,8 @@ Creates and Elastic File System (EFS) and Elastic File System (EFS) mount target
 ### Module
 ```hcl-terraform
  module "efs" {
-  source    = "git@github.com:tesera/terraform-modules//efs"
-  name      = "${local.name}"
+  source    = "./modules/efs"
+  name      = local.name
   subnet_ids = ["subnet-00000000"]
 }
 ```
