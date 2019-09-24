@@ -2,37 +2,25 @@ resource "aws_ecs_cluster" "main" {
   name = local.name
 }
 
-data "template_file" "userdata" {
-  template = file("${path.module}/user_data.sh")
-
-  vars = {
-    ECS_CLUSTER = aws_ecs_cluster.main.name
-  }
-}
-
 module "ec2" {
-  source      = "../ec2-base"
-  iam_service = "ec2" // TODO ["ec2","ecs"]
-  name        = local.name
-  vpc_id      = var.vpc_id
-  subnet_ids = [
-    var.private_subnet_ids,
-  ]
-  image_id         = local.image_id
-  instance_type    = local.instance_type
-  user_data        = data.template_file.userdata.rendered
-  min_size         = local.min_size
-  max_size         = local.max_size
-  desired_capacity = local.desired_capacity
-  volume_type      = var.volume_type
-  volume_size      = var.volume_size
-  efs_ids = [
-    var.efs_ids,
-  ]
-  efs_security_group_ids = [
-    var.efs_security_group_ids,
-  ]
-  key_name = var.key_name
+  source        = "../ec2-base"
+  iam_service   = ["ec2", "ecs"]
+  name          = local.name
+  vpc_id        = var.vpc_id
+  subnet_ids    = var.private_subnet_ids
+  image_id      = local.image_id
+  instance_type = local.instance_type
+  user_data = templatefile("${path.module}/user_data.sh", {
+    ECS_CLUSTER = aws_ecs_cluster.main.name
+  })
+  min_size               = local.min_size
+  max_size               = local.max_size
+  desired_capacity       = local.desired_capacity
+  volume_type            = var.volume_type
+  volume_size            = var.volume_size
+  efs_ids                = var.efs_ids
+  efs_security_group_ids = var.efs_security_group_ids
+  key_name               = var.key_name
 }
 
 resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerServiceforEC2Role" {
@@ -107,6 +95,7 @@ resource "aws_iam_role" "task_execution" {
       "Effect": "Allow",
       "Principal": {
         "Service": [
+          "ec2.amazonaws.com",
           "ecs-tasks.amazonaws.com"
         ]
       },
@@ -124,3 +113,28 @@ resource "aws_iam_role_policy_attachment" "task_execution" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+# Allow asumme role to pull image from another account
+resource "aws_iam_policy" "task-assume" {
+  count  = var.assume_role_arn != "" ? 1 : 0
+  name   = "${local.name}-assume-AmazonECSTaskExecutionRole"
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Action": "sts:AssumeRole",
+        "Resource": [
+          "${var.assume_role_arn}"
+        ]
+      }
+    ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "task_execution_assume" {
+  count      = var.assume_role_arn != "" ? 1 : 0
+  role       = aws_iam_role.task_execution.name
+  policy_arn = aws_iam_policy.task-assume[0].arn
+}

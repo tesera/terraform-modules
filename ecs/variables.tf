@@ -56,3 +56,12 @@ variable "key_name" {
   default = ""
 }
 
+variable "ami_account_id" {
+  type    = string
+  default = "self"
+}
+
+variable "assume_role_arn" {
+  type    = string
+  default = ""
+}

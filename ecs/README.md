@@ -1,5 +1,6 @@
 # ECS
 Auto-scaling cluster of EC2 for ECS
+# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html
 
 ## Features
 - Auto-scaling across all private subnets
@@ -23,10 +24,10 @@ Before using this terraform module, the "ec2" and "ecs" AMIs need to be created 
 ### Module
 ```hcl-terraform
 module "ecs" {
-  source            = "git@github.com:tesera/terraform-modules//ecs?ref=v0.3.0"
-  name              = "${local.name}"
-  vpc_id            = "${module.vpc.id}"
-  private_subnet_ids = ["${module.vpc.private_subnet_ids}"]
+  source            = "./modules/ecs"
+  name              = local.name
+  vpc_id            = module.vpc.id
+  private_subnet_ids = module.vpc.private_subnet_ids
 }
 
 # Logging
@@ -43,9 +44,9 @@ resource "aws_ecs_task_definition" "app" {
   family                   = "${local.name}-ecs-app"
   requires_compatibilities = [
     "EC2"]
-  cpu                      = "${var.docker_cpu}"
-  task_role_arn            = "${aws_iam_role.app.arn}"
-  execution_role_arn       = "${module.ecs.iam_execution_role_arn}"
+  cpu                      = var.docker_cpu
+  task_role_arn            = aws_iam_role.app.arn
+  execution_role_arn       = module.ecs.iam_execution_role_arn
   container_definitions = <<DEFINITION
 [
   {
@@ -72,7 +73,7 @@ DEFINITION
 
 resource "aws_iam_role" "app" {
   name = "${local.name}-app-role"
-  assume_role_policy = <<POLICY
+  assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -87,7 +88,7 @@ resource "aws_iam_role" "app" {
     }
   ]
 }
-POLICY
+EOF
 }
 
 resource "aws_iam_policy" "app" {
@@ -109,8 +110,8 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "app" {
-  role       = "${aws_iam_role.app.name}"
-  policy_arn = "${aws_iam_policy.app.arn}"
+  role       = aws_iam_role.app.name
+  policy_arn = aws_iam_policy.app.arn
 }
 
 ```
@@ -125,6 +126,7 @@ resource "aws_iam_role_policy_attachment" "app" {
 - **desired_capacity:** auto-scaling - desired instance count [Default: 2]
 - **efs_ids:** list of EFS IDs
 - **efs_security_group_ids:** list of EFS security groups
+- **ami_account_id:** account id of the AMI [Default: self]
 
 ## Output
 - **name:** ecs cluster name
@@ -134,3 +136,5 @@ resource "aws_iam_role_policy_attachment" "app" {
 - **iam_execution_role_name:** IAM task execution role name to allow extending of the role
 - **iam_execution_role_arn:** IAM task execution role arn to allow extending of the role
 - **billing_suggestion:** comments to improve billing cost
+
+
