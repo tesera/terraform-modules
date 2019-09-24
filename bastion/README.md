@@ -24,7 +24,7 @@ Before using this terraform module, the "bastion" and "ec2" AMIs need to be crea
 ### Module
 ```hcl-terraform
 module "bastion" {
-  source            = "./terraform-modules//bastion"
+  source            = "./modules/bastion"
   name              = local.workspace["name"]
   instance_type     = local.workspace["bastion_instance_type"]
   vpc_id            = module.vpc.id

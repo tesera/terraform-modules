@@ -67,3 +67,7 @@ variable "efs_security_group_ids" {
   default = []
 }
 
+variable "ami_account_id" {
+  type    = string
+  default = "self"
+}

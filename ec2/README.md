@@ -16,24 +16,15 @@ Before using this terraform module, the "ec2" AMIs need to be created in all req
 ### Module
 ```hcl-terraform
 module "ec2" {
-  source            = "git@github.com:tesera/terraform-modules//ec2"
+  source            = "./modules/ec2"
   name              = "${local.name}-usecase"
-  vpc_id            = "${module.vpc.id}"
-  subnet_ids        = "${module.vpc.private_subnet_ids}"
-  image_id          = "${local.image_id}"
-  user_data          = "${data.template_file.main-userdata.rendered}"
-}
-```
+  vpc_id            = module.vpc.id
+  subnet_ids        = module.vpc.private_subnet_ids
+  image_id          = local.image_id
+  user_data         = templatefile("${path.module}/user_data.sh", {
+                      REGION          = local.region
+                    })
 
-### Create custom userdata
-```hcl-terraform
-data "template_file" "main-userdata" {
-  template = "${file("${path.module}/userdata.sh")}"
-
-  vars {
-    REGION          = "${local.region}"
-  }
-}
 ```
 
 ### Add custom policy
@@ -63,8 +54,8 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "main-usecase" {
-  role       = "${module.ec2.iam_role_name}"
-  policy_arn = "${aws_iam_policy.main-ecs.arn}"
+  role       = module.ec2.iam_role_name
+  policy_arn = aws_iam_policy.main-ecs.arn
 }
 ```
 
@@ -99,6 +90,7 @@ aws ssm start-session --target i-00000000000000000 --profile default
 - **max_size:** auto-scaling - max instance count [Default: 1]
 - **desired_capacity:** auto-scaling - desired instance count [Default: 1]
 - **key_name:** name of root ssh key, for testing only [Default: none]
+- **ami_account_id:** account id of the AMI [Default: self]
 
 ## Output
 - **security_group_id:** security group applied, add to ingress on private instance security group

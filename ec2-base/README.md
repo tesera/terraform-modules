@@ -13,7 +13,7 @@ Auto-scalling cluster of EC2
 ### Module
 ```hcl-terraform
 module "ec2-base" {
-  source            = "./terraform-modules//base"
+  source            = "./modules/ec2-base"
   name              = "${local.name}-usecase"
   vpc_id            = "${module.vpc.id}"
   subnet_ids        = "${module.vpc.private_subnet_ids}"
