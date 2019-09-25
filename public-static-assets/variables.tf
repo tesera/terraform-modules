@@ -13,6 +13,7 @@ variable "default_tags" {
 variable "aliases" {
   type        = list(string)
   description = "Cloudfront Aliases"
+  default     = []
 }
 
 variable "acm_certificate_arn" {
@@ -26,41 +27,20 @@ variable "web_acl_id" {
   description = "WAF ACL ID"
 }
 
+variable "cors_origins" {
+  type    = list(string)
+  default = ["*"]
+}
+
 # lambda@edge
-variable "lambda_viewer_request_default" {
-  default = false
+variable "lambda" {
+  type    = map(string)
+  default = {}
 }
 
-variable "lambda_viewer_request" {
-  type    = string
-  default = ""
-}
-
-variable "lambda_origin_request_default" {
-  default = false
-}
-
-variable "lambda_origin_request" {
-  type    = string
-  default = ""
-}
-
-variable "lambda_viewer_response_default" {
-  default = false
-}
-
-variable "lambda_viewer_response" {
-  type    = string
-  default = ""
-}
-
-variable "lambda_origin_response_default" {
-  default = false
-}
-
-variable "lambda_origin_response" {
-  type    = string
-  default = ""
+variable "error_codes" {
+  type    = map(string)
+  default = {}
 }
 
 variable "logging_bucket" {

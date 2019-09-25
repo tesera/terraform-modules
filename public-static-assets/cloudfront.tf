@@ -1,6 +1,3 @@
-data "aws_caller_identity" "current" {
-}
-
 resource "aws_cloudfront_origin_access_identity" "main" {
   comment = "${local.name} S3 static assets origin access policy"
 }
@@ -41,6 +38,7 @@ resource "aws_cloudfront_distribution" "main" {
     cached_methods = [
       "GET",
       "HEAD",
+      "OPTIONS",
     ]
 
     viewer_protocol_policy = "redirect-to-https"
@@ -56,33 +54,17 @@ resource "aws_cloudfront_distribution" "main" {
     forwarded_values {
       query_string = false
 
-      # TODO add in headers here
-
       cookies {
         forward = "none"
       }
     }
 
-    # TODO update when v0.12 released
-    #lambda_function_association {
-    #  event_type = "viewer-request"
-    #  lambda_arn = "${local.lambda_viewer_request_enabled ? aws_lambda_function.viewer_request.qualified_arn : ""}"
-    #}
-
-    #lambda_function_association {
-    #  event_type = "origin-request"
-    #  lambda_arn = "${local.lambda_origin_request_enabled ? aws_lambda_function.origin_request.qualified_arn : ""}"
-    #}
-
-    #lambda_function_association {
-    #  event_type = "viewer-response"
-    #  lambda_arn = "${local.lambda_viewer_response_enabled ? aws_lambda_function.viewer_response.qualified_arn : ""}"
-    #}
-
-    // TODO - https://stackoverflow.com/questions/46262030/single-page-application-with-lambdaedge
-    lambda_function_association {
-      event_type = "origin-response"
-      lambda_arn = local.lambda_origin_response_enabled ? aws_lambda_function.origin_response.qualified_arn : ""
+    dynamic "lambda_function_association" {
+      for_each = keys(var.lambda)
+      content {
+        event_type = lambda_function_association.value
+        lambda_arn = aws_lambda_function.lambda[lambda_function_association.key].qualified_arn
+      }
     }
   }
 
@@ -94,23 +76,26 @@ resource "aws_cloudfront_distribution" "main" {
 
   default_root_object = "index.html"
 
-  /*custom_error_response {
-    error_code         = 404
-    response_code      = 404
-    response_page_path = "/index.html"
-  }*/
+  dynamic "custom_error_response" {
+    for_each = var.error_codes == "" ? {} : var.error_codes
+    content {
+      error_code         = custom_error_response.key
+      response_code      = 200
+      response_page_path = custom_error_response.value
+    }
+  }
 
   logging_config {
     include_cookies = false
     bucket          = "${local.logging_bucket}.s3.amazonaws.com"
-    prefix          = "AWSLogs/${data.aws_caller_identity.current.account_id}/CloudFront/${var.aliases[0]}/"
+    prefix          = "AWSLogs/${local.account_id}/CloudFront/${local.name}/"
   }
 
   tags = merge(
     local.tags,
     {
-      "Name" = "${local.name} CloudFront"
-    },
+      Name = "${local.name} CloudFront"
+    }
   )
 }
 
