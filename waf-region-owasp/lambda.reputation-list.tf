@@ -15,6 +15,7 @@ data "aws_iam_policy_document" "reputation-list" {
 }
 
 resource "aws_iam_policy" "reputation-list" {
+  name   = "${local.name}-waf-reputation-list-policy"
   policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -46,7 +47,7 @@ resource "aws_iam_policy" "reputation-list" {
           "waf:UpdateIPSet"
       ],
       "Resource": [
-          "${aws_waf_ipset.reputation-list.arn}"
+          "${var.type == "regional" ? aws_wafregional_ipset.reputation-list[0].arn : aws_waf_ipset.reputation-list[0].arn}"
       ],
       "Effect": "Allow"
     },
@@ -65,30 +66,31 @@ POLICY
 }
 
 resource "aws_iam_role" "reputation-list" {
-  name               = "${local.name}-waf-reputation-list"
+  name = "${local.name}-waf-reputation-list"
   assume_role_policy = data.aws_iam_policy_document.reputation-list.json
 }
 
 resource "aws_iam_role_policy_attachment" "reputation-list" {
-  role       = aws_iam_role.reputation-list.name
+  role = aws_iam_role.reputation-list.name
   policy_arn = aws_iam_policy.reputation-list.arn
 }
 
 resource "aws_lambda_function" "reputation-list" {
   function_name = "${local.name}-waf-reputation-list"
-  filename      = "${path.module}/lambda/reputation-list/archive.zip"
+  filename = "${path.module}/lambda/reputation-list/archive.zip"
 
   source_code_hash = filebase64sha256("${path.module}/lambda/reputation-list/archive.zip")
-  role             = aws_iam_role.reputation-list.arn
-  handler          = "index.handler"
-  runtime          = "nodejs8.10"
-  memory_size      = 256
-  timeout          = 300
-  publish          = true
+  role = aws_iam_role.reputation-list.arn
+  handler = "index.handler"
+  runtime = "nodejs8.10"
+  memory_size = 256
+  timeout = 300
+  publish = true
   environment {
     variables = {
-      API_TYPE           = "waf" # waf, waf-regional
-      LOG_LEVEL          = "INFO"
+      API_TYPE = "waf"
+      # waf, waf-regional
+      LOG_LEVEL = "INFO"
       METRIC_NAME_PREFIX = "${local.name}-waf"
     }
   }
@@ -96,14 +98,14 @@ resource "aws_lambda_function" "reputation-list" {
 
 ## Event Trigger
 resource "aws_cloudwatch_event_rule" "reputation-list" {
-  name                = "${local.name}-waf-reputation-list-event"
-  description         = "hourly"
+  name = "${local.name}-waf-reputation-list-event"
+  description = "hourly"
   schedule_expression = "rate(1 hour)"
 }
 
 resource "aws_cloudwatch_event_target" "reputation-list" {
-  rule  = aws_cloudwatch_event_rule.reputation-list.name
-  arn   = aws_lambda_function.reputation-list.arn
+  rule = aws_cloudwatch_event_rule.reputation-list.name
+  arn = aws_lambda_function.reputation-list.arn
   input = <<JSON
 {
   "lists": [
@@ -113,10 +115,9 @@ resource "aws_cloudwatch_event_target" "reputation-list" {
     {  "url":"https://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt" }
   ],
   "region": "${local.region}",
-  "ipSetIds": [ "${aws_waf_ipset.reputation-list.id}" ]
+  "ipSetIds": [ "${var.type == "regional" ? aws_wafregional_ipset.reputation-list[0].id : aws_waf_ipset.reputation-list[0].id}" ]
 }
 JSON
-
 }
 
 resource "aws_lambda_permission" "reputation-list" {

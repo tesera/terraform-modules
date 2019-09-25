@@ -15,6 +15,7 @@ data "aws_iam_policy_document" "log-parser" {
 }
 
 resource "aws_iam_policy" "log-parser" {
+  name   = "${local.name}-waf-log-parser-policy"
   policy = <<POLICY
 {
   "Version": "2012-10-17",
@@ -53,9 +54,9 @@ resource "aws_iam_policy" "log-parser" {
           "waf:UpdateIPSet"
       ],
       "Resource": [
-          "${aws_waf_ipset.blacklist.arn}",
-          "${aws_waf_ipset.http-flood.arn}",
-          "${aws_waf_ipset.scanners-probes.arn}"
+          "${var.type == "regional" ? aws_wafregional_ipset.blacklist[0].arn : aws_waf_ipset.blacklist[0].arn}",
+          "${var.type == "regional" ? aws_wafregional_ipset.http-flood[0].arn : aws_waf_ipset.http-flood[0].arn}",
+          "${var.type == "regional" ? aws_wafregional_ipset.scanners-probes[0].arn : aws_waf_ipset.scanners-probes[0].arn}"
       ],
       "Effect": "Allow"
     },
@@ -74,60 +75,60 @@ POLICY
 }
 
 resource "aws_iam_role" "log-parser" {
-  name               = "${local.name}-waf-log-parser"
+  name = "${local.name}-waf-log-parser"
   assume_role_policy = data.aws_iam_policy_document.log-parser.json
 }
 
 resource "aws_iam_role_policy_attachment" "log-parser" {
-  role       = aws_iam_role.log-parser.name
+  role = aws_iam_role.log-parser.name
   policy_arn = aws_iam_policy.log-parser.arn
 }
 
 data "archive_file" "log-parser" {
-  type        = "zip"
+  type = "zip"
   output_path = "${path.module}/lambda-log-parser.zip"
 
   source {
     filename = "index.py"
-    content  = file("${path.module}/lambda/log-parser/index.py")
+    content = file("${path.module}/lambda/log-parser/index.py")
   }
 }
 
 resource "aws_lambda_function" "log-parser" {
   function_name = "${local.name}-waf-log-parser"
-  filename      = data.archive_file.log-parser.output_path
+  filename = data.archive_file.log-parser.output_path
 
   source_code_hash = data.archive_file.log-parser.output_base64sha256
-  role             = aws_iam_role.log-parser.arn
-  handler          = "index.lambda_handler"
-  runtime          = "python3.7"
-  memory_size      = 512
-  timeout          = 300
-  publish          = true
+  role = aws_iam_role.log-parser.arn
+  handler = "index.lambda_handler"
+  runtime = "python3.7"
+  memory_size = 512
+  timeout = 300
+  publish = true
   environment {
     variables = {
-      STACK_NAME                                     = local.name
-      APP_ACCESS_LOG_BUCKET                          = local.logging_bucket
-      WAF_ACCESS_LOG_BUCKET                          = local.logging_bucket
-      IP_SET_ID_HTTP_FLOOD                           = aws_waf_ipset.http-flood.id
-      IP_SET_ID_SCANNERS_PROBES                      = aws_waf_ipset.scanners-probes.id
+      STACK_NAME = local.name
+      APP_ACCESS_LOG_BUCKET = local.logging_bucket
+      WAF_ACCESS_LOG_BUCKET = local.logging_bucket
+      IP_SET_ID_HTTP_FLOOD = var.type == "regional" ? aws_wafregional_ipset.http-flood[0].id : aws_waf_ipset.http-flood[0].id
+      IP_SET_ID_SCANNERS_PROBES = var.type == "regional" ? aws_wafregional_ipset.scanners-probes[0].id : aws_waf_ipset.scanners-probes[0].id
       LIMIT_IP_ADDRESS_RANGES_PER_IP_MATCH_CONDITION = 10000
-      LOG_LEVEL                                      = "INFO"
-      LOG_TYPE                                       = "cloudfront"
+      LOG_LEVEL = "INFO"
+      LOG_TYPE = "cloudfront"
       # waf, alb, cloudfront
-      MAX_AGE_TO_UPDATE  = 30
+      MAX_AGE_TO_UPDATE = 30
       METRIC_NAME_PREFIX = "${local.name}-waf"
-      REGION             = local.region
+      REGION = local.region
     }
   }
 }
 
 resource "aws_lambda_permission" "log-parser" {
-  statement_id  = "AllowExecutionFromS3Bucket"
-  action        = "lambda:InvokeFunction"
+  statement_id = "AllowExecutionFromS3Bucket"
+  action = "lambda:InvokeFunction"
   function_name = aws_lambda_function.log-parser.function_name
-  principal     = "s3.amazonaws.com"
-  source_arn    = "arn:aws:s3:::${local.logging_bucket}"
+  principal = "s3.amazonaws.com"
+  source_arn = "arn:aws:s3:::${local.logging_bucket}"
 }
 
 resource "aws_s3_bucket_notification" "log-parser" {
@@ -163,8 +164,8 @@ resource "aws_s3_bucket_notification" "log-parser" {
 
 # TODO don't update file if already exists
 resource "aws_s3_bucket_object" "app-log-parser" {
-  bucket  = local.logging_bucket
-  key     = "/${local.name}-app_log_conf.json"
+  bucket = local.logging_bucket
+  key = "/${local.name}-app_log_conf.json"
   content = <<JSON
 {
     "general": {
@@ -179,9 +180,9 @@ JSON
 }
 
 resource "aws_s3_bucket_object" "waf-log-parser" {
-  bucket  = local.logging_bucket
-  key     = "/${local.name}-waf_log_conf.json"
-  content = <<JSON
+bucket  = local.logging_bucket
+key     = "/${local.name}-waf_log_conf.json"
+content = <<JSON
 {
     "general": {
         "errorThreshold": ${var.errorThreshold},
