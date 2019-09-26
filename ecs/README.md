@@ -1,6 +1,5 @@
 # ECS
-Auto-scaling cluster of EC2 for ECS
-# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html
+Auto-scaling cluster of EC2 for ECS - https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-optimized_AMI.html
 
 ## Features
 - Auto-scaling across all private subnets
