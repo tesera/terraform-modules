@@ -11,33 +11,25 @@ output "replica_endpoints" {
 }
 
 output "username" {
-  value = element(
-    concat(
-      aws_rds_cluster.main.*.master_username,
-      aws_db_instance.main.*.username,
-    ),
-    0,
-  )
+  value = concat(
+    aws_rds_cluster.main.*.master_username,
+    aws_db_instance.main.*.username
+  )[0]
 }
 
 output "password" {
-  value = element(
-    concat(
-      aws_rds_cluster.main.*.master_password,
-      aws_db_instance.main.*.password,
-    ),
-    0,
-  )
+  value = concat(
+    aws_rds_cluster.main.*.master_password,
+    aws_db_instance.main.*.password
+  )[0]
+  sensitive = true
 }
 
 output "database" {
-  value = element(
-    concat(
-      aws_rds_cluster.main.*.database_name,
-      aws_db_instance.main.*.name,
-    ),
-    0,
-  )
+  value = concat(
+    aws_rds_cluster.main.*.database_name,
+    aws_db_instance.main.*.name
+  )[0]
 }
 
 output "security_group_id" {

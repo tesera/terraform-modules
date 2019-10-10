@@ -29,8 +29,9 @@ resource "aws_db_instance" "main" {
   storage_encrypted = replace(var.instance_type, "micro", "") == var.instance_type
 
   # Integrity
-  # TODO add back in
-  #enabled_cloudwatch_logs_exports = [ "audit" ]
+  enabled_cloudwatch_logs_exports = var.cloudwatch_logs_exports
+  performance_insights_enabled    = var.performance_insights
+
   # TODO add in `monitoring_interval` & `monitoring_role_arn`
   final_snapshot_identifier = "${local.identifier}-final"
   backup_retention_period   = var.backup_retention_period
@@ -41,8 +42,8 @@ resource "aws_db_instance" "main" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${local.identifier} Master/Slave"
-    },
+      Name = "${local.identifier} Master/Slave"
+    }
   )
 }
 
@@ -53,6 +54,7 @@ resource "aws_db_instance" "replica" {
   auto_minor_version_upgrade  = true
   allow_major_version_upgrade = false
   allocated_storage           = var.allocated_storage
+  max_allocated_storage       = max(var.max_allocated_storage, var.allocated_storage)
   identifier                  = "${local.name}-${var.engine}-${var.type}-replica-${count.index}"
   storage_type                = var.storage_type
   engine                      = var.engine
@@ -63,10 +65,11 @@ resource "aws_db_instance" "replica" {
   apply_immediately           = true
 
   # Confidentiality
-  username               = var.username
-  publicly_accessible    = var.publicly_accessible
-  db_subnet_group_name   = aws_db_subnet_group.main.name
-  vpc_security_group_ids = [aws_security_group.main.id]
+  username             = var.username
+  publicly_accessible  = var.publicly_accessible
+  db_subnet_group_name = aws_db_subnet_group.main.name
+  vpc_security_group_ids = [
+  aws_security_group.main.id]
 
   # TODO test out `iam_database_authentication_enabled` for db user access
   # TODO research and apply `kms_key_id`
@@ -74,8 +77,9 @@ resource "aws_db_instance" "replica" {
   storage_encrypted = replace(var.instance_type, "micro", "") == var.instance_type
 
   # Integrity
-  # TODO add back in
-  # enabled_cloudwatch_logs_exports = [ "audit" ]
+  enabled_cloudwatch_logs_exports = var.cloudwatch_logs_exports
+  performance_insights_enabled    = var.performance_insights
+
   # TODO add in `monitoring_interval` & `monitoring_role_arn`
   backup_retention_period = 0
 
@@ -84,8 +88,8 @@ resource "aws_db_instance" "replica" {
   tags = merge(
     local.tags,
     {
-      "Name" = "${local.identifier} Replica"
-    },
+      Name = "${local.identifier} Replica"
+    }
   )
 }
 

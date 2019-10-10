@@ -13,18 +13,18 @@ Creates a RDS instance.
 
 ```hcl-terraform
 module "rds" {
-  source                   = "git@github.com:tesera/terraform-modules//postgres"
-  vpc_id                   = "${module.vpc.id}"
+  source                   = "./modules/rds"
+  vpc_id                   = module.vpc.id
   name                     = "rds-instance-name"
   db_name                  = "dbname"
   username                 = "dbuser"
   password                 = "SomePassword123"
-  private_subnet_ids       = ["${module.vpc.private_subnet_ids}"]
+  private_subnet_ids       = module.vpc.private_subnet_ids
   ssh_identity_file        = "key"
-  bastion_ip               = "${module.bastion.public_ip}"
+  bastion_ip               = module.bastion.public_ip
   init_scripts_folder      = "scripts"
   ssh_username             = "ec2-user"
-  security_group_ids       = ["${module.bastion.security_group_id}"]
+  security_group_ids       = module.bastion.security_group_id
 }
 ```
 
@@ -144,6 +144,7 @@ resource "aws_ssm_parameter" "db_username" {
 - **backup_window:** window of time when a backup can be triggered
 - **parameter_group_name:** name of the DB parameter group to associate - https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithParamGroups.html. If we haven't created a custom group we should use the default group matching the engine version. [Default: `default.${engine}${engine_version}`]
 - **allocated_storage:** amount of allocated storage in GB
+- **max_allocated_storage:** amount of allocated storage to auto scale up to a max in GB
 - **backup_retention_period:** backup retention period
 - **multi_az:** if the RDS instance is multi AZ enabled [Default: `true`]
 - **replica_count:** number of read replicas to deploy
@@ -157,7 +158,8 @@ All scripts are going to be executed in a single transaction against the databas
 - **iam_database_authentication_enabled:** specifies whether or mappings of AWS Identity and Access Management (IAM) accounts to database accounts is enabled. [Default: `false`].
 - **skip_final_snapshot:**  determines whether a final DB snapshot is created before the DB cluster is deleted. If true is specified, no DB snapshot is created. If false is specified, a DB snapshot is created before the DB cluster is deleted, using the value from final_snapshot_identifier. [Default: false].
 - **node_count:** count of aurora instances to be created in the aurora cluster. Used only with type = cluster. [Default: `1`].
-
+- **cloudwatch_logs_exports:** logging features. Default: [`audit`, `error`, `general`, `slowquery`]
+- **performance_insights_enabled:** Enalbe performance insights. [Default: true]
 ## Output
 
 - **endpoint:** connection endpoint

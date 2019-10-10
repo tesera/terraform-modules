@@ -56,11 +56,18 @@ variable "parameter_group_name" {
 }
 
 variable "allocated_storage" {
-  default = "20"
+  type    = number
+  default = 20
+}
+
+variable "max_allocated_storage" {
+  type    = number
+  default = 0
 }
 
 variable "backup_retention_period" {
-  default = "7"
+  type    = number
+  default = 7
 }
 
 variable "multi_az" {
@@ -68,11 +75,13 @@ variable "multi_az" {
 }
 
 variable "replica_count" {
-  default = "0"
+  type    = number
+  default = 0
 }
 
 variable "publicly_accessible" {
-  default = "false"
+  type    = bool
+  default = false
 }
 
 variable "security_group_ids" {
@@ -81,15 +90,18 @@ variable "security_group_ids" {
 }
 
 variable "cpu_alarm_threshold" {
-  default = "80"
+  type    = number
+  default = 80
 }
 
 variable "cpu_alarm_evaluation_periods" {
-  default = "3"
+  type    = number
+  default = 3
 }
 
 variable "swap_alarm_threshold" {
-  default = "0"
+  type    = number
+  default = 0
 }
 
 variable "free_space_alarm_threshold" {
@@ -97,11 +109,13 @@ variable "free_space_alarm_threshold" {
 }
 
 variable "read_latency_alarm_threshold" {
-  default = "0.2" # 200ms
+  type    = number
+  default = 0.2 # 200ms
 }
 
 variable "write_latency_alarm_threshold" {
-  default = "0.2" # 200ms
+  type    = number
+  default = 0.2 # 200ms
 }
 
 variable "ssh_identity_file" {
@@ -129,11 +143,13 @@ variable "apply_immediately" {
 }
 
 variable "skip_final_snapshot" {
-  default = "false"
+  type    = bool
+  default = false
 }
 
 variable "node_count" {
-  default = "2"
+  type    = number
+  default = 2
 }
 
 variable "cluster_engine" {
@@ -144,3 +160,12 @@ variable "iam_database_authentication_enabled" {
   default = "false"
 }
 
+variable "cloudwatch_logs_exports" {
+  type    = list(string)
+  default = ["audit", "error", "general", "slowquery"]
+}
+
+variable "performance_insights" {
+  type    = bool
+  default = true
+}

@@ -15,7 +15,7 @@ resource "aws_security_group" "main" {
     {
       "Name"        = local.identifier
       "Description" = "SecurityGroup for ${local.identifier}"
-    },
+    }
   )
 }
 
