@@ -21,10 +21,10 @@ IP=\$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 INSTANCE_TYPE=\$(curl -s http://169.254.169.254/latest/meta-data/instance-type)
 AVAILABILITY_ZONE=\$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
 cat << MOTD
-$BANNER
-Private IP:        \$IP
-Availability Zone: \$AVAILABILITY_ZONE
-Instance Type:     \$INSTANCE_TYPE
+${BANNER}
+Private IP:        \${IP}
+Availability Zone: \${AVAILABILITY_ZONE}
+Instance Type:     \${INSTANCE_TYPE}
 
 MOTD
 EOF
@@ -35,19 +35,17 @@ yum install fail2ban -y
 systemctl enable fail2ban
 
 echo "***** Setup SSH via IAM *****"
-# 2018-10-31 Amazon Linux 2 was pushed with a breaking change
-# https://aws.amazon.com/de/amazon-linux-2/release-notes/
-# https://github.com/widdix/aws-ec2-ssh/issues/142
+# https://github.com/widdix/aws-ec2-ssh
 sed -i 's@AuthorizedKeysCommand /usr/bin/timeout 5s /opt/aws/bin/curl_authorized_keys %u %f@#AuthorizedKeysCommand /usr/bin/timeout 5s /opt/aws/bin/curl_authorized_keys %u %f@g' /etc/ssh/sshd_config
 sed -i 's@AuthorizedKeysCommandUser ec2-instance-connect@#AuthorizedKeysCommandUser ec2-instance-connect@g' /etc/ssh/sshd_config
-rpm -i https://s3-eu-west-1.amazonaws.com/widdix-aws-ec2-ssh-releases-eu-west-1/aws-ec2-ssh-1.9.1-1.el7.centos.noarch.rpm
+rpm -i https://s3-eu-west-1.amazonaws.com/widdix-aws-ec2-ssh-releases-eu-west-1/aws-ec2-ssh-1.9.2-1.el7.centos.noarch.rpm
 
 echo "***** Setup CloudWatch Logging *****"
 yum install awslogs -y
 cat << EOF > /usr/local/bin/configure-awslogs.sh
 #!/usr/bin/env bash
 INSTANCE_ID=$(curl -s -m 60 http://169.254.169.254/latest/meta-data/instance-id)
-sed -i "s/{instance_id}/\$INSTANCE_ID/" /etc/awslogs/awslogs.conf
+sed -i "s/{instance_id}/\${INSTANCE_ID}/" /etc/awslogs/awslogs.conf
 EOF
 chmod +x /usr/local/bin/configure-awslogs.sh
 sed -i '/ExecStart=/i ExecStartPre=/usr/local/bin/configure-awslogs.sh' /usr/lib/systemd/system/awslogsd.service
@@ -114,3 +112,6 @@ sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/late
 
 echo "***** Update *****"
 yum update -y
+
+echo "***** Services *****"
+systemctl list-unit-files --state=enabled

@@ -17,13 +17,16 @@
           "root-device-type": "ebs"
         },
         "owners": [
-          "137112412989"
+          "amazon"
         ],
         "most_recent": true
       },
+      "encrypt_boot": false,
       "instance_type": "t3.micro",
       "ssh_username": "ec2-user",
-      "ami_name": "amzn2-ami-hvm-{{isotime \"20060102030405\"}}-x86_64-gp2-ssh"
+      "ami_name": "amzn2-ami-hvm-{{isotime \"20060102030405\"}}-x86_64-gp2-ssh-bastion",
+      "ami_description": "Bastion x86_64 GP2",
+      "associate_public_ip_address": true
     }
   ],
   "provisioners": [

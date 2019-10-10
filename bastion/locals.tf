@@ -1,11 +1,12 @@
 data "aws_ami" "main" {
+  count       = var.image_id != "" ? 0 : 1
   most_recent = true
 
   filter {
     name = "name"
 
     values = [
-      "amzn2-ami-hvm-*-x86_64-gp2-ssh",
+      "amzn2-ami-hvm-*-x86_64-gp2-ssh-bastion"
     ]
   }
 
@@ -33,7 +34,7 @@ locals {
   region           = module.defaults.region
   name             = module.defaults.name
   tags             = module.defaults.tags
-  image_id         = var.image_id != "" ? var.image_id : data.aws_ami.main.image_id
+  image_id         = var.image_id != "" ? var.image_id : data.aws_ami.main[0].image_id
   max_size         = "1"
   min_size         = "1"
   desired_capacity = "1"
