@@ -4,27 +4,28 @@
 #flatten(split(",",format("%.24s", var.sub_accounts[count.index], "-", join(format("%.24s", var.sub_accounts[count.index], "-"), local.groups))))
 
 resource "aws_iam_group" "groups" {
-  count = length(keys(local.groups))
+  count = length(local.groups)
 
   #name = "${local.groups[count.index]}"
   name = join(
     "",
     [
       upper(
-        substr(element(split("-", local.groups[count.index]), 0), 0, 1),
+        substr(element(split("-", local.groups[count.index]), 0), 0, 1)
       ),
       substr(element(split("-", local.groups[count.index]), 0), 1, -1),
       upper(
-        substr(element(split("-", local.groups[count.index]), 1), 0, 1),
+        substr(element(split("-", local.groups[count.index]), 1), 0, 1)
       ),
       substr(element(split("-", local.groups[count.index]), 1), 1, -1),
-    ],
+    ]
   )
 }
 
 //# Update after v0.12.0
+
 resource "aws_iam_policy" "groups" {
-  count = length(keys(local.groups))
+  count = length(local.groups)
   name  = "${local.groups[count.index]}-policy"
 
   policy = <<POLICY
@@ -38,7 +39,7 @@ resource "aws_iam_policy" "groups" {
       ],
       "Resource": [
         "arn:aws:iam::${var.sub_accounts[element(split("-", local.groups[count.index]), 0)]}:role/${element(split("-", local.groups[count.index]), 1)}"
-        ]
+      ]
     }
   ]
 }
@@ -55,8 +56,8 @@ POLICY
 */
 
 resource "aws_iam_group_policy_attachment" "groups" {
-  count      = length(keys(local.groups))
-  group      = aws_iam_group.groups[count.index].name
+  count = length(local.groups)
+  group = aws_iam_group.groups[count.index].name
   policy_arn = aws_iam_policy.groups[count.index].arn
 }
 
@@ -67,7 +68,7 @@ resource "aws_iam_group" "admin" {
 }
 
 resource "aws_iam_group_policy_attachment" "admin" {
-  group      = aws_iam_group.admin.name
+  group = aws_iam_group.admin.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
@@ -77,7 +78,7 @@ resource "aws_iam_group" "billing" {
 }
 
 resource "aws_iam_group_policy_attachment" "billing" {
-  group      = aws_iam_group.billing.name
+  group = aws_iam_group.billing.name
   policy_arn = "arn:aws:iam::aws:policy/job-function/Billing"
 }
 
@@ -171,8 +172,8 @@ POLICY
 }
 
 resource "aws_iam_group_policy_attachment" "user" {
-  group      = aws_iam_group.user.name
-  policy_arn = aws_iam_policy.user.arn
+group      = aws_iam_group.user.name
+policy_arn = aws_iam_policy.user.arn
 }
 
 # Terraform

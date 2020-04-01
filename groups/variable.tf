@@ -1,26 +1,16 @@
-//
-variable "roles" {
-  type    = list(string)
-  default = ["admin"]
+variable "type" {
+  type = string
 }
 
-//variable "sub_accounts" {
-//  type = "list"
-//  default = [
-//    "operations",
-//    "production",
-//    "staging",
-//    "testing",
-//    "development",
-//    "forensics"
-//  ]
-//}
+variable "roles" {
+  type    = list(string)
+  default = ["admin", "developer"]
+}
 
 variable "sub_accounts" {
   type = map(string)
 
   default = {
-    operations  = ""
     production  = ""
     staging     = ""
     testing     = ""

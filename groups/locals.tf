@@ -1,19 +1,15 @@
-data "external" "groups" {
-  program = [
-    "node",
-    "${path.module}/groups.js",
-    join(",", keys(var.sub_accounts)),
-    join(",", var.roles),
-  ]
+data "aws_caller_identity" "current" {
 }
 
-module "defaults" {
-  source = "../defaults"
+data "null_data_source" "groups" {
+  count = length(keys(var.sub_accounts))
+  inputs = {
+    groups = format("${keys(var.sub_accounts)[count.index]}-%s", join(",${keys(var.sub_accounts)[count.index]}-", var.roles))
+  }
 }
 
 locals {
-  account_id   = module.defaults.account_id
-  groups       = data.external.groups.result
+  account_id   = data.aws_caller_identity.current.account_id
+  groups       = split(",", join(",", data.null_data_source.groups.*.outputs.groups))
   sub_accounts = var.sub_accounts
 }
-
