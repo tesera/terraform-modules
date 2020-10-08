@@ -7,9 +7,8 @@ module "defaults" {
 locals {
   account_id    = module.defaults.account_id
   region        = module.defaults.region
-  name          = module.defaults.name
   tags          = module.defaults.tags
-  name          = replace(var.name, "/[_]/", "-")
+  name          = replace(module.defaults.name, "/[_]/", "-")
   sse_algorithm = "AES256"
 
   logging_bucket = var.logging_bucket != "" ? var.logging_bucket : "${module.defaults.name}-${terraform.workspace}-edge-logs"

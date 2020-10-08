@@ -43,7 +43,7 @@ data "archive_file" "lambda" {
 
 resource "aws_lambda_function" "lambda" {
   count            = length(keys(var.lambda))
-  provider         = "aws.edge"
+  provider         = aws.edge
   function_name    = "${local.name}-edge-${keys(var.lambda)[count.index]}"
   filename         = data.archive_file.lambda[count.index].output_path
   source_code_hash = data.archive_file.lambda[count.index].output_base64sha256

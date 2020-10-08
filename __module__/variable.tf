@@ -1,9 +1,9 @@
 variable "name" {
-  type    = "string"
+  type    = string
   default = ""
 }
 
 variable "default_tags" {
-  type    = "map"
+  type    = map
   default = {}
 }

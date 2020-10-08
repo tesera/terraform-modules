@@ -1,16 +1,16 @@
 data "archive_file" "lambda" {
   type        = "zip"
   output_path = "${var.source_dir}/../api${local.path_name}.zip"
-  source_dir  = "${var.source_dir}"
+  source_dir  = var.source_dir
 }
 
 resource "aws_lambda_function" "lambda" {
   function_name    = "${local.name}-api-${local.http_method}${local.path_name}"
-  filename         = "${data.archive_file.lambda.output_path}"
-  source_code_hash = "${data.archive_file.lambda.output_base64sha256}"
-  role             = "${aws_iam_role.lambda.arn}"
-  handler          = "${var.handler}"
-  runtime          = "${var.runtime}"
+  filename         = data.archive_file.lambda.output_path
+  source_code_hash = data.archive_file.lambda.output_base64sha256
+  role             = aws_iam_role.lambda.arn
+  handler          = var.handler
+  runtime          = var.runtime
   memory_size      = 128
   timeout          = 30
   publish          = true
@@ -25,7 +25,7 @@ resource "aws_lambda_function" "lambda" {
 resource "aws_lambda_permission" "main" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.lambda.function_name}"
+  function_name = aws_lambda_function.lambda.function_name
   principal     = "apigateway.amazonaws.com"
 
   # "${aws_api_gateway_deployment.example.execution_arn}/*/${var.http_method}${var.resource_path}"
@@ -53,15 +53,15 @@ POLICY
 
 resource "aws_iam_policy" "lambda" {
   name   = "${local.name}-api-${local.http_method}${local.path_name}-policy"
-  policy = "${local.policy}"
+  policy = local.policy
 }
 
 resource "aws_iam_role_policy_attachment" "lambda" {
-  role       = "${aws_iam_role.lambda.name}"
-  policy_arn = "${aws_iam_policy.lambda.arn}"
+  role       = aws_iam_role.lambda.name
+  policy_arn = aws_iam_policy.lambda.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda-AWSLambdaVPCAccessExecutionRole" {
-  role       = "${aws_iam_role.lambda.name}"
+  role       = aws_iam_role.lambda.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
 }

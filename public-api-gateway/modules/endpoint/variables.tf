@@ -1,7 +1,7 @@
 variable "name" {}
 
 variable "default_tags" {
-  type    = "map"
+  type    = map
   default = {}
 }
 
@@ -61,6 +61,6 @@ variable "authorizer_id" {
 
 // COGNITO_USER_POOLS
 variable "authorization_scopes" {
-  type    = "list"
+  type    = list
   default = []
 }
