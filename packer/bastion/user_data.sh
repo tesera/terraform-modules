@@ -3,12 +3,13 @@
 echo "***** Update *****"
 yum update -y
 
-echo "***** Install pip *****"
-curl -O https://bootstrap.pypa.io/get-pip.py
-python get-pip.py
+echo "***** Install unzip *****"
+yum install unzip  -y
 
-echo "***** Update awscli *****"
-pip install --upgrade awscli
+echo "***** Install awscli *****"
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+./aws/install
 
 echo "***** Install epel and figlet for setting up banner *****"
 amazon-linux-extras install epel -y
@@ -108,7 +109,7 @@ wget https://inspector-agent.amazonaws.com/linux/latest/install
 bash install
 
 echo "***** Setup SSM Agent *****"
-sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
 
 echo "***** Update *****"
 yum update -y
