@@ -1,5 +1,5 @@
 module "defaults" {
-  source = "../defaults"
+  source = "../../defaults"
   tags   = var.default_tags
 }
 
