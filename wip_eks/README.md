@@ -9,7 +9,7 @@ Auto-scaling cluster of EC2 for EKS
 - CloudWatch logging enabled
 
 ## Setup
-`brew insttall kubectrl`
+`brew install kubectrl`
 https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html
 `$ aws --version` must be greater than 1.16
 
