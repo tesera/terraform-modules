@@ -39,10 +39,20 @@ const response401 = {
 exports.handler = (event, context, callback) => {
     const cfrequest = event.Records[0].cf.request;
     const headers = cfrequest.headers;
+
     console.log('getting started');
     console.log('USERPOOLID=' + USERPOOLID);
     console.log('region=' + region);
     console.log('pems=' + pems);
+
+    if (cfrequest.method.toLowerCase() == "options") {
+        console.log('No need to verify OPTIONS requests. Success!');
+        //remove authorization header
+        delete cfrequest.headers.authorization;
+        //CloudFront can proceed to fetch the content from origin
+        callback(null, cfrequest);
+        return true;
+    }
 
     //Fail if no authorization header found
     if (!headers.authorization) {
