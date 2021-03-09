@@ -35,11 +35,7 @@ resource "aws_cloudfront_distribution" "main" {
       "OPTIONS",
     ]
 
-    cached_methods = [
-      "GET",
-      "HEAD",
-      "OPTIONS",
-    ]
+    cached_methods = var.cached_methods
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0

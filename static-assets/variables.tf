@@ -48,3 +48,12 @@ variable "logging_bucket" {
   default = ""
 }
 
+variable "cached_methods" {
+  type    = list(string)
+  default = ["GET", "HEAD", "OPTIONS"]
+}
+
+variable "access_accounts" {
+  type    = map(string)
+  default = {}
+}

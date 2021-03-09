@@ -109,6 +109,33 @@ data "aws_iam_policy_document" "s3" {
       ]
     }
   }
+
+  dynamic "statement" {
+    for_each = var.access_accounts
+
+    content {
+      actions = [
+        "s3:GetObject",
+        "s3:GetObjectVersion"
+      ]
+
+      resources = [
+        aws_s3_bucket.main.arn,
+        "${aws_s3_bucket.main.arn}/*",
+      ]
+
+      principals {
+        type = "AWS"
+
+        identifiers = [
+          "arn:aws:iam::${statement.value}:root"
+        ]
+      }
+
+      sid = "Allow access from HRIS ${statement.key}"
+    }
+  }
+
 }
 
 resource "aws_s3_bucket_policy" "main" {
