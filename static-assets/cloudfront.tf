@@ -53,6 +53,8 @@ resource "aws_cloudfront_distribution" "main" {
       cookies {
         forward = "none"
       }
+
+      headers = var.whitelisted_headers
     }
 
     dynamic "lambda_function_association" {

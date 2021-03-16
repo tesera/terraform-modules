@@ -57,3 +57,8 @@ variable "access_accounts" {
   type    = map(string)
   default = {}
 }
+
+variable "whitelisted_headers" {
+  type    = list(string)
+  default = []
+}

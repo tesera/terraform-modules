@@ -33,7 +33,7 @@ resource "aws_iam_role_policy_attachment" "lambda" {
 data "archive_file" "lambda" {
   count       = length(keys(var.lambda))
   type        = "zip"
-  output_path = "${keys(var.lambda)[count.index]}.zip"
+  output_path = "${local.name}-${keys(var.lambda)[count.index]}.zip"
   source_dir  = var.lambda[keys(var.lambda)[count.index]]
 }
 

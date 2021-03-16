@@ -116,7 +116,9 @@ data "aws_iam_policy_document" "s3" {
     content {
       actions = [
         "s3:GetObject",
-        "s3:GetObjectVersion"
+        "s3:GetObjectVersion",
+        "s3:ListBucket",
+        "s3:GetObjectTagging"
       ]
 
       resources = [
