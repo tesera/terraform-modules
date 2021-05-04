@@ -14,3 +14,11 @@ output "sub_account_emails" {
   value = values(aws_organizations_account.environments)[*].email
 }
 
+output "master_account_id" {
+  value = var.create_master == true ? aws_organizations_account.master[0].id : null
+}
+
+output "master_account_email" {
+  value = var.create_master == true ? aws_organizations_account.master[0].email : null
+}
+
