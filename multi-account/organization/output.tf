@@ -3,14 +3,14 @@ output "id" {
 }
 
 output "sub_accounts" {
-  value = zipmap(var.sub_accounts, aws_organizations_account.environment.*.id)
+  value = zipmap(var.sub_accounts, values(aws_organizations_account.environments)[*].id)
 }
 
 output "sub_account_ids" {
-  value = aws_organizations_account.environment.*.id
+  value = values(aws_organizations_account.environments)[*].id
 }
 
 output "sub_account_emails" {
-  value = aws_organizations_account.environment.*.email
+  value = values(aws_organizations_account.environments)[*].email
 }
 

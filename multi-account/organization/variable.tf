@@ -13,13 +13,25 @@ variable "account_email" {
 }
 
 variable "sub_accounts" {
-  type = list(string)
+  type = set(string)
 
   default = [
-    "production",
-    "staging",
-    "testing",
     "development",
+    "qa",
+    "production"
   ]
 }
 
+variable "create_master" {
+  type    = bool
+  default = false
+}
+
+variable "use_existing_organization" {
+  type    = bool
+  default = false
+}
+
+variable "organizational_unit_name" {
+  type = string
+}
