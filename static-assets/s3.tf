@@ -80,6 +80,7 @@ resource "aws_s3_bucket" "main" {
       }
     }
   }
+  
   tags = merge(
     local.tags,
     {

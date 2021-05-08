@@ -6,7 +6,8 @@ terraform {
       source = "hashicorp/archive"
     }
     aws = {
-      source = "hashicorp/aws"
+      source                = "hashicorp/aws"
+      configuration_aliases = [aws.edge]
     }
   }
 }
